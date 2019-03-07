@@ -1,0 +1,12 @@
+# Auxiliary Python files
+*.py[cod]
+
+# Sensitive information
+tours/input/matkat*.csv
+tours/input/paikat*.csv
+tours/input/tausta*.csv
+tours/output/*.csv
+
+# R files
+*.R
+
