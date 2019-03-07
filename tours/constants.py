@@ -7,18 +7,29 @@ TYPE_HOME = 1
 TYPE_WORK = 2
 TYPE_SCHOOL = 3
 
-TYPES_AS_STRINGS = {1: "koti",
-                    2: "työ",
-                    3: "koulu",
-                    4: "kyyti",
-                    5: "ostosasiointi",
-                    6: "työasiointi",
-                    7: "vierailu",
-                    8: "liikunta",
-                    9: "vapaa-aika",
-                    10: "muu",
-                    11: "ruokailu",
-                    }
+TYPE_GROUP = {
+    1: 1,
+    2: 2,
+    3: 3,
+    4: 5,
+    5: 5,
+    6: 5,
+    7: 6,
+    8: 6,
+    9: 6,
+    10: 6,
+    11: 6,
+    12: 4,
+}
+
+GROUP_NAME = {
+    1: "koti",
+    2: "työ",
+    3: "koulu",
+    4: "opiskelu",
+    5: "asiointi",
+    6: "muu",
+}
 
 
 def collapse(list_of_printables, sep=" - "):

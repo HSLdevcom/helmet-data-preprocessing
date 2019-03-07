@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 
 
+from math import sqrt
+
+
 class Location(object):
     def __init__(self, tid, ttype, tx, ty, zone):
         self.tid = int(tid)
@@ -20,3 +23,11 @@ class Location(object):
 
     def get_zone(self):
         return self.zone
+
+    def eucd(self, location):
+        ix = self.get_coord()[0]
+        iy = self.get_coord()[1]
+        jx = location.get_coord()[0]
+        jy = location.get_coord()[1]
+        distance = sqrt((ix - jx)**2 + (iy - jy)**2)
+        return distance

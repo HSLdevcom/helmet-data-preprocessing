@@ -123,18 +123,41 @@ class Tour(object):
         return ttype
 
     def get_origin(self):
-        # The numbers of types are simultaneosly priorities of choosing origin
-        types = self.get_types()
-        origin = min(types)
+        # The numbers of type groups are simultaneosly priorities of choosing
+        # origin
+        locations = self.get_locations()
+        groups = list()
+        for location in locations:
+            groups.append(constants.TYPE_GROUP[location.get_type()])
+        m = groups.index(min(groups))
+        origin = locations[m]
         return origin
 
     def get_destination(self, origin):
-        types = self.get_types()
-        types = [ttype for ttype in types if ttype > origin]
-        if (len(types) == 0):
-            return origin
-        else:
-            return min(types)
+        # Destination is searched from other Locations apart from origin,
+        # unless origin is the only Location that is ever visited. If there are
+        # multiple Locations with same priority, the farthest one is chosen.
+        locations = self.get_locations()
+        groups = list()
+        distances = list()
+        low_priority = max(constants.TYPE_GROUP.values()) + 100
+        for location in locations:
+            if location is origin:
+                groups.append(low_priority)
+                distances.append(0.0)
+            else:
+                groups.append(constants.TYPE_GROUP[location.get_type()])
+                distances.append(origin.eucd(location))
+        destination_group = min(groups)
+        farthest_distance = -1
+        m = -1
+        for index, location in enumerate(locations, start=0):
+            if (groups[index] == destination_group and
+                    distances[index] >= farthest_distance):
+                m = index
+                farthest_distance = distances[index]
+        destination = locations[m]
+        return destination
 
     def get_number_of_visits(self, ttype):
         # Calculates the number of visits to a certain type of location. If Tour
@@ -212,7 +235,7 @@ class Tour(object):
                 return "a - b - ... - c - a"
         # Everything else
         else:
-            if self.get_origin() == constants.TYPE_HOME:
+            if self.get_origin().get_type() == constants.TYPE_HOME:
                 types = self.get_types()
                 types = sorted(types)
                 tour_type = constants.collapse(types)
@@ -229,8 +252,8 @@ class Tour(object):
                 "jtime": self.get_jtime(),
                 "path": self.__str__(),
                 "source": self.get_source(),
-                "origin": origin,
-                "destination": destination,
+                "origin": origin.get_type(),
+                "destination": destination.get_type(),
                 "tour_type": self.get_tour_type(),
                 "visits_t1": self.get_number_of_visits(1),
                 "visits_t2": self.get_number_of_visits(2),
