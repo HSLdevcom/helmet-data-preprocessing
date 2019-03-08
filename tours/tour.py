@@ -139,7 +139,13 @@ class Tour(object):
         # origin
         locations = self.get_locations()
         groups = list()
+        low_priority = max(constants.TYPE_GROUP.values()) + 100
         for location in locations:
+            group = constants.TYPE_GROUP[location.get_type()]
+            # After home, work, school, and study locations (1-4) all other
+            # location groups are of same priority.
+            if group >= 5:
+                group = low_priority
             groups.append(constants.TYPE_GROUP[location.get_type()])
         m = groups.index(min(groups))
         origin = locations[m]
@@ -153,10 +159,19 @@ class Tour(object):
         groups = list()
         distances = list()
         low_priority = max(constants.TYPE_GROUP.values()) + 100
+        lowest_priority = low_priority + 1
         for location in locations:
+            group = constants.TYPE_GROUP[location.get_type()]
             if location is origin:
-                groups.append(low_priority)
+                # Destination is not origin unless the tour is only
+                # origin-origin.
+                groups.append(lowest_priority)
                 distances.append(0.0)
+            elif group >= 5:
+                # After home, work, school, and study locations (1-4) all other
+                # location groups are of same priority.
+                groups.append(low_priority)
+                distances.append(origin.eucd(location))
             else:
                 groups.append(constants.TYPE_GROUP[location.get_type()])
                 distances.append(origin.eucd(location))
