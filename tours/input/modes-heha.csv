@@ -3,11 +3,11 @@
 2;Polkupyörä;py;2
 3;Auto, kuljettajana;hak;4
 4;Auto, matkustajana;ham;5
-5;Taksi tai muu kuljetuspalvelu;muu;
+5;Taksi tai muu kuljetuspalvelu;muu;5
 6;Bussi;jl;3
 7;Juna;jl;3
 8;Metro;jl;3
 9;Raitiovaunu;jl;3
-10;Moottoripyörä, mopo, mopoauto, mönkijä;muu;
-11;Muu kulkutapa;muu;
+10;Moottoripyörä, mopo, mopoauto, mönkijä;muu;-1
+11;Muu kulkutapa;muu;-1
 12;Auto;ham;5
