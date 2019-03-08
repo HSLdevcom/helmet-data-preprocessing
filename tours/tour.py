@@ -230,6 +230,7 @@ class Tour(object):
                 "visits_t9": self.get_number_of_visits(9),
                 "visits_t10": self.get_number_of_visits(10),
                 "visits_t11": self.get_number_of_visits(11),
+                "visits_t12": self.get_number_of_visits(12),
                 "starts_from": self.get_itype(),
                 "ends_to": self.get_jtype(),
                 "mode": self.get_mode(),
