@@ -67,6 +67,18 @@ class Tour(object):
     def get_jtime(self):
         return self.get_trips()[-1].get_jtime()
 
+    def get_itime_from(self, location):
+        trips = self.get_trips()
+        ilocations = []
+        for trip in trips:
+            ilocations.append(trip.get_ilocation())
+        try:
+            m = ilocations.index(location)
+        except ValueError:
+            return ""
+        itime = trips[m].get_itime()
+        return itime
+
     def get_ilocation(self):
         return self.get_trips()[0].get_ilocation()
 
@@ -254,6 +266,8 @@ class Tour(object):
                 "source": self.get_source(),
                 "origin": origin.get_type(),
                 "destination": destination.get_type(),
+                "itime_origin": self.get_itime_from(origin),
+                "itime_destination": self.get_itime_from(destination),
                 "tour_type": self.get_tour_type(),
                 "visits_t1": self.get_number_of_visits(1),
                 "visits_t2": self.get_number_of_visits(2),
