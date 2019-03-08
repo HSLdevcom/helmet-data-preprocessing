@@ -218,6 +218,8 @@ class Tour(object):
                 "destination": destination.get_type(),
                 "itime_origin": self.get_itime_from(origin),
                 "itime_destination": self.get_itime_from(destination),
+                "zone_origin": origin.get_zone(),
+                "zone_destination": destination.get_zone(),
                 "tour_type": self.get_tour_type(),
                 "visits_t1": self.get_number_of_visits(1),
                 "visits_t2": self.get_number_of_visits(2),
