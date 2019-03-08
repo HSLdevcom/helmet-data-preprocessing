@@ -195,79 +195,14 @@ class Tour(object):
             types.append(location.get_type())
         return types.count(ttype)
 
-    def __str_sorted__(self):
-        types = self.get_types()
-        length = len(types)
-        types[1:(length-1)] = sorted(types[1:(length-1)])
-        tour_log = constants.collapse(types)
-        return tour_log
-
-    def __flip_types__(self, ttype):
-        locations = self.get_locations()
-        visited_types = list()
-        for location in locations:
-            new_visited_type = location.get_type()
-            if (new_visited_type != ttype):
-                visited_types.append(new_visited_type)
-        visited_types = sorted(visited_types)
-        types = [ttype] + visited_types + [ttype]
-        return types
-
     def get_tour_type(self):
-        if self.is_closed():
-            number_of_trips = self.get_number_of_trips()
-            # Closed tours with only one trip
-            if number_of_trips == 1:
-                return self.__str_sorted__()
-            # Closed tours with two trips (there and back)
-            elif number_of_trips == 2:
-                if (self.starts_from(constants.TYPE_HOME)):
-                    # Print tours that start from home as is
-                    return self.__str_sorted__()
-                elif (self.get_number_of_visits(constants.TYPE_HOME) > 0 and
-                        not self.starts_from(constants.TYPE_HOME)):
-                    # Flip tours that do not start from home but visit it
-                    types = self.__flip_types__(constants.TYPE_HOME)
-                    tour_type = constants.collapse(types)
-                    return tour_type
-                elif (self.starts_from(constants.TYPE_WORK)):
-                    # Print tours that start from work as is
-                    return self.__str_sorted__()
-                elif (self.get_number_of_visits(constants.TYPE_WORK) > 0 and
-                        not self.starts_from(constants.TYPE_WORK)):
-                    # Flip tours that do not start from work but visit it
-                    types = self.__flip_types__(constants.TYPE_WORK)
-                    tour_type = constants.collapse(types)
-                    return tour_type
-                elif (self.starts_from(constants.TYPE_SCHOOL)):
-                    # Print tours that start from work as is
-                    return self.__str_sorted__()
-                elif (self.get_number_of_visits(constants.TYPE_SCHOOL) > 0 and
-                        not self.starts_from(constants.TYPE_SCHOOL)):
-                    # Flip tours that do not start from school but visit it
-                    types = self.__flip_types__(constants.TYPE_SCHOOL)
-                    tour_type = constants.collapse(types)
-                    return tour_type
-                else:
-                    return "a - b - a"
-            # Closed tours with three trips
-            elif number_of_trips == 3:
-                if (self.starts_from(constants.TYPE_HOME) or
-                        self.starts_from(constants.TYPE_WORK) or
-                        self.starts_from(constants.TYPE_SCHOOL)):
-                    return self.__str_sorted__()
-                else:
-                    return "a - b - c - a"
-            else:
-                return "a - b - ... - c - a"
-        # Everything else
-        else:
-            if self.get_origin().get_type() == constants.TYPE_HOME:
-                types = self.get_types()
-                types = sorted(types)
-                tour_type = constants.collapse(types)
-                return tour_type
-            return "open nhb"
+        locations = self.get_locations()
+        groups = list()
+        for location in locations:
+            groups.append(constants.TYPE_GROUP[location.get_type()])
+        groups.sort()
+        tour_type = constants.collapse(groups)
+        return tour_type
 
     def to_dict(self):
         origin = self.get_origin()
