@@ -120,7 +120,15 @@ for person in people:
         # Get the index of return trip
         index_of_return = -1
         for remaining_trip in remaining_trips:
+            if (remaining_trip is not trip and
+                    remaining_trip.get_ilocation() is trip.get_ilocation()):
+                # Person has never arrived to the starting location but is now
+                # starting from it. This implies missing trips in diary. Tour
+                # is open-ended, so it is skipped. It will be handled later as
+                # well as other open tours.
+                break
             if remaining_trip.get_jlocation() is trip.get_ilocation():
+                # Person arrives to the same location: closed tour is saved.
                 index_of_return = diary.index(remaining_trip)
                 break
 
@@ -166,14 +174,29 @@ for person in people:
             continue
 
         # Define open-ended tour: an open-ended tour is always discontinued,
-        # if a person visits home.
+        # if a person visits home, or if trips are skipped.
         index_starting = trips_not_in_tours.index(trip)
         index_ending = len(trips_not_in_tours) - 1
         remaining_trips = trips_not_in_tours[index_starting:]
+        last_number = trip.get_number()
         for remaining_trip in remaining_trips:
             index_ending = trips_not_in_tours.index(remaining_trip)
+            if (remaining_trip is not trip):
+                # If remaining trips skip a number, the tour is then finished
+                # because this means that there is a closed tour in between.
+                if (remaining_trip.get_number() != (last_number + 1)):
+                    index_ending = index_ending - 1
+                    break
+                # If the current remaining trip suddenly starts from home, tour
+                # is finished. Usually this means that there are missing trips
+                # in person's travel diary.
+                if (remaining_trip.get_itype() == constants.TYPE_HOME):
+                    index_ending = index_ending - 1
+                    break
+            # A tour is finished if person arrives home.
             if remaining_trip.get_jtype() == constants.TYPE_HOME:
                 break
+            last_number = remaining_trip.get_number()
 
         open_ended_tour = Tour(
             trips_not_in_tours[index_starting:(index_ending+1)],
