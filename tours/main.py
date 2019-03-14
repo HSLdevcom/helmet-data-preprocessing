@@ -71,13 +71,13 @@ for index, row in taus.iterrows():
     # Creating a list of objects of class Trip
     new_diary = []
     for index, row in matk_subset.iterrows():
-        # Searching for start and end location objects by id. Locations are already
-        # organized by their id from 1 to n.
+        # Searching for start and end location objects by id. Locations are
+        # already organized by their id from 1 to n.
         ilocation = locations[row["itid"]-1]
         jlocation = locations[row["jtid"]-1]
         # If no results were found, raise an expection
         if ilocation is None:
-            TypeError("Start location not found!")
+            raise TypeError("Start location not found!")
         elif jlocation is None:
             raise TypeError("End location not found!")
         elif (ilocation.get_id() != row["itid"]):
