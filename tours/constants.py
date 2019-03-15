@@ -44,14 +44,13 @@ def read_people_from_hlt(fname):
                          skipinitialspace=True,
                          usecols=[
                                  "T_TAUSTAID",
-                                 "T_VK_VP_SEUTULAAJENNUS"],
+                                 "xfactor"],
                          dtype={
                                  "T_TAUSTAID": int,
-                                 "T_VK_VP_SEUTULAAJENNUS": float
+                                 "xfactor": float
                                  })
     columns = {
-        "T_TAUSTAID": "pid",
-        "T_VK_VP_SEUTULAAJENNUS": "xfactor"
+        "T_TAUSTAID": "pid"
         }
     df.rename(columns=columns, inplace=True)
     return df
