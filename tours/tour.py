@@ -146,7 +146,7 @@ class Tour(object):
             # location groups are of same priority.
             if group >= 5:
                 group = low_priority
-            groups.append(constants.TYPE_GROUP[location.get_type()])
+            groups.append(group)
         m = groups.index(min(groups))
         origin = locations[m]
         return origin
@@ -173,7 +173,7 @@ class Tour(object):
                 groups.append(low_priority)
                 distances.append(origin.eucd(location))
             else:
-                groups.append(constants.TYPE_GROUP[location.get_type()])
+                groups.append(group)
                 distances.append(origin.eucd(location))
         destination_group = min(groups)
         farthest_distance = -1
