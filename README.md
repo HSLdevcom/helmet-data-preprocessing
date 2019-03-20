@@ -19,9 +19,17 @@ pipenv install
 
 ```
 
-
 install new libraries:
 
 ```   
 pipenv install <your-new-library>
 ```
+
+## Tests
+
+We're using PyTest framework. Test are in [tests](tests-folder) and can be invoked with
+
+```   
+pipenv run py.test
+```
+
