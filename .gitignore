@@ -9,6 +9,13 @@ tours/input/matkat*.csv
 tours/input/paikat*.csv
 tours/input/tausta*.csv
 tours/output/*.csv
+input/matkat*.csv
+input/paikat*.csv
+input/tausta*.csv
+output/*.csv
+
+# Extra config files
+input-config-*.json
 
 # R files
 *.R
