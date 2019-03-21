@@ -1,6 +1,9 @@
 # Auxiliary Python files
 *.py[cod]
 
+# Caches
+.pytest_cache
+
 # Sensitive information
 tours/input/matkat*.csv
 tours/input/paikat*.csv
@@ -10,3 +13,5 @@ tours/output/*.csv
 # R files
 *.R
 
+# IDE-specific folders
+.idea
