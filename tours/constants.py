@@ -37,6 +37,33 @@ def collapse(list_of_printables, sep=" - "):
     return text
 
 
+def read_people(filepath, survey):
+    if survey == "heha":
+        return read_people_from_heha(filepath)
+    elif survey == "hlt":
+        return read_people_from_hlt(filepath)
+    else:
+        raise ValueError("Survey type not supported!")
+
+
+def read_trips(filepath, survey):
+    if survey == "heha":
+        return read_trips_from_heha(filepath)
+    elif survey == "hlt":
+        return read_trips_from_hlt(filepath)
+    else:
+        raise ValueError("Survey type not supported!")
+
+
+def read_locations(filepath, survey):
+    if survey == "heha":
+        return read_locations_from_heha(filepath)
+    elif survey == "hlt":
+        return read_locations_from_hlt(filepath)
+    else:
+        raise ValueError("Survey type not supported!")
+
+
 def read_people_from_hlt(fname):
     df = pandas.read_csv(fname,
                          sep=";",

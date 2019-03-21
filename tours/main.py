@@ -3,6 +3,7 @@
 
 import sys
 import pandas
+import json
 import constants
 from person import Person
 from trip import Trip
@@ -24,26 +25,26 @@ def tours_include_trip(tours, trip):
     return trip_in_tours
 
 
-print "python: {}".format(sys.argv[0])
+print("python: {}".format(sys.argv[0]))
 
-dataset = ""
+input_config_filepath = ""
 if len(sys.argv) == 1:
-    dataset = "heha"
+    input_config_filepath = "input-config.json"
 else:
-    dataset = sys.argv[1]
+    input_config_filepath = sys.argv[1]
 
-print "Survey is in {} format.".format(dataset)
+print("Input data read from: {}".format(input_config_filepath))
+with open(input_config_filepath) as f:
+    input_config = json.load(f)
+print(json.dumps(input_config, indent=4, sort_keys=True))
 
-if dataset == "heha":
-    RESULT_FILE_NAME = "tours/output/tours-heha.csv"
-    matk = constants.read_trips_from_heha("tours/input/matkat-heha.csv")
-    taus = constants.read_people_from_heha("tours/input/tausta-heha.csv")
-    paik = constants.read_locations_from_heha("tours/input/paikat-heha.csv")
-elif dataset == "hlt":
-    RESULT_FILE_NAME = "tours/output/tours-hlt.csv"
-    matk = constants.read_trips_from_hlt("tours/input/matkat-hlt.csv")
-    taus = constants.read_people_from_hlt("tours/input/tausta-hlt.csv")
-    paik = constants.read_locations_from_hlt("tours/input/paikat-hlt.csv")
+RESULT_FILE_NAME = input_config["tour-filepath"]
+taus = constants.read_people(input_config["people-filepath"],
+                             input_config["survey"])
+matk = constants.read_trips(input_config["trips-filepath"],
+                            input_config["survey"])
+paik = constants.read_locations(input_config["locations-filepath"],
+                                input_config["survey"])
 
 
 # Transforming start and end locations to Location objects
