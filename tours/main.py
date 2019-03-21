@@ -35,15 +35,15 @@ else:
 print "Survey is in {} format.".format(dataset)
 
 if dataset == "heha":
-    RESULT_FILE_NAME = "output/tours-heha.csv"
-    matk = constants.read_trips_from_heha("input/matkat-heha.csv")
-    taus = constants.read_people_from_heha("input/tausta-heha.csv")
-    paik = constants.read_locations_from_heha("input/paikat-heha.csv")
+    RESULT_FILE_NAME = "tours/output/tours-heha.csv"
+    matk = constants.read_trips_from_heha("tours/input/matkat-heha.csv")
+    taus = constants.read_people_from_heha("tours/input/tausta-heha.csv")
+    paik = constants.read_locations_from_heha("tours/input/paikat-heha.csv")
 elif dataset == "hlt":
-    RESULT_FILE_NAME = "output/tours-hlt.csv"
-    matk = constants.read_trips_from_hlt("input/matkat-hlt.csv")
-    taus = constants.read_people_from_hlt("input/tausta-hlt.csv")
-    paik = constants.read_locations_from_heha("input/paikat-hlt.csv")
+    RESULT_FILE_NAME = "tours/output/tours-hlt.csv"
+    matk = constants.read_trips_from_hlt("tours/input/matkat-hlt.csv")
+    taus = constants.read_people_from_hlt("tours/input/tausta-hlt.csv")
+    paik = constants.read_locations_from_hlt("tours/input/paikat-hlt.csv")
 
 
 # Transforming start and end locations to Location objects
