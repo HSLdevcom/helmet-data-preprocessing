@@ -30,6 +30,6 @@ pipenv install <your-new-library>
 We're using PyTest framework. Test are in [tests](tests-folder) and can be invoked with
 
 ```   
-pipenv run py.test
+pipenv run pytest
 ```
 

@@ -19,5 +19,5 @@ setup(
     url='https://github.com/HSLdevcom/helmet-data-preprocessing',
     packages=['tours'],
     install_requires=['pandas',],
-#    scripts=['tours',],
+    scripts=['tours', 'tests'],
 )
