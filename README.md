@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/HSLdevcom/helmet-data-preprocessing.svg?branch=master)](https://travis-ci.org/HSLdevcom/helmet-data-preprocessing)  
+
 # helmet-data-preprocessing
 
 This repository includes data preprocessing scripts. Preprocessed data is fed
