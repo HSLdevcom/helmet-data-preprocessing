@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/HSLdevcom/helmet-data-preprocessing.svg?branch=master)](https://travis-ci.org/HSLdevcom/helmet-data-preprocessing)  
+
 # helmet-data-preprocessing
 
 This repository includes data preprocessing scripts. Preprocessed data is fed
@@ -22,10 +24,13 @@ pip install --user pipenv
 
 ```
 
-Then install the requirements from Pipfile using pipenv   
+Then install the requirements from Pipfile using pipenv.  
 
 ```   
+# First setup:
 pipenv install
+# Once setup is done you can just run
+pipenv sync
 ```
 
 Install new libraries when needed (will update Pipfile, please commit that to repository):
@@ -36,7 +41,7 @@ pipenv install <your-new-library>
 
 ## Tests
 
-We're using PyTest framework. Test are in [tests](tests-folder) and can be invoked with
+We're using PyTest framework. Test are in [tests-folder](tests) and can be invoked with
 
 ```   
 pipenv run pytest
@@ -51,11 +56,12 @@ pipenv run python ./tours/main.py
 
 ## Troubleshooting
 
-Q: My application is using Python 3 instead of Python 2
-A: - Remember to use pipenv run command instead of python 
+Q: My application is using Python 3 instead of Python 2  
+A: 
+  - Remember to use pipenv run command instead of python 
    - you can check the version with pipenv run python --version
 
-Q: Some library is not found (f.ex Pandas)
+Q: Some library is not found (f.ex Pandas)  
 A: Run: pipenv install
 
    
