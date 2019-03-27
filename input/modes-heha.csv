@@ -1,4 +1,4 @@
-﻿id;Paakulkutapa;mode_name;mode
+﻿id;PKTAPA2;mode_name;mode
 1;Kävely (sis. avustavat välineet);ka;1
 2;Polkupyörä;py;2
 3;Auto, kuljettajana;ak;4
@@ -9,5 +9,4 @@
 8;Metro;jl;3
 9;Raitiovaunu;jl;3
 10;Moottoripyörä, mopo, mopoauto, mönkijä;muu;-1
-11;Muu kulkutapa;muu;-1
-12;Auto;am;5
+11;Muu kulku;muu;-1
