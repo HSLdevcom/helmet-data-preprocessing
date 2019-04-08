@@ -70,16 +70,12 @@ def read_people_from_hlt(fname):
                          decimal=",",
                          skipinitialspace=True,
                          usecols=[
-                                 "T_TAUSTAID",
+                                 "pid",
                                  "xfactor"],
                          dtype={
-                                 "T_TAUSTAID": int,
+                                 "pid": int,
                                  "xfactor": float
                                  })
-    columns = {
-        "T_TAUSTAID": "pid"
-        }
-    df.rename(columns=columns, inplace=True)
     return df
 
 
@@ -89,7 +85,7 @@ def read_trips_from_hlt(fname):
                          decimal=",",
                          skipinitialspace=True,
                          usecols=[
-                                 "M_TAUSTAID",
+                                 "pid",
                                  "M_TRIPROUTESID",
                                  "matnro",
                                  "ix",
@@ -106,7 +102,7 @@ def read_trips_from_hlt(fname):
                                  "length"
                                  ],
                          dtype={
-                                 "M_TAUSTAID": int,
+                                 "pid": int,
                                  "M_TRIPROUTESID": int,
                                  "matnro": int,
                                  "ix": float,
@@ -123,7 +119,6 @@ def read_trips_from_hlt(fname):
                                  "length": float,
                                  })
     columns = {
-            "M_TAUSTAID": "pid",
             "M_TRIPROUTESID": "eid",
             "matnro": "number",
             "ix": "ix",
@@ -168,15 +163,14 @@ def read_people_from_heha(fname):
             decimal=",",
             skipinitialspace=True,
             usecols=[
-                    "juokseva",
+                    "pid",
                     "paino6"
                     ],
             dtype={
-                    "juokseva": int,
+                    "pid": int,
                     "paino6": float
                     })
     columns = {
-        "juokseva": "pid",
         "paino6": "xfactor"
         }
     df.rename(columns=columns, inplace=True)
@@ -189,7 +183,7 @@ def read_trips_from_heha(fname):
                          decimal=",",
                          skipinitialspace=True,
                          usecols=[
-                                 "juokseva",
+                                 "pid",
                                  "matkaid",
                                  "matnro",
                                  "ix",
@@ -206,7 +200,7 @@ def read_trips_from_heha(fname):
                                  "PITUUS",
                                  ],
                          dtype={
-                                 "juokseva": int,
+                                 "pid": int,
                                  "matkaid": int,
                                  "matnro": int,
                                  "ix": float,
@@ -223,7 +217,6 @@ def read_trips_from_heha(fname):
                                  "PITUUS": float,
                                  })
     columns = {
-            "juokseva": "pid",
             "matkaid": "eid",
             "matnro": "number",
             "ix": "ix",
