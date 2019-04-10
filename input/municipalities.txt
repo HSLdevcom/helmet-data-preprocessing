@@ -1,4 +1,4 @@
-region	municipality	municipality_name	region_name	paakaupunkiseutu	kehyskunta	ymparyskunta
+region	municipality	municipality_name	region_name	capital_region	surrounding_municipality	peripheral_municipality
 0	49	Espoo	HEHA	TRUE	FALSE	FALSE
 0	91	Helsinki	HEHA	TRUE	FALSE	FALSE
 0	106	Hyvinkää	HEHA	FALSE	TRUE	FALSE
