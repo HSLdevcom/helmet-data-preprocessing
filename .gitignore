@@ -5,14 +5,13 @@
 .pytest_cache
 
 # Sensitive information
-tours/input/matkat*.csv
-tours/input/paikat*.csv
-tours/input/tausta*.csv
 tours/output/*.csv
-input/matkat*.csv
-input/paikat*.csv
-input/tausta*.csv
-output/*.csv
+input/*.csv
+
+# Output files
+estimation/alternatives/*.txt
+estimation/alternatives-columns.txt
+*.RData
 
 # Extra config files
 input-config-*.json
