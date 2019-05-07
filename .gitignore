@@ -10,8 +10,9 @@ input/*.csv
 
 # Output files
 estimation/alternatives/*.txt
-estimation/alternatives-columns.txt
+estimation/alternatives-columns-*.txt
 *.RData
+*.csv
 
 # Extra config files
 input-config-*.json
