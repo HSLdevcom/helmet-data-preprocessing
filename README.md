@@ -39,6 +39,74 @@ Install new libraries when needed (will update Pipfile, please commit that to re
 pipenv install <your-new-library>
 ```
 
+To use R, install the newest version of R. The scripts were written in R 3.4.4. Please note, that scripts use encoding `windows-1252`.
+
+Then, install `strafica` package and its dependencies. You can check dependencies from the DESCRIPTION file. `strafica` package can be found from the office for selected people to use, and later online.
+
+### Input data
+
+All input data is located in private EXT-HELMET_KEHI_40 Sharepoint group. Input data is organized like this:
+
+```
+├── data
+│   └── raw
+│       ├── heha
+│       │   └── MATKAT18_V3.xlsx
+│       ├── hlt
+│       │   ├── M_MATKAT.CSV
+│       │   ├── PA_PAIKAT_sijoittelualueet.csv
+│       │   └── T_TAUSTA.CSV
+│       ├── jkl_kust_yht.csv
+│       ├── Maankäyttö
+│       │   ├── Autonomistus mallialueittain YKR 2015_v1.xlsx
+│       │   ├── HS15_vaesto2017.xlsx
+│       │   ├── koko_mallialue_asuinrakennukset_2016_2017.xlsx
+│       │   ├── koko_mallialue_myymala_ja_palvelutpt_2016.xlsx
+│       │   ├── koko_mallialue_työpaikat_yht_2016.xlsx
+│       │   ├── maankayttotiedot_sijoittelualueittain_kaikki_yhdessa.xlsx
+│       │   ├── maapinta_ala_ja_asutut_ruudut.xlsx
+│       │   ├── opla_luettelo_2017_2.xlsx
+│       │   ├── opla_luettelo_2017.xlsx
+│       │   ├── rakennettu_maapinta_ala_2018.xlsx
+│       │   ├── teollisuus_ja_kuljetustpt_2016.xlsx
+│       │   ├── tulotiedot_2016.xlsx
+│       │   └── ymparyskunnat_vaesto2016.xlsx
+│       ├── md21_pysakointikustannus_tyo_2018.csv
+│       ├── md22_pysakointikustannus_muu_2018.csv
+│       ├── pysäköintikustannukset_2018.xlsx
+│       ├── sijoittelualueet2019
+│       │   ├── sijoittelualueet2019.dbf
+│       │   ├── sijoittelualueet2019.prj
+│       │   ├── sijoittelualueet2019.qpj
+│       │   ├── sijoittelualueet2019.shp
+│       │   └── sijoittelualueet2019.shx
+│       ├── Vastukset2016
+│       │   ├── mf100.csv
+│       │   ├── mf101.csv
+│       │   ├── ...
+│       └── Vastukset2018
+│           ├── mf100.csv
+│           ├── mf101.csv
+│           ├── ...
+├── helmet-data-preprocessing
+│   ├── ...
+│   │   ├── ...
+│   │   │   ├── ...
+│   │   │   ├── ...
+...
+```
+
+Folders in Sharepoint:
+
+- `heha`: 5 Data > HEHA-aineistot
+- `hlt`: 5 Data > HLT-aineisto
+- `jkl_kust_yht.csv`: 5 Data > Estimoinnin_lähtotiedot > Joukkoliikenteen kustannukset
+- `Maankäyttö`: 5 Data > Maankäyttö
+- `pysäköintikustannukset_2018.xlsx`: 5 Data > Estimoinnin_lähtötiedot
+- `sijoittelualueet2019`: 5 Data > aluejaot > aluejaot_2019_SHP
+- `Vastukset2016`: 5 Data > Estimoinnin_lähtötiedot > Vastukset2016
+- `Vastukset2018`: 5 Data > Estimoinnin_lähtötiedot > Vastukset2018
+
 ## Tests
 
 We're using PyTest framework. Test are in [tests-folder](tests) and can be invoked with
@@ -49,10 +117,21 @@ pipenv run pytest
 
 ## Running
 
-```   
+```
+cd input/
+rscript zones.R
+rscript survey-heha.R
+rscript survey-hlt.R
+cd ..
 pipenv run python ./tours/main.py
+# ALTERNATIVELY:
+# pipenv run python ./tours/main.py input-config-heha.json
+# pipenv run python ./tours/main.py input-config-hlt.json
+cd estimation/
+sh batch.sh
 ```
 
+Output files in CSV or RData format will be created to `input`, `tours/output`, `estimation`, and `estimation/alternatives` folders.
 
 ## Troubleshooting
 

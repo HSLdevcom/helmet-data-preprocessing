@@ -17,8 +17,5 @@ estimation/alternatives-columns-*.txt
 # Extra config files
 input-config-*.json
 
-# R files
-*.R
-
 # IDE-specific folders
 .idea
