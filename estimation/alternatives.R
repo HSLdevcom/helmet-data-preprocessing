@@ -200,7 +200,7 @@ columns$column = sprintf("^%s$", columns$column)
 
 
 alternatives_peripheral = subset(alternatives,
-                                 model == 2 & mode %in% c(3,4,5))
+                                 model == 2)
 data_columns = write_estimation_data(alternatives=alternatives_peripheral,
                                      batch_size=100,
                                      model_name="peripheral",
@@ -212,7 +212,7 @@ writeLines(data_columns, "alternatives-columns-peripheral.txt")
 
 
 # alternatives_metropolitan = subset(alternatives,
-#                                    model == 1 & mode %in% c(1,2,3,4,5))
+#                                    model == 1)
 # data_columns = write_estimation_data(alternatives=alternatives_metropolitan,
 #                                      batch_size=100,
 #                                      model_name="metropolitan",
