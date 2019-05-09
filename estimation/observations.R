@@ -188,28 +188,6 @@ background_information = rbind_list(background_information, df)
 stopifnot(length(unique(background_information$pid)) == nrow(background_information))
 observations = leftjoin(observations, background_information)
 
-# Divide data into two models
-
-m = match(observations$rzone, zones$zone)
-hs15_model = (zones$capital_region[m] | zones$surrounding_municipality[m]) &
-    observations$izone %in% zones$zone &
-    observations$jzone %in% zones$zone &
-    observations$survey == 0
-outer_model = zones$peripheral_municipality[m] &
-    observations$izone %in% zones$zone &
-    observations$jzone %in% zones$zone &
-    observations$survey == 2
-stopif(any(hs15_model & outer_model))
-
-observations$model = NA
-observations$model[hs15_model] = 1
-observations$model[outer_model] = 2
-
-# Subset estimation data
-
-observations = subset(observations, mode %in% 1:5)
-observations = subset(observations, !is.na(model))
-
 observations = downclass(observations)
 check.na(observations)
 save(observations, file="observations.RData")
