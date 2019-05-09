@@ -5,7 +5,8 @@ matrices = as.data.frame(data.table::fread("matrices.csv",
                                            stringsAsFactors=FALSE))
 
 # Average travel time, length, and car cost matrices
-observations = load1("observations.RData")
+observations = rbind_list(load1("observations-metropolitan.RData"),
+                          load1("observations-peripheral.RData"))
 weights = dfsas(year=c(observations$year, observations$year),
                 xfactor=c(observations$xfactor, observations$xfactor),
                 mtype=c(observations$mtype, observations$mtype),
