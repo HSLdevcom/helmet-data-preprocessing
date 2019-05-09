@@ -65,20 +65,16 @@ time.start = Sys.time()
 # Join original matrices and average matrices.
 matrices$izone = zones$zone[match(matrices$izone, zones$zone_orig)]
 matrices$jzone = zones$zone[match(matrices$jzone, zones$zone_orig)]
-m = which(matrices_needed %in% names(matrices))
 matrices = matrices[, c("izone",
                         "jzone",
                         "same_municipality",
                         "same_zone",
                         "area",
-                        matrices_needed[m])]
+                        grep("bicycle|pedestrian|cost_transit", colnames(matrices), value=TRUE))]
 average$izone = zones$zone[match(average$izone, zones$zone_orig)]
 average$jzone = zones$zone[match(average$jzone, zones$zone_orig)]
-m = which(matrices_needed %in% names(average))
-average = average[, c("izone",
-                      "jzone",
-                      matrices_needed[m])]
 matrices = leftjoin(matrices, average)
+post.gc(rm(average))
 
 
 # Create a list of square matrices to make joining easier
@@ -100,7 +96,6 @@ for (i in seq_along(matrix_columns)) {
 }
 post.gc(rm(matrices))
 progress.final(time.start)
-stopifnot(all(matrices_needed %in% names(matrix_list)))
 
 
 # Join data
@@ -177,7 +172,7 @@ input = read.delims("input.txt")
 for (i in rows.along(input)) {
     
     fname = sprintf("observations-%s.RData", input$name[i])
-    message(sprintf("%d/%d: %s", i, nrow(input), fname)
+    message(sprintf("%d/%d: %s", i, nrow(input), fname))
     alternatives = load1(fname)
     
     # From which matrix travel times and lengths are read from?
@@ -197,12 +192,12 @@ for (i in rows.along(input)) {
     alternatives$aux_length_pedestrian = sprintf("length_pedestrian_%d", alternatives$year)
     
     matrices_needed = unique(unlist(alternatives[, grepl("^aux_", names(alternatives))]))
+    stopifnot(all(matrices_needed %in% names(matrix_list)))
     
     fname = sprintf("order-%s.txt", input$name[i])
     columns = read.delims(fname)
     columns$column = sprintf("^%s$", columns$column)
     
-    message("Writing estimation data...")
     data_columns = write_estimation_data(alternatives=alternatives,
                                          batch_size=100,
                                          model_name=input$name[i],
