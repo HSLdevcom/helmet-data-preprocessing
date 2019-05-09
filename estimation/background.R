@@ -114,4 +114,6 @@ background = rbind_list(background, df)
 # Add personal data to tours
 
 stopifnot(length(unique(background$pid)) == nrow(background))
+background = downclass(background)
+check.na(background)
 save(background, file="background.RData")
