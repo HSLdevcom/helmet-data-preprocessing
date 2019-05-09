@@ -5,6 +5,10 @@ rm *.RData *.csv
 
 rscript zones.R
 rscript matrices.R
+rscript background.R
+
+rscript tours.R
+rscript constructed.R
 rscript observations.R
 rscript average.R
 rscript alternatives.R
