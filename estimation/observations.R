@@ -31,6 +31,11 @@ for (i in rows.along(input)) {
     observations$ttype[m] = 6
     m = is.na(observations$ttype)
     observations$ttype[m] = 7
+    m = (observations$constructed & observations$ttype == 1)
+    observations$ttype[m] = 8
+    m = (observations$constructed & observations$ttype != 8)
+    observations$ttype[m] = 9
+    
     observations$other_destinations = ifelse(rowSums(tours[, grepl("^visits_t", colnames(tours), perl=TRUE)]) > 2, 1, 0)
     observations$closed = ifelse(tours$closed, 1, 2)
     
@@ -68,9 +73,9 @@ for (i in rows.along(input)) {
     m = which(rowSums(tours[,grep("^visits_t[0-9]+", colnames(tours))]) == 1)
     observations$jpeak[m] = NA
     
-    observations$mtype = ifelse(observations$ttype==1,
+    observations$mtype = ifelse(observations$ttype %in% c(1,8),
                       "hbwork",
-                      ifelse(observations$ttype %in% c(2,3,4,5),
+                      ifelse(observations$ttype %in% c(2,3,4,5,9),
                              "hbother",
                              "nhb"))
     

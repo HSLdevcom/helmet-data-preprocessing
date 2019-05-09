@@ -12,6 +12,7 @@ tours = read.csv2(ancfile("tours/output/tours-hlt.csv"),
 tours$closed = ifelse(tours$closed == "True", TRUE, FALSE)
 tours$model = 2
 tours$year = 2016
+tours$constructed = FALSE
 m = match(tours$rzone, zones$zone_orig)
 tours = subset(tours, (zones$peripheral_municipality[m] &
                            tours$zone_origin %in% zones$zone_orig &
@@ -27,6 +28,7 @@ tours = read.csv2(ancfile("tours/output/tours-heha.csv"),
 tours$closed = ifelse(tours$closed == "True", TRUE, FALSE)
 tours$model = 1
 tours$year = 2018
+tours$constructed = FALSE
 m = match(tours$rzone, zones$zone_orig)
 tours = subset(tours, ((zones$capital_region[m] | zones$surrounding_municipality[m]) &
                            tours$zone_origin %in% zones$zone_orig &
