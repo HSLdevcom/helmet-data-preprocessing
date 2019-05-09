@@ -1,4 +1,4 @@
 file	name
-tours-metropolitan.RData	metropolitan
 tours-peripheral.RData	peripheral
 constructed-peripheral.RData	peripheral-constructed
+tours-metropolitan.RData	metropolitan
