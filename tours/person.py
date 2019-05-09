@@ -16,6 +16,9 @@ class Person(object):
     def get_xfactor(self):
         return self.xfactor
 
+    def get_rzone(self):
+        return self.rzone
+
     def get_diary(self):
         return self.diary
 
@@ -43,6 +46,7 @@ class Person(object):
     def to_dict(self):
         res = {
                 "pid": self.get_id(),
-                "xfactor": self.get_xfactor()
+                "xfactor": self.get_xfactor(),
+                "rzone": self.get_rzone(),
                 }
         return res
