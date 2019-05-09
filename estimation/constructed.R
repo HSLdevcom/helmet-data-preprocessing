@@ -46,7 +46,7 @@ constructed$visits_t11 = ifelse(constructed$destination == 11, 1, 0)
 constructed$visits_t12 = ifelse(constructed$destination == 12, 1, 0)
 constructed$model = tours$model
 constructed$year = tours$year
-tours$constructed = TRUE
+constructed$constructed = TRUE
 
 stopifnot(all(colnames(constructed) == tour_columns))
 
