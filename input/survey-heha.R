@@ -169,6 +169,10 @@ flip_trip = function(trip,
     flipped_trip$PITUUS = trip$PITUUS
     flipped_trip$matnro = trip$matnro + 0.5
     flipped_trip$imputated = TRUE
+    flipped_trip = unpick(flipped_trip,
+                          LPdttm, MPdttm,
+                          dt1, tm1, dt2, tm2,
+                          LPdttm_, MPdttm_)
     return(flipped_trip)
 }
 
