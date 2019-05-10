@@ -71,11 +71,17 @@ def read_people_from_hlt(fname):
                          skipinitialspace=True,
                          usecols=[
                                  "pid",
-                                 "xfactor"],
+                                 "xfactor",
+                                 "rsij2019"],
                          dtype={
                                  "pid": int,
-                                 "xfactor": float
+                                 "xfactor": float,
+                                 "rsij2019": int,
                                  })
+    columns = {
+            "rsij2019": "rzone",
+            }
+    df.rename(columns=columns, inplace=True)
     return df
 
 
@@ -164,14 +170,17 @@ def read_people_from_heha(fname):
             skipinitialspace=True,
             usecols=[
                     "pid",
-                    "paino6"
+                    "paino6",
+                    "ap_sij19",
                     ],
             dtype={
                     "pid": int,
-                    "paino6": float
+                    "paino6": float,
+                    "ap_sij19": int,
                     })
     columns = {
-        "paino6": "xfactor"
+        "paino6": "xfactor",
+        "ap_sij19": "rzone",
         }
     df.rename(columns=columns, inplace=True)
     return df

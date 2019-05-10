@@ -3,10 +3,10 @@
 
 
 class Person(object):
-    def __init__(self, pid, xfactor, rx, ry):
+    def __init__(self, pid, xfactor, rzone):
         self.pid = int(pid)          # integer
         self.xfactor = float(xfactor)  # float
-        self.home = (float(rx), float(ry))    # list
+        self.rzone = int(rzone)    # list
         self.diary = []         # list of Trip instances
         self.tours = []         # list of Tour instances
 
@@ -15,6 +15,9 @@ class Person(object):
 
     def get_xfactor(self):
         return self.xfactor
+
+    def get_rzone(self):
+        return self.rzone
 
     def get_diary(self):
         return self.diary
@@ -43,6 +46,7 @@ class Person(object):
     def to_dict(self):
         res = {
                 "pid": self.get_id(),
-                "xfactor": self.get_xfactor()
+                "xfactor": self.get_xfactor(),
+                "rzone": self.get_rzone(),
                 }
         return res

@@ -66,7 +66,7 @@ locations = sort_list_by_method(locations, "get_id")
 people = list()
 for index, row in taus.iterrows():
     # Creating a new Person object
-    new_person = Person(row["pid"], row["xfactor"], -1, -1)
+    new_person = Person(row["pid"], row["xfactor"], row["rzone"])
     # Subsetting his/her trips from all trips
     matk_subset = matk.loc[matk["pid"] == new_person.get_id()]
     # Creating a list of objects of class Trip
@@ -234,6 +234,7 @@ tour_output.to_csv(RESULT_FILE_NAME,
                    decimal=",",
                    columns=["pid",
                             "xfactor",
+                            "rzone",
                             "tour_type",
                             "no_of_trips",
                             "closed",
