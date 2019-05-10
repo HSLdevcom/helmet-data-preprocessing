@@ -33,6 +33,23 @@ get_ttype = function(x, y) {
     return(classes)
 }
 
+
+#' Get peak hour from timestamps.
+#' 
+#' @param x A character vector with timestamps of format \code{%H:%M:%S}.
+#' @return An character vector of which peak hour does the timestamp belong to.
+get_peak = function(x) {
+    peak = apply.breaks(x,
+                        class=c("morning","afternoon"),
+                        c("06:00:00","15:00:00"),
+                        c("08:59:59","17:59:59"))
+    m = which(is.na(peak))
+    peak[m] = "other"
+    m = which(x == "")
+    peak[m] = NA
+    return(peak)
+}
+
 zones = load1("zones.RData")
 background = load1("background.RData")
 
@@ -63,23 +80,8 @@ for (i in rows.along(input)) {
     m = match(tours$zone_destination, zones$zone_orig)
     observations$jzone = zones$zone[m]
     
-    observations$ipeak = apply.breaks(tours$itime_origin,
-                            class=c("morning","afternoon"),
-                            c("06:00:00","15:00:00"),
-                            c("08:59:59","17:59:59"))
-    m = which(is.na(observations$ipeak))
-    observations$ipeak[m] = "other"
-    m = which(tours$itime_origin == "")
-    observations$ipeak[m] = NA
-    
-    observations$jpeak = apply.breaks(tours$itime_destination,
-                            class=c("morning","afternoon"),
-                            c("06:00:00","15:00:00"),
-                            c("08:59:59","17:59:59"))
-    m = which(is.na(observations$jpeak))
-    observations$jpeak[m] = "other"
-    m = which(tours$itime_destination == "")
-    observations$jpeak[m] = NA
+    observations$ipeak = get_peak(tours$itime_origin)
+    observations$jpeak = get_peak(tours$itime_destination)
     
     # If tour visits only one place and returns to it, do not interpret a return
     # time slot.
