@@ -210,10 +210,10 @@ class Tour(object):
                 # After home, work, school, and study locations (1-4) all other
                 # location groups are of same priority.
                 groups.append(low_priority)
-                distances.append(origin.eucd(location))
+                distances.append(origin.eucd(location) + destination.eucd(location))
             else:
                 groups.append(group)
-                distances.append(origin.eucd(location))
+                distances.append(origin.eucd(location) + destination.eucd(location))
         destination_group = min(groups)
         farthest_distance = -1
         m = -1
