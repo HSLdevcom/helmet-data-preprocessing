@@ -156,8 +156,8 @@ flip_trip = function(trip,
     flipped_trip$jy = trip$iy
     flipped_trip$itype = trip$jtype
     flipped_trip$jtype = trip$itype
-    flipped_trip$lp_sij19 = trip$lp_sij19
-    flipped_trip$mp_sij19 = trip$mp_sij19
+    flipped_trip$lp_sij19 = trip$mp_sij19
+    flipped_trip$mp_sij19 = trip$lp_sij19
     # 30 minutes is spent on the location
     staytime = staytimes[trip$jtype]
     flipped_trip$idatetime = trip$jdatetime + minutes(staytime)
