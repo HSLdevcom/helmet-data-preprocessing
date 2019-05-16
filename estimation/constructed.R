@@ -36,6 +36,7 @@ for (i in seq_along(input)) {
     constructed$zone_origin = tours$rzone
     constructed$zone_destination = tours$zone_origin
     constructed$zone_secondary_destination = -1
+    constructed$order = "AB"
     constructed$mode = 4
     constructed$length = NA
     constructed$path = sprintf("1 - %d", tours$zone_origin)

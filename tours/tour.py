@@ -255,6 +255,37 @@ class Tour(object):
         tour_type = constants.collapse(groups)
         return tour_type
 
+    def get_order_of_visits(self, origin, destination, secondary_destination):
+        locations = self.get_locations()
+        letters = ["A", "B", "C"]
+        if origin not in locations:
+            raise ValueError("`origin` not in tour!")
+        if destination not in locations:
+            raise ValueError("`destination` not in tour!")
+        if secondary_destination not in locations:
+            # Does not matter so much if secondary destination does not appear
+            # since it can include an empty location anyway.
+            if secondary_destination.get_id() == -1:
+                letters.remove("C")
+            else:
+                raise ValueError("`secondary_destination` not in tour!")
+        if origin is destination:
+            if secondary_destination.get_id() == -1:
+                letters.remove("B")
+            else:
+                print "`origin` and `destination` are the same but still `secondary_destination` exists!"
+        # Finally, find out positions of each location
+        indices = list()
+        if "A" in letters:
+            indices.append(locations.index(origin))
+        if "B" in letters:
+            indices.append(locations.index(destination))
+        if "C" in letters:
+            indices.append(locations.index(secondary_destination))
+        # https://stackoverflow.com/a/6618543
+        location_order = [letter for _, letter in sorted(zip(indices, letters))]
+        return "".join(location_order)
+
     def to_dict(self):
         empty_location = Location(tid=-1, ttype=-1, tx=-1, ty=-1, zone=-1)
         origin = self.get_origin()
@@ -278,6 +309,9 @@ class Tour(object):
                 "zone_origin": origin.get_zone(),
                 "zone_destination": destination.get_zone(),
                 "zone_secondary_destination": secondary_destination.get_zone(),
+                "order": self.get_order_of_visits(origin,
+                                                  destination,
+                                                  secondary_destination),
                 "tour_type": self.get_tour_type(),
                 "visits_t1": self.get_number_of_visits(1),
                 "visits_t2": self.get_number_of_visits(2),
