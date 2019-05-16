@@ -172,10 +172,16 @@ class Tour(object):
                 # After home, work, school, and study locations (1-4) all other
                 # location groups are of same priority.
                 groups.append(low_priority)
-                distances.append(origin.eucd(location))
+                distance = origin.eucd(location)
+                # In case of `nan` coordinates, the distance between Locations
+                # is zero. If there are several destination candidates of same
+                # priority, choosing a Location with missing coordinates is
+                # very unlikely.
+                distances.append(constants.if_nan_then(distance, 0.0))
             else:
                 groups.append(group)
-                distances.append(origin.eucd(location))
+                distance = origin.eucd(location)
+                distances.append(constants.if_nan_then(distance, 0.0))
         destination_group = min(groups)
         farthest_distance = -1
         m = -1
