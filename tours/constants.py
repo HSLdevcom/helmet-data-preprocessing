@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import pandas
+from math import isnan
 
 TYPE_HOME = 1
 TYPE_WORK = 2
@@ -35,6 +36,13 @@ GROUP_NAME = {
 def collapse(list_of_printables, sep=" - "):
     text = sep.join(str(x) for x in list_of_printables)
     return text
+
+
+def if_nan_then(x, y):
+    if isnan(x):
+        return y
+    else:
+        return x
 
 
 def read_people(filepath, survey):
