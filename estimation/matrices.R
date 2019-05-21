@@ -46,6 +46,7 @@ files = dfsas(fname=c("Vastukset2016/mf380.csv",
                       "Vastukset2018/mf110.csv",
                       "Vastukset2018/mf114.csv",
                       "Vastukset2018/mf118.csv",
+                      "Vastukset2018/mf377.csv",
                       "Vastukset2018/mf386.csv",
                       "Vastukset2018/mf387.csv",
                       "Vastukset2018/mf100.csv",
@@ -75,6 +76,7 @@ files = dfsas(fname=c("Vastukset2016/mf380.csv",
                      "ttime_transit_aht_2018",
                      "ttime_transit_pt_2018",
                      "ttime_transit_iht_2018",
+                     "length_pedestrian_2018",
                      "ttime_bicycle_2018",
                      "length_bicycle_2018",
                      "length_bicycle_separate_cycleway_2018",
@@ -119,10 +121,7 @@ matrices$cost_transit_other_2016 = matrices$cost_transit_other_2018
 matrices = unpick(matrices, cost_transit_monthly_2018)
 
 # Walking
-matrices$length_pedestrian_2016 = 0L
-matrices$length_pedestrian_2018 = 0L
-matrices$ttime_pedestrian_2016 = 0L
-matrices$ttime_pedestrian_2018 = 0L
+matrices$ttime_pedestrian_2018 = matrices$length_pedestrian_2018 / 5.0 * 60
 
 # Municipalities
 matrices$imunicipality = zones$municipality[match(matrices$izone, zones$zone_orig)]
