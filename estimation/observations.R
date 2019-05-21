@@ -94,6 +94,9 @@ for (i in rows.along(input)) {
                              "hbother",
                              "nhb"))
     
+    m = match(tours$zone_secondary_destination, zones$zone_orig)
+    observations$kzone = zones$zone[m]
+    
     # Add background information
     observations = leftjoin(observations, background)
     
