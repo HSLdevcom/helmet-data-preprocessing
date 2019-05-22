@@ -60,7 +60,7 @@ You can check dependencies from the DESCRIPTION file or from the [Dockerfile](Do
 and then install it:
 
 ```   
-cd strafica && Rscript install.R
+cd strafica && Rscript ./install.R
 ```
 
 
@@ -140,9 +140,9 @@ pipenv run pytest
 
 ```
 cd input/
-rscript zones.R
-rscript survey-heha.R
-rscript survey-hlt.R
+Rscript zones.R
+Rscript survey-heha.R
+Rscript survey-hlt.R
 cd ..
 pipenv run python ./tours/main.py
 # ALTERNATIVELY:
