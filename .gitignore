@@ -8,6 +8,9 @@
 tours/output/*.csv
 input/*.csv
 
+# Proprietary libraries
+strafica/
+
 # Output files
 estimation/alternatives/*.txt
 estimation/alternatives-columns-*.txt
