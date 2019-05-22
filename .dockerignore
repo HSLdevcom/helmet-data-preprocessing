@@ -1,0 +1,10 @@
+*
+!estimation
+!input
+!tests
+!tours
+!input-config.json
+!Pipfile
+!Pipfile.lock
+!README.md
+!*.py
