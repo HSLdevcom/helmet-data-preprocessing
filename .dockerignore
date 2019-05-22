@@ -4,6 +4,7 @@
 !tests
 !tours
 !input-config.json
+!install-dependencies.R
 !Pipfile
 !Pipfile.lock
 !README.md
