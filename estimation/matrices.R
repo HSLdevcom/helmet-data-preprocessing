@@ -122,6 +122,8 @@ matrices = unpick(matrices, cost_transit_monthly_2018)
 
 # Walking
 matrices$ttime_pedestrian_2018 = matrices$length_pedestrian_2018 / 5.0 * 60
+matrices$length_pedestrian_2016 = matrices$length_pedestrian_2018
+matrices$ttime_pedestrian_2016 = matrices$ttime_pedestrian_2018
 
 # Municipalities
 matrices$imunicipality = zones$municipality[match(matrices$izone, zones$zone_orig)]
