@@ -73,6 +73,7 @@ for (i in rows.along(input)) {
     observations$izone = zones$zone[m]
     observations$izone_cbd = ifelse(zones$cbd[m]==1, 1, 0)
     observations$izone_population_density = zones$population_density[m]
+    observations$izone_job_density = zones$job_density[m]
     observations$izone_housing = zones$housing[m]
     observations$izone_parking_fee_other = zones$parking_fee_other[m]
     observations$izone_cars_per_people = zones$cars_per_people[m]
