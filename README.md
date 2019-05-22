@@ -41,7 +41,28 @@ pipenv install <your-new-library>
 
 To use R, install the newest version of R. The scripts were written in R 3.4.4. Please note, that scripts use encoding `windows-1252`.
 
-Then, install `strafica` package and its dependencies. You can check dependencies from the DESCRIPTION file. `strafica` package can be found from the office for selected people to use, and later online.
+R-environment is also virtualized using Docker. See [Dockerfile](Dockerfile) for details.
+Build and run using attached scripts. Run-script will open up a bash session where user
+can start the preprocessing. External dependencies and the data need to be however mapped
+as external volume, see [the run script](run-docker.sh).
+
+```   
+./build-docker.sh
+./run-docker.sh
+```   
+
+
+### External dependencies
+
+R-scripts use proprietary library called `strafica` which needs to be installed separately.
+`strafica` package can be found from the office for selected people to use.
+You can check dependencies from the DESCRIPTION file or from the [Dockerfile](Dockerfile)
+and then install it:
+
+```   
+cd strafica && Rscript install.R
+```
+
 
 ### Input data
 
@@ -136,11 +157,9 @@ Output files in CSV or RData format will be created to `input`, `tours/output`, 
 ## Troubleshooting
 
 Q: My application is using Python 3 instead of Python 2  
-A: 
-  - Remember to use pipenv run command instead of python 
+A:
+  - Remember to use pipenv run command instead of python
    - you can check the version with pipenv run python --version
 
 Q: Some library is not found (f.ex Pandas)  
 A: Run: pipenv install
-
-   
