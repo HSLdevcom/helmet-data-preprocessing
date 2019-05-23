@@ -28,6 +28,7 @@ izone_cars_per_people
 izone_cbd
 mode
 jzone
+izone_job_density
 azone_[0-9]+_cbd
 azone_[0-9]+_same_municipality
 azone_[0-9]+_same_zone
