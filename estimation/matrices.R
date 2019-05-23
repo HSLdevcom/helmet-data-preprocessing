@@ -121,7 +121,8 @@ matrices$cost_transit_other_2016 = matrices$cost_transit_other_2018
 matrices = unpick(matrices, cost_transit_monthly_2018)
 
 # Walking
-matrices$ttime_pedestrian_2018 = matrices$length_pedestrian_2018 / 5.0 * 60
+walk_speed = 5.0 / 60  # km/min
+matrices$ttime_pedestrian_2018 = matrices$length_pedestrian_2018 / walk_speed  # min
 matrices$length_pedestrian_2016 = matrices$length_pedestrian_2018
 matrices$ttime_pedestrian_2016 = matrices$ttime_pedestrian_2018
 
