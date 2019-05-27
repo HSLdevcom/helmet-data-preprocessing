@@ -139,7 +139,7 @@ class Tour(object):
         locations = self.get_locations()
         priorities = list()
         for location in locations:
-            priority = constants.TYPE_PRIORITY[location.get_type()]
+            priority = location.get_priority()
             priorities.append(priority)
         m = priorities.index(min(priorities))
         origin = locations[m]
@@ -154,7 +154,7 @@ class Tour(object):
         distances = list()
         low_priority = max(constants.TYPE_PRIORITY.values()) + 100
         for location in locations:
-            priority = constants.TYPE_PRIORITY[location.get_type()]
+            priority = location.get_priority()
             if location is origin:
                 # Destination is not origin unless the tour is only
                 # origin-origin.
@@ -193,7 +193,7 @@ class Tour(object):
         distances = list()
         low_priority = max(constants.TYPE_PRIORITY.values()) + 100
         for location in locations:
-            priority = constants.TYPE_PRIORITY[location.get_type()]
+            priority = location.get_priority()
             priorities.append(priority)
             distance1 = origin.eucd(location)
             distance2 = destination.eucd(location)
@@ -223,7 +223,7 @@ class Tour(object):
         locations = self.get_locations()
         groups = list()
         for location in locations:
-            groups.append(constants.TYPE_GROUP[location.get_type()])
+            groups.append(location.get_group())
         groups.sort()
         tour_type = constants.collapse(groups)
         return tour_type
