@@ -29,10 +29,14 @@ for (i in seq_along(input)) {
     constructed$jtime = ""
     constructed$origin = TYPE_HOME
     constructed$destination = tours$zone_origin
+    constructed$secondary_destination = -1
     constructed$itime_origin = ""
     constructed$itime_destination = ""
+    constructed$itime_secondary_destination = ""
     constructed$zone_origin = tours$rzone
     constructed$zone_destination = tours$zone_origin
+    constructed$zone_secondary_destination = -1
+    constructed$order = "AB"
     constructed$mode = 4
     constructed$length = NA
     constructed$path = sprintf("1 - %d", tours$zone_origin)

@@ -199,7 +199,7 @@ jkoht = rename(ikoht, tid=jtid)
 matk = leftjoin(matk, jkoht)
 
 # Replace trip types by the ones in HEHA
-types = read.csv2("types-hlt.csv", stringsAsFactors=FALSE, fileEncoding="utf-8")
+types = read.delims("types-hlt.txt", fileEncoding="utf-8")
 m = match(matk$M_LTK, types$id)
 matk$itype = types$type[m]
 m = match(matk$M_MTK, types$id)
@@ -225,7 +225,7 @@ paik = arrange(paik, tid)
 ### Modes
 ###
 
-modes = read.csv2("modes-hlt.csv", stringsAsFactors=FALSE, fileEncoding="utf-8")
+modes = read.delims("modes-hlt.txt", fileEncoding="utf-8")
 m = match(matk$M_PAAKULKUTAPA, modes$id)
 matk$mode = modes$mode[m]
 m = is.na(matk$mode)

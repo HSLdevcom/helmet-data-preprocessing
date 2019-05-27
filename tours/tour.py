@@ -3,6 +3,7 @@
 
 
 import constants
+from location import Location
 
 
 class Tour(object):
@@ -192,6 +193,42 @@ class Tour(object):
         destination = locations[m]
         return destination
 
+    def get_secondary_destination(self, origin, destination, empty_location):
+        # Secondary destination is searched from other Locations apart from
+        # origin and destination. If there are
+        # multiple Locations with same priority, the farthest one is chosen.
+        # If no other locations apart from origin and destination can not be
+        # found, empty_location is returned.
+        locations = [location for location in self.get_locations() if
+                     location is not origin and location is not destination]
+        if not locations:
+            return empty_location
+        groups = list()
+        distances = list()
+        low_priority = max(constants.TYPE_GROUP.values()) + 100
+        for location in locations:
+            group = constants.TYPE_GROUP[location.get_type()]
+            if group >= 5:
+                # After home, work, school, and study locations (1-4) all other
+                # location groups are of same priority.
+                groups.append(low_priority)
+            else:
+                groups.append(group)
+            distance1 = origin.eucd(location)
+            distance2 = destination.eucd(location)
+            distances.append(constants.if_nan_then(distance1, 0.0) +
+                             constants.if_nan_then(distance2, 0.0))
+        destination_group = min(groups)
+        farthest_distance = -1
+        m = -1
+        for index, location in enumerate(locations, start=0):
+            if (groups[index] == destination_group and
+                    distances[index] >= farthest_distance):
+                m = index
+                farthest_distance = distances[index]
+        destination = locations[m]
+        return destination
+
     def get_number_of_visits(self, ttype):
         # Calculates the number of visits to a certain type of location. If Tour
         # is closed, the return trip will not be calculated as new visit.
@@ -210,9 +247,44 @@ class Tour(object):
         tour_type = constants.collapse(groups)
         return tour_type
 
+    def get_order_of_visits(self, origin, destination, secondary_destination):
+        locations = self.get_locations()
+        letters = ["A", "B", "C"]
+        if origin not in locations:
+            raise ValueError("`origin` not in tour!")
+        if destination not in locations:
+            raise ValueError("`destination` not in tour!")
+        if secondary_destination not in locations:
+            # Does not matter so much if secondary destination does not appear
+            # since it can include an empty location anyway.
+            if secondary_destination.get_id() == -1:
+                letters.remove("C")
+            else:
+                raise ValueError("`secondary_destination` not in tour!")
+        if origin is destination:
+            if secondary_destination.get_id() == -1:
+                letters.remove("B")
+            else:
+                print "`origin` and `destination` are the same but still `secondary_destination` exists!"
+        # Finally, find out positions of each location
+        indices = list()
+        if "A" in letters:
+            indices.append(locations.index(origin))
+        if "B" in letters:
+            indices.append(locations.index(destination))
+        if "C" in letters:
+            indices.append(locations.index(secondary_destination))
+        # https://stackoverflow.com/a/6618543
+        location_order = [letter for _, letter in sorted(zip(indices, letters))]
+        return "".join(location_order)
+
     def to_dict(self):
+        empty_location = Location(tid=-1, ttype=-1, tx=-1, ty=-1, zone=-1)
         origin = self.get_origin()
         destination = self.get_destination(origin)
+        secondary_destination = self.get_secondary_destination(origin,
+                                                               destination,
+                                                               empty_location)
         res = {
                 "no_of_trips": self.get_number_of_trips(),
                 "closed": self.is_closed(),
@@ -222,10 +294,16 @@ class Tour(object):
                 "source": self.get_source(),
                 "origin": origin.get_type(),
                 "destination": destination.get_type(),
+                "secondary_destination": secondary_destination.get_type(),
                 "itime_origin": self.get_itime_from(origin),
                 "itime_destination": self.get_itime_from(destination),
+                "itime_secondary_destination": self.get_itime_from(secondary_destination),
                 "zone_origin": origin.get_zone(),
                 "zone_destination": destination.get_zone(),
+                "zone_secondary_destination": secondary_destination.get_zone(),
+                "order": self.get_order_of_visits(origin,
+                                                  destination,
+                                                  secondary_destination),
                 "tour_type": self.get_tour_type(),
                 "visits_t1": self.get_number_of_visits(1),
                 "visits_t2": self.get_number_of_visits(2),

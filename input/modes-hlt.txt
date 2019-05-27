@@ -1,0 +1,39 @@
+id	M_PAAKULKUTAPA	mode_name	mode
+1	kävely, juoksu, potkukelkka, pyörätuoli, rollaattori	ka	1
+2	polkupyörä, myös sähköavusteinen	py	2
+3	rullaluistimet, rullasukset	ka	1
+4	sukset	muu	-1
+5	hevonen, koiravaljakko ja muu eläinkyyti	muu	-1
+6	muu liikunnallinen kulkutapa	muu	-1
+7	henkilöauto, kuljettajana	ak	4
+8	henkilöauto, matkustajana	am	5
+9	pakettiauto, kuljettajana	ak	4
+10	pakettiauto, matkustajana	am	5
+11	taksi, koulutaksi, invataksi, kutsutaksi	am	5
+12	mopoauto	muu	-1
+13	lähiliikenteen bussi	jl	3
+14	kaukoliikenteen linja-auto	jl	3
+15	tilausbussi	jl	3
+16	muu linja-auto muu (esim. pikkubussi, koulubussi, palvelulinja, turistibussi)	jl	3
+17	lähijuna, taajamajuna, kiskobussi	jl	3
+18	kaukojuna	jl	3
+19	raitiovaunu	jl	3
+20	metro	jl	3
+21	muu raideliikenne	jl	3
+22	reittilento	muu	-1
+23	tilauslento	muu	-1
+24	muu lentokone (esim. pienkone, helikopteri)	muu	-1
+25	purjelentokone, laskuvarjo, liitovarjo, muu moottoroimaton	muu	-1
+26	soutuvene, purjevene, kanootti, kumivene, jolla ym.	muu	-1
+27	moottorivene	muu	-1
+28	laiva, autolautta, pika-alus	muu	-1
+29	lossi, yhteysalus, lautta	muu	-1
+30	moottoripyörä, kevytmoottoripyörä	muu	-1
+31	mopo, moposkootteri	muu	-1
+32	moottorikelkka, mönkijä, golf-auto ym.	muu	-1
+33	matkailuajoneuvo	muu	-1
+34	kuorma-auto	muu	-1
+35	traktori, työkone	muu	-1
+36	hälytysajoneuvo (ambulanssi, paloauto, poliisiauto)	muu	-1
+37	muu kulkutapa	muu	-1
+99	(ei ollut vaihtoehtoa)	muu	-1
