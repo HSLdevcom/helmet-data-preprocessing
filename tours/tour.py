@@ -219,12 +219,13 @@ class Tour(object):
             types.append(location.get_type())
         return types.count(ttype)
 
-    def get_tour_type(self):
-        locations = self.get_locations()
+    def get_tour_type(self, origin, destination, secondary_destination):
         groups = list()
-        for location in locations:
-            groups.append(location.get_group())
-        groups.sort()
+        groups.append(origin.get_group())
+        if (destination is not origin):
+            groups.append(destination.get_group())
+        if (secondary_destination.get_type() != -1):
+            groups.append(secondary_destination.get_group())
         tour_type = constants.collapse(groups)
         return tour_type
 
@@ -285,7 +286,9 @@ class Tour(object):
                 "order": self.get_order_of_visits(origin,
                                                   destination,
                                                   secondary_destination),
-                "tour_type": self.get_tour_type(),
+                "tour_type": self.get_tour_type(origin,
+                                                destination,
+                                                secondary_destination),
                 "visits_t1": self.get_number_of_visits(1),
                 "visits_t2": self.get_number_of_visits(2),
                 "visits_t3": self.get_number_of_visits(3),
