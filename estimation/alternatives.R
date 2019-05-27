@@ -199,12 +199,34 @@ for (i in rows.along(input)) {
     columns = read.delims(fname)
     columns$column = sprintf("^%s$", columns$column)
     
-    data_columns = write_estimation_data(alternatives=alternatives,
-                                         batch_size=100,
-                                         model_name=input$name[i],
-                                         row=row,
-                                         matrix_list=matrix_list,
-                                         columns=columns)
+    if (input$name[i] == "metropolitan") {
+        data_columns = write_estimation_data(alternatives=subset(alternatives, ttype %in% c(1,2,3)),
+                                             batch_size=100,
+                                             model_name=sprintf("wss-%s", input$name[i]),
+                                             row=row,
+                                             matrix_list=matrix_list,
+                                             columns=columns)
+        data_columns = write_estimation_data(alternatives=subset(alternatives, ttype %in% c(4,5)),
+                                             batch_size=100,
+                                             model_name=sprintf("spbo-%s", input$name[i]),
+                                             row=row,
+                                             matrix_list=matrix_list,
+                                             columns=columns)
+        data_columns = write_estimation_data(alternatives=subset(alternatives, ttype %in% c(6,7)),
+                                             batch_size=100,
+                                             model_name=sprintf("wbo-%s", input$name[i]),
+                                             row=row,
+                                             matrix_list=matrix_list,
+                                             columns=columns)
+        
+    } else {
+        data_columns = write_estimation_data(alternatives=alternatives,
+                                             batch_size=100,
+                                             model_name=input$name[i],
+                                             row=row,
+                                             matrix_list=matrix_list,
+                                             columns=columns)
+    }
     
     message("Writing column names...")
     fname = sprintf("alternatives-columns-%s.txt", input$name[i])
