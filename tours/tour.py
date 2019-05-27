@@ -208,24 +208,16 @@ class Tour(object):
         low_priority = max(constants.TYPE_GROUP.values()) + 100
         for location in locations:
             group = constants.TYPE_GROUP[location.get_type()]
-            if location is origin:
-                raise ValueError("Secondary destination can not be same as origin!")
-            elif location is destination:
-                raise ValueError("Secondary destination can not be same as primary destination!")
-            elif group >= 5:
+            if group >= 5:
                 # After home, work, school, and study locations (1-4) all other
                 # location groups are of same priority.
                 groups.append(low_priority)
-                distance1 = origin.eucd(location)
-                distance2 = destination.eucd(location)
-                distances.append(constants.if_nan_then(distance1, 0.0) +
-                                 constants.if_nan_then(distance2, 0.0))
             else:
                 groups.append(group)
-                distance1 = origin.eucd(location)
-                distance2 = destination.eucd(location)
-                distances.append(constants.if_nan_then(distance1, 0.0) +
-                                 constants.if_nan_then(distance2, 0.0))
+            distance1 = origin.eucd(location)
+            distance2 = destination.eucd(location)
+            distances.append(constants.if_nan_then(distance1, 0.0) +
+                             constants.if_nan_then(distance2, 0.0))
         destination_group = min(groups)
         farthest_distance = -1
         m = -1
