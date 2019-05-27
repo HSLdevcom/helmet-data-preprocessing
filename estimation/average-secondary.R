@@ -8,9 +8,10 @@ matrices = as.data.frame(data.table::fread("matrices.csv",
 observations = load1("observations-secondary-metropolitan.RData")
 weights = dfsas(year=c(observations$year, observations$year),
                 xfactor=c(observations$xfactor, observations$xfactor),
+                mtype=c(observations$mtype, observations$mtype),
                 peak=c(observations$ipeak, observations$jpeak))
 weights = subset(weights, !is.na(peak))
-weights = fold(weights, .(year, peak), xfactor=sum(xfactor))
+weights = fold(weights, .(year, mtype, peak), xfactor=sum(xfactor))
 weights = tidyr::spread(weights, peak, xfactor)
 weights[, c("morning","afternoon","other")] = weights[, c("morning","afternoon","other")] / rowSums(weights[, c("morning","afternoon","other")])
 
@@ -36,7 +37,8 @@ for (i in seq_along(columns)) {
             weights$other[j]*matrices[, other]
         average_names[n] = sprintf("%s_%d_secondary",
                                    columns[i],
-                                   weights$year[j])
+                                   weights$year[j],
+                                   weights$mtype[j])
     }
 }
 average = as.data.frame(average)
