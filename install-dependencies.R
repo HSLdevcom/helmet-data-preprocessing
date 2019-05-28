@@ -1,5 +1,22 @@
-# Strafica dependencies
-install.packages(c('data.table', 'ggplot2', 'scales', 'DBI', 'plyr', 'png', 'rgdal', 'rgeos', 'sp', 'magrittr'))
-# helmet-data-preprocessing -specific dependencies
-install.packages(c('readxl'))
+# -*- coding: windows-1252-dos -*-
 
+# Install the newest version of devtools
+install.packages("devtools")
+
+require(devtools)
+cran = "http://cran.us.r-project.org"
+
+# strafica dependencies
+install_version("data.table", version="1.12.2", repos=cran)
+install_version("ggplot2", version="3.1.1", repos=cran)
+install_version("scales", version="1.0.0", repos=cran)
+install_version("DBI", version="1.0.0", repos=cran)
+install_version("plyr", version="1.8.4", repos=cran)
+install_version("png", version="0.1-7", repos=cran)
+install_version("rgdal", version="1.4-3", repos=cran)
+install_version("rgeos", version="0.4-3", repos=cran)
+install_version("sp", version="1.3-1", repos=cran)
+install_version("magrittr", version="1.5", repos=cran)
+
+# helmet-data-preprocessing -specific dependencies
+install_version("readxl", version="1.3.1", repos=cran)
