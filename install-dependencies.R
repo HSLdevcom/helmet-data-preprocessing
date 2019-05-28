@@ -20,3 +20,5 @@ install_version("magrittr", version="1.5", repos=cran)
 
 # helmet-data-preprocessing -specific dependencies
 install_version("readxl", version="1.3.1", repos=cran)
+install_version("lubridate", version="1.7.4", repos=cran)
+install_version("tidyr", version="0.8.3", repos=cran)
