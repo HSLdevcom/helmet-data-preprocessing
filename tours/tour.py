@@ -3,6 +3,7 @@
 
 
 import constants
+from location import Location
 
 
 class Tour(object):
@@ -135,19 +136,12 @@ class Tour(object):
         return ttype
 
     def get_origin(self):
-        # The numbers of type groups are simultaneosly priorities of choosing
-        # origin
         locations = self.get_locations()
-        groups = list()
-        low_priority = max(constants.TYPE_GROUP.values()) + 100
+        priorities = list()
         for location in locations:
-            group = constants.TYPE_GROUP[location.get_type()]
-            # After home, work, school, and study locations (1-4) all other
-            # location groups are of same priority.
-            if group >= 5:
-                group = low_priority
-            groups.append(group)
-        m = groups.index(min(groups))
+            priority = location.get_priority()
+            priorities.append(priority)
+        m = priorities.index(min(priorities))
         origin = locations[m]
         return origin
 
@@ -156,36 +150,60 @@ class Tour(object):
         # unless origin is the only Location that is ever visited. If there are
         # multiple Locations with same priority, the farthest one is chosen.
         locations = self.get_locations()
-        groups = list()
+        priorities = list()
         distances = list()
-        low_priority = max(constants.TYPE_GROUP.values()) + 100
-        lowest_priority = low_priority + 1
+        low_priority = max(constants.TYPE_PRIORITY.values()) + 100
         for location in locations:
-            group = constants.TYPE_GROUP[location.get_type()]
+            priority = location.get_priority()
             if location is origin:
                 # Destination is not origin unless the tour is only
                 # origin-origin.
-                groups.append(lowest_priority)
+                priorities.append(low_priority)
                 distances.append(0.0)
-            elif group >= 5:
-                # After home, work, school, and study locations (1-4) all other
-                # location groups are of same priority.
-                groups.append(low_priority)
+            else:
+                priorities.append(priority)
                 distance = origin.eucd(location)
                 # In case of `nan` coordinates, the distance between Locations
                 # is zero. If there are several destination candidates of same
                 # priority, choosing a Location with missing coordinates is
                 # very unlikely.
                 distances.append(constants.if_nan_then(distance, 0.0))
-            else:
-                groups.append(group)
-                distance = origin.eucd(location)
-                distances.append(constants.if_nan_then(distance, 0.0))
-        destination_group = min(groups)
+        destination_priority = min(priorities)
         farthest_distance = -1
         m = -1
         for index, location in enumerate(locations, start=0):
-            if (groups[index] == destination_group and
+            if (priorities[index] == destination_priority and
+                    distances[index] >= farthest_distance):
+                m = index
+                farthest_distance = distances[index]
+        destination = locations[m]
+        return destination
+
+    def get_secondary_destination(self, origin, destination, empty_location):
+        # Secondary destination is searched from other Locations apart from
+        # origin and destination. If there are
+        # multiple Locations with same priority, the farthest one is chosen.
+        # If no other locations apart from origin and destination can not be
+        # found, empty_location is returned.
+        locations = [location for location in self.get_locations() if
+                     location is not origin and location is not destination]
+        if not locations:
+            return empty_location
+        priorities = list()
+        distances = list()
+        low_priority = max(constants.TYPE_PRIORITY.values()) + 100
+        for location in locations:
+            priority = location.get_priority()
+            priorities.append(priority)
+            distance1 = origin.eucd(location)
+            distance2 = destination.eucd(location)
+            distances.append(constants.if_nan_then(distance1, 0.0) +
+                             constants.if_nan_then(distance2, 0.0))
+        destination_priority = min(priorities)
+        farthest_distance = -1
+        m = -1
+        for index, location in enumerate(locations, start=0):
+            if (priorities[index] == destination_priority and
                     distances[index] >= farthest_distance):
                 m = index
                 farthest_distance = distances[index]
@@ -201,18 +219,54 @@ class Tour(object):
             types.append(location.get_type())
         return types.count(ttype)
 
-    def get_tour_type(self):
-        locations = self.get_locations()
+    def get_tour_type(self, origin, destination, secondary_destination):
         groups = list()
-        for location in locations:
-            groups.append(constants.TYPE_GROUP[location.get_type()])
-        groups.sort()
+        groups.append(origin.get_group())
+        if (destination is not origin):
+            groups.append(destination.get_group())
+        if (secondary_destination.get_type() != -1):
+            groups.append(secondary_destination.get_group())
         tour_type = constants.collapse(groups)
         return tour_type
 
+    def get_order_of_visits(self, origin, destination, secondary_destination):
+        locations = self.get_locations()
+        letters = ["A", "B", "C"]
+        if origin not in locations:
+            raise ValueError("`origin` not in tour!")
+        if destination not in locations:
+            raise ValueError("`destination` not in tour!")
+        if secondary_destination not in locations:
+            # Does not matter so much if secondary destination does not appear
+            # since it can include an empty location anyway.
+            if secondary_destination.get_id() == -1:
+                letters.remove("C")
+            else:
+                raise ValueError("`secondary_destination` not in tour!")
+        if origin is destination:
+            if secondary_destination.get_id() == -1:
+                letters.remove("B")
+            else:
+                print "`origin` and `destination` are the same but still `secondary_destination` exists!"
+        # Finally, find out positions of each location
+        indices = list()
+        if "A" in letters:
+            indices.append(locations.index(origin))
+        if "B" in letters:
+            indices.append(locations.index(destination))
+        if "C" in letters:
+            indices.append(locations.index(secondary_destination))
+        # https://stackoverflow.com/a/6618543
+        location_order = [letter for _, letter in sorted(zip(indices, letters))]
+        return "".join(location_order)
+
     def to_dict(self):
+        empty_location = Location(tid=-1, ttype=-1, tx=-1, ty=-1, zone=-1)
         origin = self.get_origin()
         destination = self.get_destination(origin)
+        secondary_destination = self.get_secondary_destination(origin,
+                                                               destination,
+                                                               empty_location)
         res = {
                 "no_of_trips": self.get_number_of_trips(),
                 "closed": self.is_closed(),
@@ -222,11 +276,19 @@ class Tour(object):
                 "source": self.get_source(),
                 "origin": origin.get_type(),
                 "destination": destination.get_type(),
+                "secondary_destination": secondary_destination.get_type(),
                 "itime_origin": self.get_itime_from(origin),
                 "itime_destination": self.get_itime_from(destination),
+                "itime_secondary_destination": self.get_itime_from(secondary_destination),
                 "zone_origin": origin.get_zone(),
                 "zone_destination": destination.get_zone(),
-                "tour_type": self.get_tour_type(),
+                "zone_secondary_destination": secondary_destination.get_zone(),
+                "order": self.get_order_of_visits(origin,
+                                                  destination,
+                                                  secondary_destination),
+                "tour_type": self.get_tour_type(origin,
+                                                destination,
+                                                secondary_destination),
                 "visits_t1": self.get_number_of_visits(1),
                 "visits_t2": self.get_number_of_visits(2),
                 "visits_t3": self.get_number_of_visits(3),

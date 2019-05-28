@@ -1,0 +1,25 @@
+﻿id	M_LTK	type
+1	oma koti	1
+2	muu vakituinen asunto (esim. kakkosasunto)	1
+3	oma työpaikka	2
+4		
+5	työasiointipaikka, työkohde	6
+6	oma koulu tai opiskelupaikka	3
+7	oma hoitopaikka tai esikoulu	3
+8	pysähdyspaikka henkilön noutamista/jättämistä varten (esim. asema tai perheenjäsenen työpaikka, koulu, hoitopaikka)	4
+9	päivittäistavaroiden ostopaikka	5
+10	asiointipaikka (pankki, toimisto, lääkäri, posti, kampaamo jne.)	5
+11	kauppakeskus	5
+12	muu ostospaikka	5
+13	ravintola, kahvila, lounaspaikka tai vastaava	11
+14	pubi, baari, yökerho	9
+15	liikunta- tai ulkoilupaikka	8
+16	rakentamaton luontoalue	10
+17		
+18	vierailupaikka (sukulaisten, ystävien, tuttavien luona)	7
+19	kulttuurikohde tai muu huvi- tai juhlatilaisuuden järjestämispaikka	9
+20	kesämökki tai vapaa-ajan asunto	9
+21	muu vapaa-ajan kohde (esim. harrastuspaikka)	9
+22	hotelli, motelli tai muu tilapäinen yöpymispaikka	10
+23	muu kohde	10
+24	muu kohde	10

@@ -24,6 +24,9 @@ matrices = as.data.frame(data.table::fread("matrices.csv",
                                            stringsAsFactors=FALSE))
 average = as.data.frame(data.table::fread("average.csv",
                                           stringsAsFactors=FALSE))
+average_secondary = as.data.frame(data.table::fread("average-secondary.csv",
+                                          stringsAsFactors=FALSE))
+average = leftjoin(average, average_secondary, by=c("izone","jzone"))
 progress.final(time.start)
 
 
@@ -126,8 +129,12 @@ write_estimation_data = function(alternatives,
         # Origin-, year-, and group-dependent
         for (aux in auxiliary_columns) {
             emme = mclapply.stop(rows.along(batch), function(j) {
-                mat = batch[j, aux]
-                matrix_sum = matrix_list[[mat]][batch$izone[j], ] + t(matrix_list[[mat]][, batch$izone[j]])
+                mat_ab = batch[j, aux]
+                aux2 = gsub("aux_", "aux2_", aux)
+                mat_abc = batch[j, aux2]
+                matrix_sum = matrix_list[[mat_abc]][batch$izone[j], ] +
+                    t(matrix_list[[mat_abc]][, batch$kzone[j]]) -
+                    matrix_list[[mat_ab]][batch$kzone[j], batch$izone[j]]
                 matrix_sum = as.data.frame(matrix_sum)
                 return(matrix_sum)
             })
@@ -169,7 +176,7 @@ write_estimation_data = function(alternatives,
 
 
 input = read.delims("input.txt")
-input = subset(input, !grepl("^secondary", name))
+input = subset(input, grepl("^secondary", name))
 for (i in rows.along(input)) {
     
     fname = sprintf("observations-%s.RData", input$name[i])
@@ -181,58 +188,41 @@ for (i in rows.along(input)) {
     alternatives$aux_length_bicycle_separate_cycleway = sprintf("length_bicycle_separate_cycleway_%d", alternatives$year)
     alternatives$aux_length_bicycle_adjacent_cycleway = sprintf("length_bicycle_adjacent_cycleway_%d", alternatives$year)
     alternatives$aux_length_bicycle_mixed_traffic = sprintf("length_bicycle_mixed_traffic_%d", alternatives$year)
+    alternatives$aux2_ttime_bicycle = sprintf("ttime_bicycle_%d", alternatives$year)
+    alternatives$aux2_length_bicycle_separate_cycleway = sprintf("length_bicycle_separate_cycleway_%d", alternatives$year)
+    alternatives$aux2_length_bicycle_adjacent_cycleway = sprintf("length_bicycle_adjacent_cycleway_%d", alternatives$year)
+    alternatives$aux2_length_bicycle_mixed_traffic = sprintf("length_bicycle_mixed_traffic_%d", alternatives$year)
     
-    alternatives$aux_ttime_transit = sprintf("ttime_transit_%d_%s", alternatives$year, alternatives$mtype)
+    alternatives$aux_ttime_transit = sprintf("ttime_transit_%d_%s", alternatives$year, "secondary")
     alternatives$aux_cost_transit_work = sprintf("cost_transit_work_%d", alternatives$year)
     alternatives$aux_cost_transit_other = sprintf("cost_transit_other_%d", alternatives$year)
+    alternatives$aux2_ttime_transit = sprintf("ttime_transit_%d_%s", alternatives$year, "secondary")
+    alternatives$aux2_cost_transit_work = sprintf("cost_transit_work_%d", alternatives$year)
+    alternatives$aux2_cost_transit_other = sprintf("cost_transit_other_%d", alternatives$year)
     
     alternatives$aux_ttime_car = sprintf("ttime_car_%d_%s", alternatives$year, alternatives$mtype)
     alternatives$aux_cost_car = sprintf("cost_car_%d_%s", alternatives$year, alternatives$mtype)
+    alternatives$aux2_ttime_car = sprintf("ttime_car_%d_%s", alternatives$year, "secondary")
+    alternatives$aux2_cost_car = sprintf("cost_car_%d_%s", alternatives$year, "secondary")
     
     alternatives$aux_ttime_pedestrian = sprintf("ttime_pedestrian_%d", alternatives$year)
     alternatives$aux_length_pedestrian = sprintf("length_pedestrian_%d", alternatives$year)
+    alternatives$aux2_ttime_pedestrian = sprintf("ttime_pedestrian_%d", alternatives$year)
+    alternatives$aux2_length_pedestrian = sprintf("length_pedestrian_%d", alternatives$year)
     
-    matrices_needed = unique(unlist(alternatives[, grepl("^aux_", names(alternatives))]))
+    matrices_needed = unique(unlist(alternatives[, grepl("^aux_|^aux2_", names(alternatives))]))
     stopifnot(all(matrices_needed %in% names(matrix_list)))
     
     fname = sprintf("order-%s.txt", input$name[i])
     columns = read.delims(fname)
     columns$column = sprintf("^%s$", columns$column)
     
-    if (input$name[i] == "metropolitan") {
-        hb_work_school_study = c(1,2,3)
-        hb_shopping_service_other = c(4,5)
-        nhb = c(6,7)
-        data_columns = write_estimation_data(alternatives=subset(alternatives,
-                                                                 ttype %in% hb_work_school_study),
-                                             batch_size=100,
-                                             model_name=sprintf("wss-%s", input$name[i]),
-                                             row=row,
-                                             matrix_list=matrix_list,
-                                             columns=columns)
-        data_columns = write_estimation_data(alternatives=subset(alternatives,
-                                                                 ttype %in% hb_shopping_service_other),
-                                             batch_size=100,
-                                             model_name=sprintf("spbo-%s", input$name[i]),
-                                             row=row,
-                                             matrix_list=matrix_list,
-                                             columns=columns)
-        data_columns = write_estimation_data(alternatives=subset(alternatives,
-                                                                 ttype %in% nhb),
-                                             batch_size=100,
-                                             model_name=sprintf("wbo-%s", input$name[i]),
-                                             row=row,
-                                             matrix_list=matrix_list,
-                                             columns=columns)
-        
-    } else {
-        data_columns = write_estimation_data(alternatives=alternatives,
-                                             batch_size=100,
-                                             model_name=input$name[i],
-                                             row=row,
-                                             matrix_list=matrix_list,
-                                             columns=columns)
-    }
+    data_columns = write_estimation_data(alternatives=alternatives,
+                                         batch_size=100,
+                                         model_name=input$name[i],
+                                         row=row,
+                                         matrix_list=matrix_list,
+                                         columns=columns)
     
     message("Writing column names...")
     fname = sprintf("alternatives-columns-%s.txt", input$name[i])

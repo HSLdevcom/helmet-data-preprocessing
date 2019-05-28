@@ -17,8 +17,6 @@ for (i in seq_along(input)) {
     constructed = data.frame(pid=tours$pid)
     constructed$xfactor = tours$xfactor
     constructed$rzone = tours$rzone
-    constructed$rx = tours$rx
-    constructed$ry = tours$ry
     constructed$tour_type = sprintf("%d - %d",
                                     TYPE_HOME,
                                     as.integer(sapply(strsplit(tours$tour_type, split=" - "), `[[`, 1)))
@@ -31,16 +29,14 @@ for (i in seq_along(input)) {
     constructed$jtime = ""
     constructed$origin = TYPE_HOME
     constructed$destination = tours$zone_origin
+    constructed$secondary_destination = -1
     constructed$itime_origin = ""
     constructed$itime_destination = ""
+    constructed$itime_secondary_destination = ""
     constructed$zone_origin = tours$rzone
     constructed$zone_destination = tours$zone_origin
-    constructed$municipality_origin = 0
-    constructed$municipality_destination = tours$municipality_origin
-    constructed$ix = tours$rx
-    constructed$iy = tours$ry
-    constructed$jx = tours$ix
-    constructed$jy = tours$iy
+    constructed$zone_secondary_destination = -1
+    constructed$order = "AB"
     constructed$mode = 4
     constructed$length = NA
     constructed$path = sprintf("1 - %d", tours$zone_origin)

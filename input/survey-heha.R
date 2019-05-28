@@ -19,7 +19,7 @@ matk = subset(matk, montako_matkaa > 0)
 ### Location types
 ###
 
-types = read.csv2("types-heha.csv", stringsAsFactors=FALSE, fileEncoding="utf-8")
+types = read.delims("types-heha.txt", fileEncoding="utf-8")
 m = match(matk$LP, types$type_name)
 matk$itype = types$type[m]
 m = match(matk$MP, types$type_name)
@@ -332,7 +332,7 @@ paik = arrange(paik, tid)
 ### Modes
 ###
 
-modes = read.csv2("modes-heha.csv", stringsAsFactors=FALSE, fileEncoding="utf-8")
+modes = read.delims("modes-heha.txt", fileEncoding="utf-8")
 m = match(matk$PKTAPA2, modes$PKTAPA2)
 matk$mode = modes$mode[m]
 m = is.na(matk$mode)

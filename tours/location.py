@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
+import constants
 from math import sqrt
 
 
@@ -31,3 +32,9 @@ class Location(object):
         jy = location.get_coord()[1]
         distance = sqrt((ix - jx)**2 + (iy - jy)**2)
         return distance
+
+    def get_group(self):
+        return constants.TYPE_GROUP[self.get_type()]
+
+    def get_priority(self):
+        return constants.TYPE_PRIORITY[self.get_type()]

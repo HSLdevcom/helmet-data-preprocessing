@@ -13,12 +13,12 @@ get_ttype = function(x, y) {
     stopifnot(is.logical(y))
     classes = rep(NA, times=length(x))
     # Seven classes for survey tours
-    patterns = c("^(1 - 2)",
+    patterns = c("^(1 - [27])",
                  "^(1 - 3)",
                  "^(1 - 4)",
                  "^(1 - 5)",
                  "^1$|^(1 - [16])",
-                 "^2$|^(2 - [123456])")
+                 "^2$|^(2 - [1234567])")
     for (i in seq(patterns)) {
         m = grepl(patterns[i], x, perl=TRUE)
         classes[m] = i
@@ -73,6 +73,7 @@ for (i in rows.along(input)) {
     observations$izone = zones$zone[m]
     observations$izone_cbd = ifelse(zones$cbd[m]==1, 1, 0)
     observations$izone_population_density = zones$population_density[m]
+    observations$izone_job_density = zones$job_density[m]
     observations$izone_housing = zones$housing[m]
     observations$izone_parking_fee_other = zones$parking_fee_other[m]
     observations$izone_cars_per_people = zones$cars_per_people[m]
@@ -88,11 +89,16 @@ for (i in rows.along(input)) {
     m = which(rowSums(tours[,grep("^visits_t[0-9]+", colnames(tours))]) == 1)
     observations$jpeak[m] = NA
     
-    observations$mtype = ifelse(observations$ttype %in% c(1,8),
-                      "hbwork",
-                      ifelse(observations$ttype %in% c(2,3,4,5,9),
-                             "hbother",
-                             "nhb"))
+    if (unique(tours$year) == 2016) {
+        mtypes = read.delims("mtypes-peripheral.txt")
+        observations = leftjoin(observations, mtypes)
+    } else if (unique(tours$year) == 2018) {
+        mtypes = read.delims("mtypes-metropolitan.txt")
+        observations = leftjoin(observations, mtypes)
+    }
+    
+    m = match(tours$zone_secondary_destination, zones$zone_orig)
+    observations$kzone = zones$zone[m]
     
     # Add background information
     observations = leftjoin(observations, background)
