@@ -13,12 +13,12 @@ get_ttype = function(x, y) {
     stopifnot(is.logical(y))
     classes = rep(NA, times=length(x))
     # Seven classes for survey tours
-    patterns = c("^(1 - 2)",
+    patterns = c("^(1 - [27])",
                  "^(1 - 3)",
                  "^(1 - 4)",
                  "^(1 - 5)",
                  "^1$|^(1 - [16])",
-                 "^2$|^(2 - [123456])")
+                 "^2$|^(2 - [1234567])")
     for (i in seq(patterns)) {
         m = grepl(patterns[i], x, perl=TRUE)
         classes[m] = i

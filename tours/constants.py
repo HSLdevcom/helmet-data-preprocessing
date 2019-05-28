@@ -5,8 +5,6 @@ import pandas
 from math import isnan
 
 TYPE_HOME = 1
-TYPE_WORK = 2
-TYPE_SCHOOL = 3
 
 TYPE_GROUP = {
     1: 1,
@@ -14,7 +12,7 @@ TYPE_GROUP = {
     3: 3,
     4: 5,
     5: 5,
-    6: 5,
+    6: 7,
     7: 6,
     8: 6,
     9: 6,
@@ -23,13 +21,19 @@ TYPE_GROUP = {
     12: 4,
 }
 
-GROUP_NAME = {
-    1: "koti",
-    2: "työ",
-    3: "koulu",
-    4: "opiskelu",
-    5: "asiointi",
-    6: "muu",
+TYPE_PRIORITY = {
+    1: 1,
+    2: 2,
+    3: 3,
+    4: 5,
+    5: 5,
+    6: 5,
+    7: 5,
+    8: 5,
+    9: 5,
+    10: 5,
+    11: 5,
+    12: 4,
 }
 
 

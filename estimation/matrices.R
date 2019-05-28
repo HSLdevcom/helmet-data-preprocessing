@@ -120,6 +120,10 @@ matrices$cost_transit_work_2016 = matrices$cost_transit_work_2018
 matrices$cost_transit_other_2016 = matrices$cost_transit_other_2018
 matrices = unpick(matrices, cost_transit_monthly_2018)
 
+# Bicycling
+matrices$ttime_bicycle_2016 = pclip(matrices$ttime_bicycle_2016, -Inf, 9999)
+matrices$ttime_bicycle_2018 = pclip(matrices$ttime_bicycle_2018, -Inf, 9999)
+
 # Walking
 walk_speed = 5.0 / 60  # km/min
 matrices$ttime_pedestrian_2018 = matrices$length_pedestrian_2018 / walk_speed  # min
