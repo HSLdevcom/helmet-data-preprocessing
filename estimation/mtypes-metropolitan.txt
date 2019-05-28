@@ -1,0 +1,11 @@
+ttype	mtype
+1	hbwork
+2	hbschool
+3	hbuniversity
+4	hbshopping
+5	hbother
+6	wb
+7	nhb
+8	hbwork
+9	hbother
+

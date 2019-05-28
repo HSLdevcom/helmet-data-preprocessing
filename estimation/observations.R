@@ -89,11 +89,13 @@ for (i in rows.along(input)) {
     m = which(rowSums(tours[,grep("^visits_t[0-9]+", colnames(tours))]) == 1)
     observations$jpeak[m] = NA
     
-    observations$mtype = ifelse(observations$ttype %in% c(1,8),
-                      "hbwork",
-                      ifelse(observations$ttype %in% c(2,3,4,5,9),
-                             "hbother",
-                             "nhb"))
+    if (unique(tours$year) == 2016) {
+        mtypes = read.delims("mtypes-peripheral.txt")
+        observations = leftjoin(observations, mtypes)
+    } else if (unique(tours$year) == 2018) {
+        mtypes = read.delims("mtypes-metropolitan.txt")
+        observations = leftjoin(observations, mtypes)
+    }
     
     m = match(tours$zone_secondary_destination, zones$zone_orig)
     observations$kzone = zones$zone[m]
