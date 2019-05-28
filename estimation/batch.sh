@@ -3,18 +3,18 @@
 (cd alternatives/ && rm *.txt)
 rm *.RData *.csv
 
-rscript zones.R
-rscript matrices.R
-rscript background.R
+Rscript --quiet --no-save --encoding=CP1252 zones.R
+Rscript --quiet --no-save --encoding=CP1252 matrices.R
+Rscript --quiet --no-save --encoding=CP1252 background.R
 
-rscript tours.R
-rscript constructed.R
-rscript secondary.R
-rscript observations.R
-rscript average.R
-rscript average-secondary.R
-rscript alternatives.R
-rscript alternatives-secondary.R
+Rscript --quiet --no-save --encoding=CP1252 tours.R
+Rscript --quiet --no-save --encoding=CP1252 constructed.R
+Rscript --quiet --no-save --encoding=CP1252 secondary.R
+Rscript --quiet --no-save --encoding=CP1252 observations.R
+Rscript --quiet --no-save --encoding=CP1252 average.R
+Rscript --quiet --no-save --encoding=CP1252 average-secondary.R
+Rscript --quiet --no-save --encoding=CP1252 alternatives.R
+Rscript --quiet --no-save --encoding=CP1252 alternatives-secondary.R
 
 cd alternatives/
 
