@@ -200,19 +200,25 @@ for (i in rows.along(input)) {
     columns$column = sprintf("^%s$", columns$column)
     
     if (input$name[i] == "metropolitan") {
-        data_columns = write_estimation_data(alternatives=subset(alternatives, ttype %in% c(1,2,3)),
+        hb_work_school_study = c(1,2,3)
+        hb_shopping_service_other = c(4,5)
+        nhb = c(6,7)
+        data_columns = write_estimation_data(alternatives=subset(alternatives,
+                                                                 ttype %in% hb_work_school_study),
                                              batch_size=100,
                                              model_name=sprintf("wss-%s", input$name[i]),
                                              row=row,
                                              matrix_list=matrix_list,
                                              columns=columns)
-        data_columns = write_estimation_data(alternatives=subset(alternatives, ttype %in% c(4,5)),
+        data_columns = write_estimation_data(alternatives=subset(alternatives,
+                                                                 ttype %in% hb_shopping_service_other),
                                              batch_size=100,
                                              model_name=sprintf("spbo-%s", input$name[i]),
                                              row=row,
                                              matrix_list=matrix_list,
                                              columns=columns)
-        data_columns = write_estimation_data(alternatives=subset(alternatives, ttype %in% c(6,7)),
+        data_columns = write_estimation_data(alternatives=subset(alternatives,
+                                                                 ttype %in% nhb),
                                              batch_size=100,
                                              model_name=sprintf("wbo-%s", input$name[i]),
                                              row=row,
