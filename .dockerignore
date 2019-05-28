@@ -1,8 +1,14 @@
 *
-!estimation
-!input
+!*.sh
+!*.json
+!estimation/*.R
+!estimation/*.sh
+!estimation/*.txt
+!input/*.R
+!input/*.sh
+!input/*.txt
 !tests
-!tours
+!tours/*.py
 !input-config.json
 !install-dependencies.R
 !Pipfile
