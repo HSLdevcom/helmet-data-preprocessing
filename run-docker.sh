@@ -7,7 +7,7 @@ fi
 RAW_DATA_FOLDER=${PWD}/$1
 echo "Mounting and reading raw data from local dir ${RAW_DATA_FOLDER}"
 
-OUTPUT_FOLDER=${PWD}/${2:-'tours/output/'}
+OUTPUT_FOLDER=${PWD}/${2:-'estimation/alternatives'}
 echo "Mounting and writing output to local dir ${OUTPUT_FOLDER}"
 
 # Mount external dependencies (proprietary libraries and data)
