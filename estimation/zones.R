@@ -16,12 +16,12 @@ municipalities = pick(municipalities,
                       capital_region, surrounding_municipality, peripheral_municipality)
 zones = leftjoin(zones, municipalities, by="municipality")
 
-built_land_area = read_xlsx(ancfile("data/raw/Maankäyttö/rakennettu_maapinta_ala_2018.xlsx"), sheet="Kaikki")
+built_land_area = read_xlsx(ancfile("data/raw/Maankaytto/rakennettu_maapinta_ala_2018.xlsx"), sheet="Kaikki")
 built_land_area = as.data.frame(built_land_area)
 m = match(zones$zone_orig, built_land_area$SIJ2019)
 zones$area = built_land_area$`Rakennetun alan pinta-ala (km2)`
 
-landuse = read_xlsx(ancfile("data/raw/Maankäyttö/maankayttotiedot_sijoittelualueittain_kaikki_yhdessa.xlsx"))
+landuse = read_xlsx(ancfile("data/raw/Maankaytto/maankayttotiedot_sijoittelualueittain_kaikki_yhdessa.xlsx"))
 landuse = as.data.frame(landuse)
 m = match(zones$zone_orig, landuse$SIJ2019)
 zones$populated_land_area = landuse$As_ruutujen_maa_ala[m]
@@ -37,23 +37,23 @@ m = which(zones$area < 0.000001)
 zones$job_density[m] = 0
 
 parking = read.csv2(ancfile("data/raw/md21_pysakointikustannus_tyo_2018.csv"),
-                    fileEncoding="utf-8",
+                    fileEncoding="UTF-8-BOM",
                     stringsAsFactors=FALSE)
 zones$parking_fee_work = parking$parking_fee[match(zones$zone_orig, parking$zone)]
 parking = read.csv2(ancfile("data/raw/md22_pysakointikustannus_muu_2018.csv"),
-                    fileEncoding="utf-8",
+                    fileEncoding="UTF-8-BOM",
                     stringsAsFactors=FALSE)
 zones$parking_fee_other = parking$parking_fee[match(zones$zone_orig, parking$zone)]
 zones = na.to.zero(zones, c("parking_fee_work", "parking_fee_other"))
 
-students = read_xlsx(ancfile("data/raw/Maankäyttö/opla_luettelo_2017_2.xlsx"), sheet="sij19")
+students = read_xlsx(ancfile("data/raw/Maankaytto/opla_luettelo_2017_2.xlsx"), sheet="sij19")
 students = as.data.frame(students)
 m = match(zones$zone_orig, students$SIJ2019)
 zones$students_primary_school = round(students$peruskoulu[m])
 zones$students_high_school = round(students$`aste2 yhteensä`[m])
 zones$students_university = round(students$`aste3 yhteensä`[m])
 
-cars = read_xlsx(ancfile("data/raw/Maankäyttö/Autonomistus mallialueittain YKR 2015_v1.xlsx"))
+cars = read_xlsx(ancfile("data/raw/Maankaytto/Autonomistus mallialueittain YKR 2015_v1.xlsx"))
 cars = as.data.frame(cars)
 # Average household size from those cells we have information about. We will
 # assume that cells without any information behave similarly.
