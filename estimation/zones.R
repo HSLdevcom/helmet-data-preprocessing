@@ -37,11 +37,11 @@ m = which(zones$area < 0.000001)
 zones$job_density[m] = 0
 
 parking = read.csv2(ancfile("data/raw/md21_pysakointikustannus_tyo_2018.csv"),
-                    fileEncoding="UTF-8-BOM",
+                    fileEncoding="utf-8",
                     stringsAsFactors=FALSE)
 zones$parking_fee_work = parking$parking_fee[match(zones$zone_orig, parking$zone)]
 parking = read.csv2(ancfile("data/raw/md22_pysakointikustannus_muu_2018.csv"),
-                    fileEncoding="UTF-8-BOM",
+                    fileEncoding="utf-8",
                     stringsAsFactors=FALSE)
 zones$parking_fee_other = parking$parking_fee[match(zones$zone_orig, parking$zone)]
 zones = na.to.zero(zones, c("parking_fee_work", "parking_fee_other"))
