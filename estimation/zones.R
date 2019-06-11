@@ -6,11 +6,11 @@ library(readxl)
 
 message("Reading data into zones...")
 
-zones = read.csv2(ancfile("input/zones.csv"), stringsAsFactors=FALSE)
+zones = read.csv2(ancfile("area/zones.csv"), stringsAsFactors=FALSE)
 zones$cbd = ifelse(zones$cbd, 1, 0)
 zones$suburb = ifelse(zones$suburb, 1, 0)
 
-municipalities = read.delims(ancfile("input/municipalities.txt"), fileEncoding="utf-8")
+municipalities = read.delims(ancfile("area/municipalities.txt"), fileEncoding="utf-8")
 municipalities = pick(municipalities,
                       municipality, municipality_name,
                       capital_region, surrounding_municipality, peripheral_municipality)

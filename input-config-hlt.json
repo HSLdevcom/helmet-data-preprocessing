@@ -1,7 +1,7 @@
 {
     "survey": "hlt",
-    "people-filepath": "input/tausta-hlt.csv",
-    "trips-filepath": "input/matkat-hlt.csv",
-    "locations-filepath": "input/paikat-hlt.csv",
+    "people-filepath": "survey/tausta-hlt.csv",
+    "trips-filepath": "survey/matkat-hlt.csv",
+    "locations-filepath": "survey/paikat-hlt.csv",
     "tour-filepath": "output/tours/tours-hlt.csv"
 }

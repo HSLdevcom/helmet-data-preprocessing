@@ -30,7 +30,7 @@ background = list()
 # HEHA 2018
 
 message("Formatting HEHA 2018 personal data...")
-people = read.csv2(ancfile("input/tausta-heha.csv"), stringsAsFactors=FALSE)
+people = read.csv2(ancfile("survey/tausta-heha.csv"), stringsAsFactors=FALSE)
 
 df = data.frame(pid=people$pid)
 df$year = 2018
@@ -78,7 +78,7 @@ message("Formatting HEHA 2007-2008 personal data...")
 # HLT 2016
 
 message("Formatting HLT 2016 personal data...")
-people = read.csv2(ancfile("input/tausta-hlt.csv"), stringsAsFactors=FALSE)
+people = read.csv2(ancfile("survey/tausta-hlt.csv"), stringsAsFactors=FALSE)
 
 df = data.frame(pid=people$pid)
 df$year = 2016
