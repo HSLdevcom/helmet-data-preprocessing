@@ -5,17 +5,19 @@
 .pytest_cache
 
 # Sensitive information
-tours/output/*.csv
-input/*.csv
+survey/*.csv
 
 # Proprietary libraries
 strafica/
 
 # Output files
-estimation/alternatives/*.txt
-estimation/alternatives-columns-*.txt
 *.RData
 *.csv
+output/tours/*.csv
+output/tours/*.txt
+output/alternatives/*.csv
+output/alternatives/*.txt
 
 # IDE-specific folders
 .idea
+*.code-workspace
