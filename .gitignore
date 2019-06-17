@@ -13,6 +13,7 @@ strafica/
 # Output files
 *.RData
 *.csv
+estimation/alternatives/*.txt
 output/**/*.txt
 
 # IDE-specific folders
