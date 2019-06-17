@@ -16,6 +16,10 @@ check_class = function(x, exclude=NA) {
 }
 
 
+# Output folder location
+output_folder = ancfile("output/estimation")
+
+
 # Load input files
 message("Loading input files...")
 time.start = Sys.time()
@@ -225,7 +229,8 @@ for (i in rows.along(input)) {
                                          columns=columns)
     
     message("Writing column names...")
-    fname = sprintf("alternatives-columns-%s.txt", input$name[i])
+    fname = sprintf("%s/alternatives-columns-%s.txt",
+                    output_folder, input$name[i])
     writeLines(data_columns, fname)
     
 }

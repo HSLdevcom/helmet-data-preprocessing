@@ -16,6 +16,10 @@ check_class = function(x, exclude=NA) {
 }
 
 
+# Output folder location
+output_folder = ancfile("output/estimation")
+
+
 # Load input files
 message("Loading input files...")
 time.start = Sys.time()
@@ -200,9 +204,11 @@ for (i in rows.along(input)) {
     columns$column = sprintf("^%s$", columns$column)
     
     if (input$name[i] == "metropolitan") {
+        
         hb_work_school_study = c(1,2,3)
         hb_shopping_service_other = c(4,5)
         nhb = c(6,7)
+        
         data_columns = write_estimation_data(alternatives=subset(alternatives,
                                                                  ttype %in% hb_work_school_study),
                                              batch_size=100,
@@ -210,6 +216,11 @@ for (i in rows.along(input)) {
                                              row=row,
                                              matrix_list=matrix_list,
                                              columns=columns)
+        message("Writing column names...")
+        fname = sprintf("%s/alternatives-columns-wss-%s.txt",
+                        output_folder, input$name[i])
+        writeLines(data_columns, fname)
+        
         data_columns = write_estimation_data(alternatives=subset(alternatives,
                                                                  ttype %in% hb_shopping_service_other),
                                              batch_size=100,
@@ -217,6 +228,11 @@ for (i in rows.along(input)) {
                                              row=row,
                                              matrix_list=matrix_list,
                                              columns=columns)
+        message("Writing column names...")
+        fname = sprintf("%s/alternatives-columns-spbo-%s.txt",
+                        output_folder, input$name[i])
+        writeLines(data_columns, fname)
+        
         data_columns = write_estimation_data(alternatives=subset(alternatives,
                                                                  ttype %in% nhb),
                                              batch_size=100,
@@ -224,6 +240,10 @@ for (i in rows.along(input)) {
                                              row=row,
                                              matrix_list=matrix_list,
                                              columns=columns)
+        message("Writing column names...")
+        fname = sprintf("%s/alternatives-columns-wbo-%s.txt",
+                        output_folder, input$name[i])
+        writeLines(data_columns, fname)
         
     } else {
         data_columns = write_estimation_data(alternatives=alternatives,
@@ -232,10 +252,11 @@ for (i in rows.along(input)) {
                                              row=row,
                                              matrix_list=matrix_list,
                                              columns=columns)
+        message("Writing column names...")
+        fname = sprintf("%s/alternatives-columns-%s.txt",
+                        output_folder,
+                        input$name[i])
+        writeLines(data_columns, fname)
     }
-    
-    message("Writing column names...")
-    fname = sprintf("alternatives-columns-%s.txt", input$name[i])
-    writeLines(data_columns, fname)
     
 }
