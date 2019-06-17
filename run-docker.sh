@@ -12,7 +12,7 @@ echo "Mounting and writing output to local dir ${OUTPUT_FOLDER}"
 
 # Mount external dependencies (proprietary libraries and data)
 docker run -it --rm \
-  -v ${INPUT_FOLDER}:/helmet-data-preprocessing/data/raw/ \
+  -v ${INPUT_FOLDER}:/helmet-data-preprocessing/input/ \
   -v ${OUTPUT_FOLDER}:/helmet-data-preprocessing/output/ \
   -v ${PWD}/strafica:/helmet-data-preprocessing/strafica \
   helmet-data-preprocessing

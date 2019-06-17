@@ -1,8 +1,8 @@
 # -*- coding: windows-1252-dos -*-
 library(strafica)
 
-zones = read.shape(ancfile("data/raw/sijoittelualueet2019/sijoittelualueet2019.shp"),
-                      encoding="utf-8")
+zones = read.shape(ancfile("input/aluejaot/aluejaot_2019_SHP/sijoittelualueet2019.shp"),
+                   encoding="utf-8")
 zones = sp.to.polys(zones, data.only=TRUE)
 zones = pick(zones, sij2019, kela)
 zones = rename(zones, sij2019=zone_orig, kela=municipality)
