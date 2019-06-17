@@ -1,4 +1,4 @@
-﻿type	type_name
+type	type_name
 1	Oma koti tai asuinpaikka
 2	Oma työpaikka
 3	Oma koulu tai opiskelupaikka
