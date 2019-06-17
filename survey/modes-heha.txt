@@ -1,4 +1,4 @@
-﻿id	PKTAPA2	mode_name	mode
+id	PKTAPA2	mode_name	mode
 1	Kävely (sis. avustavat välineet)	ka	1
 2	Polkupyörä	py	2
 3	Auto, kuljettajana	ak	4

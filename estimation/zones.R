@@ -53,32 +53,9 @@ zones$students_primary_school = round(students$peruskoulu[m])
 zones$students_high_school = round(students$`aste2 yhteens‰`[m])
 zones$students_university = round(students$`aste3 yhteens‰`[m])
 
-cars = read_xlsx(ancfile("input/Maank‰yttˆ/Autonomistus mallialueittain YKR 2015_v1.xlsx"))
-cars = as.data.frame(cars)
-# Average household size from those cells we have information about. We will
-# assume that cells without any information behave similarly.
-cars$household_size = cars$`Henkilˆit‰ yhteens‰ (ne ykr-ruudut, joista tiedot on saatavilla, kotitalouksia > 1)` / cars$`Kotitalouksien lukum‰‰r‰ yhteens‰ niiss‰ ruuduissa, joista tiedot saatavilla (H-sarake)`
-# For zones without any (known) households, we will assume a weighted average
-# size of all household sizes.
-m = which(is.nan(cars$household_size))
-cars$household_size[m] = weighted.mean(cars$household_size, cars$`Kotitalouksien lukum‰‰r‰ yhteens‰ niiss‰ ruuduissa, joista tiedot saatavilla (H-sarake)`, na.rm=TRUE)
-m = which(is.na(cars$`0 auton kotitalouksia (%)`) | is.na(cars$`1 auton kotitalouksia (%)`) | is.na(cars$`Useamman auton kotitaloudet (%)`))
-percentages = c(sum(cars$`kotitalouksia, joissa 0 autoa (=J-O-P)`),
-                sum(cars$`kotitalouksia, joissa 1 auto`),
-                sum(cars$`kotitalouksia, joissa 2+ autoa`))
-percentages = percentages / sum(percentages)
-cars$`0 auton kotitalouksia (%)`[m] = percentages[1]
-cars$`1 auton kotitalouksia (%)`[m] = percentages[2]
-cars$`Useamman auton kotitaloudet (%)`[m] = percentages[3]
-m = match(zones$zone_orig, cars$`SIJ2019 (mallin aluejako)`)
-zones$household_size = cars$household_size[m]
-zones$households = zones$population / zones$household_size
-zones$households_cars_0 = cars$`0 auton kotitalouksia (%)`[m] * zones$households
-zones$households_cars_1 = cars$`1 auton kotitalouksia (%)`[m] * zones$households
-zones$households_cars_2 = cars$`Useamman auton kotitaloudet (%)`[m] * zones$households
-zones$cars_per_people = (zones$households_cars_1 + 2.2 * zones$households_cars_2) / (zones$population / 1000)
-m = which(is.na(zones$cars_per_people) | zones$cars_per_people < 1)
-zones$cars_per_people[m] = weighted.mean(zones$cars_per_people, zones$population)
+cars = read_xlsx(ancfile("input/Maank‰yttˆ/Auto2018_pisteet_sum.xlsx"))
+m = match(zones$zone_orig, cars$SIJ2019)
+zones$cars_per_people = as.numeric(cars$Autonomistusaste[m]) * 1000
 quantile(zones$cars_per_people, c(0, 0.01, 0.02, 0.98, 0.99, 1), na.rm=TRUE)
 
 zones = downclass(zones)
