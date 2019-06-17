@@ -13,10 +13,7 @@ strafica/
 # Output files
 *.RData
 *.csv
-output/tours/*.csv
-output/tours/*.txt
-output/alternatives/*.csv
-output/alternatives/*.txt
+output/**/*.txt
 
 # IDE-specific folders
 .idea
