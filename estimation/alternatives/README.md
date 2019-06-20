@@ -1,3 +1,3 @@
-# estimation/alternatives
+# output/estimation
 
-This folder contains estimation data that serves as input to [helmet-estimation](https://github.com/HSLdevcom/helmet-estimation). Estimation data files appear after `estimation/alternatives.R` is run.
+This folder contains temporary output files after `estimation/alternatives.R` and `estimation/alternatives-secondary.R` are run.

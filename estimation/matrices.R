@@ -36,7 +36,7 @@ files = dfsas(fname=c("Vastukset2016/mf380.csv",
                       "Vastukset2016/mf100.csv",
                       "Vastukset2016/mf101.csv",
                       "Vastukset2016/mf102.csv",
-                      "jkl_kust_yht.csv",
+                      "Joukkoliikenteen kustannukset/jkl_kust_yht.csv",
                       "Vastukset2018/mf380.csv",
                       "Vastukset2018/mf381.csv",
                       "Vastukset2018/mf382.csv",
@@ -86,7 +86,7 @@ files = dfsas(fname=c("Vastukset2016/mf380.csv",
 message("Reading matrices...")
 time.start = Sys.time()
 for (i in rows.along(files)) {
-    fname = sprintf("data/raw/%s", files$fname[i])
+    fname = sprintf("input/Estimoinnin_lähtötiedot/%s", files$fname[i])
     messagef("  %2d/%2d: %s", i, nrow(files), fname)
     mat = read_emme_csv(ancfile(fname),
                         value=files$name[i],

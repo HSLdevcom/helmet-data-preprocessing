@@ -1,0 +1,12 @@
+*
+!**/*.json
+!**/*.md
+!**/*.py
+!**/*.R
+!**/*.sh
+!estimation/*.txt
+!survey/*.txt
+!Pipfile
+!Pipfile.lock
+build-docker.sh
+run-docker.sh

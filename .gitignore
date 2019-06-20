@@ -5,14 +5,17 @@
 .pytest_cache
 
 # Sensitive information
-tours/output/*.csv
-input/*.csv
+survey/*.csv
+
+# Proprietary libraries
+strafica/
 
 # Output files
-estimation/alternatives/*.txt
-estimation/alternatives-columns-*.txt
 *.RData
 *.csv
+estimation/alternatives/*.txt
+output/**/*.txt
 
 # IDE-specific folders
 .idea
+*.code-workspace

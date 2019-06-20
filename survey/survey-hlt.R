@@ -1,9 +1,9 @@
 # -*- coding: windows-1252-dos -*-
 library(strafica)
 
-matk = read.csv2(ancfile("data/raw/hlt/M_MATKAT.CSV"), stringsAsFactors=FALSE)
-taus = read.csv2(ancfile("data/raw/hlt/T_TAUSTA.CSV"), stringsAsFactors=FALSE)
-paik = read.csv2(ancfile("data/raw/hlt/PA_PAIKAT_sijoittelualueet.csv"), stringsAsFactors=FALSE)
+matk = read.csv2(ancfile("input/HLT-aineisto/M_MATKAT.CSV"), stringsAsFactors=FALSE)
+taus = read.csv2(ancfile("input/HLT-aineisto/T_TAUSTA.CSV"), stringsAsFactors=FALSE)
+paik = read.csv2(ancfile("input/HLT-aineisto/PA_PAIKAT_sijoittelualueet.csv"), stringsAsFactors=FALSE)
 
 
 ###

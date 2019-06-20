@@ -3,7 +3,7 @@ library(strafica)
 library(readxl)
 library(lubridate)
 
-matk = read_xlsx(ancfile("data/raw/heha/MATKAT18_V3.xlsx"))
+matk = read_xlsx(ancfile("input/HEHA-aineistot/MATKAT18_V3.xlsx"))
 matk = as.data.frame(matk)
 
 taus = pick(matk,

@@ -7,7 +7,7 @@ library(strafica)
 zones = load1("zones.RData")
 
 # HLT 2016
-tours = read.csv2(ancfile("tours/output/tours-hlt.csv"),
+tours = read.csv2(ancfile("output/tours/tours-hlt.csv"),
                   stringsAsFactors=FALSE)
 tours$closed = ifelse(tours$closed == "True", TRUE, FALSE)
 tours$model = 2
@@ -23,7 +23,7 @@ check.na(tours)
 save(tours, file="tours-peripheral.RData")
 
 # HEHA 2018
-tours = read.csv2(ancfile("tours/output/tours-heha.csv"),
+tours = read.csv2(ancfile("output/tours/tours-heha.csv"),
                   stringsAsFactors=FALSE)
 tours$closed = ifelse(tours$closed == "True", TRUE, FALSE)
 tours$model = 1
