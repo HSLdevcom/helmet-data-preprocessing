@@ -7,7 +7,7 @@ fi
 INPUT_FOLDER=${PWD}/$1
 echo "Mounting and reading input data from local dir ${INPUT_FOLDER}"
 
-OUTPUT_FOLDER=${PWD}/${2:-'estimation/alternatives'}
+OUTPUT_FOLDER=${PWD}/${2:-'output/'}
 echo "Mounting and writing output to local dir ${OUTPUT_FOLDER}"
 
 # Mount external dependencies (proprietary libraries and data)
