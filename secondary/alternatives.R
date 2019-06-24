@@ -24,11 +24,11 @@ output_folder = ancfile("output/estimation")
 message("Loading input files...")
 time.start = Sys.time()
 zones = load1("zones.RData")
-matrices = as.data.frame(data.table::fread("matrices.csv",
+matrices = as.data.frame(data.table::fread(ancfile("estimation/matrices.csv"),
                                            stringsAsFactors=FALSE))
-average = as.data.frame(data.table::fread("average.csv",
+average = as.data.frame(data.table::fread(ancfile("estimation/average.csv"),
                                           stringsAsFactors=FALSE))
-average_secondary = as.data.frame(data.table::fread("average-secondary.csv",
+average_secondary = as.data.frame(data.table::fread(ancfile("secondary/average.csv"),
                                           stringsAsFactors=FALSE))
 average = leftjoin(average, average_secondary, by=c("izone","jzone"))
 progress.final(time.start)
@@ -180,7 +180,6 @@ write_estimation_data = function(alternatives,
 
 
 input = read.delims("input.txt")
-input = subset(input, grepl("^secondary", name))
 for (i in rows.along(input)) {
     
     fname = sprintf("observations-%s.RData", input$name[i])
