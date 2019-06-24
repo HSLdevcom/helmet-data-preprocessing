@@ -1,7 +1,7 @@
 # -*- coding: windows-1252-dos -*-
 library(strafica)
 
-tours = load1("tours-metropolitan.RData")
+tours = load1(ancfile("estimation/tours-metropolitan.RData"))
 tour_columns = colnames(tours)
 tours = subset(tours, secondary_destination != -1)
 tours = subset(tours, zone_secondary_destination != 0)
@@ -50,4 +50,4 @@ secondary$constructed = FALSE
 
 stopifnot(all(colnames(secondary) == tour_columns))
 
-save(secondary, file="secondary-metropolitan.RData")
+save(secondary, file="tours-secondary-metropolitan.RData")
