@@ -1,7 +1,7 @@
 # -*- coding: windows-1252-dos -*-
 library(strafica)
 
-matrices = as.data.frame(data.table::fread("matrices.csv",
+matrices = as.data.frame(data.table::fread(ancfile("estimation/matrices.csv"),
                                            stringsAsFactors=FALSE))
 
 # Average travel time, length, and car cost matrices
@@ -48,4 +48,4 @@ average = cbind(pick(matrices, izone, jzone),
 head(average)
 
 # Output
-data.table::fwrite(average, file="average-secondary.csv")
+data.table::fwrite(average, file="average.csv")
