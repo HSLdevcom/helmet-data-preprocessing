@@ -23,7 +23,7 @@ get_age_groups = function(x, pid) {
     return(df)
 }
 
-zones = load1("zones.RData")
+zones = read.csv2(ancfile("area/zones.csv"), stringsAsFactors=FALSE)
 
 background = list()
 

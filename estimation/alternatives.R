@@ -23,8 +23,8 @@ output_folder = ancfile("output/estimation")
 # Load input files
 message("Loading input files...")
 time.start = Sys.time()
-zones = load1("zones.RData")
-matrices = as.data.frame(data.table::fread("matrices.csv",
+zones = read.csv2(ancfile("area/zones.csv"), stringsAsFactors=FALSE)
+matrices = as.data.frame(data.table::fread(ancfile("area/matrices.csv"),
                                            stringsAsFactors=FALSE))
 average = as.data.frame(data.table::fread("average.csv",
                                           stringsAsFactors=FALSE))

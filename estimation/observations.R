@@ -50,7 +50,7 @@ get_peak = function(x) {
     return(peak)
 }
 
-zones = load1("zones.RData")
+zones = read.csv2(ancfile("area/zones.csv"), stringsAsFactors=FALSE)
 background = load1("background.RData")
 
 input = read.delims("input.txt")

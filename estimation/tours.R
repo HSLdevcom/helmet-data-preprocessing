@@ -4,7 +4,7 @@ library(strafica)
 # This script is created to get rid of unviable tours before doing any further
 # estimation data adjustments.
 
-zones = load1("zones.RData")
+zones = read.csv2(ancfile("area/zones.csv"), stringsAsFactors=FALSE)
 
 # HLT 2016
 tours = read.csv2(ancfile("output/tours/tours-hlt.csv"),

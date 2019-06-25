@@ -3,8 +3,6 @@
 (cd alternatives/ && rm *.txt)
 rm *.RData *.csv
 
-Rscript --quiet --no-save --encoding=CP1252 zones.R
-Rscript --quiet --no-save --encoding=CP1252 matrices.R
 Rscript --quiet --no-save --encoding=CP1252 background.R
 
 Rscript --quiet --no-save --encoding=CP1252 tours.R

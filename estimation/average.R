@@ -1,7 +1,7 @@
 # -*- coding: windows-1252-dos -*-
 library(strafica)
 
-matrices = as.data.frame(data.table::fread("matrices.csv",
+matrices = as.data.frame(data.table::fread(ancfile("area/matrices.csv"),
                                            stringsAsFactors=FALSE))
 
 # Average travel time, length, and car cost matrices
