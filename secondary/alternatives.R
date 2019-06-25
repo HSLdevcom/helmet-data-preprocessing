@@ -148,8 +148,11 @@ write_estimation_data = function(alternatives,
         }
         
         # Origin-dependent
-        batch = cbind(batch, matrix_list[["same_zone"]][batch$izone, ])
+        batch = cbind(batch, matrix_list[["same_zone_i"]][batch$izone, ])
         batch = cbind(batch, matrix_list[["area"]][batch$izone, ])
+        
+        # Primary destination dependent
+        batch = cbind(batch, matrix_list[["same_zone_j"]][batch$jzone, ])
         
         # Home-dependent
         batch = cbind(batch, matrix_list[["same_municipality"]][batch$rzone, ])
