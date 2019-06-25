@@ -62,6 +62,10 @@ m = match(zones$zone_orig, cars$SIJ2019)
 zones$cars_per_people = as.numeric(cars$Autonomistusaste[m]) * 1000
 quantile(zones$cars_per_people, c(0, 0.01, 0.02, 0.98, 0.99, 1), na.rm=TRUE)
 
+income = read_xlsx(.ancfile("input/Maankäyttö/tulotiedot_2016_korjattu.xlsx"), sheet="tulotaso_korjattu")
+m = match(zones$zone_orig, income$SIJ2019)
+zones$income = income$hr_mtu[m]
+
 zones = downclass(zones)
 check.na(zones)
 save(zones, file="zones.RData")

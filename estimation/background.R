@@ -116,6 +116,7 @@ df$rzone = zones$zone[m]
 df$rzone_capital_region = ifelse(zones$capital_region[m], 1, 0)
 df$rzone_surrounding_municipality = ifelse(zones$surrounding_municipality[m], 1, 0)
 df$rzone_peripheral_municipality = ifelse(zones$peripheral_municipality[m], 1, 0)
+df$rzone_income = zones$income[m]
 
 background = rbind_list(background, df)
 
