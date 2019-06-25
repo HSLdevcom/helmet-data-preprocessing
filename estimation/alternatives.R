@@ -206,7 +206,8 @@ for (i in rows.along(input)) {
     if (input$name[i] == "metropolitan") {
         
         hb_work_school_study = c(1,2,3)
-        hb_shopping_service_other = c(4,5)
+        hb_shopping_service = c(4)
+        hb_other = c(5)
         nhb = c(6,7)
         
         data_columns = write_estimation_data(alternatives=subset(alternatives,
@@ -222,14 +223,26 @@ for (i in rows.along(input)) {
         writeLines(data_columns, fname)
         
         data_columns = write_estimation_data(alternatives=subset(alternatives,
-                                                                 ttype %in% hb_shopping_service_other),
+                                                                 ttype %in% hb_shopping_service),
                                              batch_size=100,
-                                             model_name=sprintf("spbo-%s", input$name[i]),
+                                             model_name=sprintf("spb-%s", input$name[i]),
                                              row=row,
                                              matrix_list=matrix_list,
                                              columns=columns)
         message("Writing column names...")
-        fname = sprintf("%s/alternatives-columns-spbo-%s.txt",
+        fname = sprintf("%s/alternatives-columns-spb-%s.txt",
+                        output_folder, input$name[i])
+        writeLines(data_columns, fname)
+        
+        data_columns = write_estimation_data(alternatives=subset(alternatives,
+                                                                 ttype %in% hb_other),
+                                             batch_size=100,
+                                             model_name=sprintf("other-%s", input$name[i]),
+                                             row=row,
+                                             matrix_list=matrix_list,
+                                             columns=columns)
+        message("Writing column names...")
+        fname = sprintf("%s/alternatives-columns-other-%s.txt",
                         output_folder, input$name[i])
         writeLines(data_columns, fname)
         
