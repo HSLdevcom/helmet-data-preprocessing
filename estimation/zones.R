@@ -64,7 +64,8 @@ quantile(zones$cars_per_people, c(0, 0.01, 0.02, 0.98, 0.99, 1), na.rm=TRUE)
 
 income = read_xlsx(.ancfile("input/Maankäyttö/tulotiedot_2016_korjattu.xlsx"), sheet="tulotaso_korjattu")
 m = match(zones$zone_orig, income$SIJ2019)
-zones$income = income$hr_mtu[m]
+zones$income_person = income$hr_mtu[m]
+zones$income_household = income$tr_mtu[m]
 
 zones = downclass(zones)
 check.na(zones)
