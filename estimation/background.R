@@ -111,7 +111,7 @@ df$children = ifelse(is.na(people$T_0_6V), 9, df$children)
 df$female = ifelse(people$T_SUKUPUOLI == 2, 1, 0)
 df = leftjoin(df, get_age_groups(people$T_IKA, df$pid), by="pid")
 
-m = match(people$rsij2019, zones$zone_orig)
+m = match(people$rzone, zones$zone_orig)
 df$rzone = zones$zone[m]
 df$rzone_capital_region = ifelse(zones$capital_region[m], 1, 0)
 df$rzone_surrounding_municipality = ifelse(zones$surrounding_municipality[m], 1, 0)
