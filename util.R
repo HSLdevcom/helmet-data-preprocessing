@@ -1,6 +1,7 @@
 # -*- coding: windows-1252-dos -*-
 library(strafica)
 
+
 #' Get tour classes from tour types.
 #' 
 #' @param x A character vector of tour types (\code{tour_type}) as defined in \code{tours/output} files.
@@ -48,6 +49,7 @@ get_peak = function(x) {
     return(peak)
 }
 
+
 # from alternatives.R
 check_class = function(x, exclude=NA) {
     cnames = colnames(x)
@@ -60,4 +62,36 @@ check_class = function(x, exclude=NA) {
         messagef(" %s: %s",
                  scnames[i], sclasses[i])
     }
+}
+
+
+write_alogit = function(x, fname, sep=" ", accuracy=0.01) {
+    x = round(as.matrix(x), digits=2)
+    x = t(apply(x, 1, formatC, format="fg"))
+    write.table(x,
+                file=fname,
+                quote=FALSE,
+                sep=sep,
+                row.names=FALSE,
+                col.names=FALSE)
+    return(invisible())
+}
+
+
+#' Get age groups from age vector.
+#' 
+#' @param x Age vector.
+#' @param pid Person ID vector.
+#' @return A data frame with first column being \code{pid} and other columns
+#'   being age group columns.
+get_age_groups = function(x, pid) {
+    stopifnot(is.integer(x))
+    df = data.frame(pid=pid)
+    df$age_7_17 = ifelse(x >= 7 & x <= 17, 1, 0)
+    df$age_18_29 = ifelse(x >= 18 & x <= 29, 1, 0)
+    df$age_30_49 = ifelse(x >= 30 & x <= 49, 1, 0)
+    df$age_50_64 = ifelse(x >= 50 & x <= 64, 1, 0)
+    df$age_65 = ifelse(x >= 65, 1, 0)
+    df$age_missing = ifelse(is.na(x) | x < 7, 9, 0)
+    return(df)
 }

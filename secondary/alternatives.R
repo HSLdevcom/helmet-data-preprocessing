@@ -1,6 +1,5 @@
 # -*- coding: windows-1252-dos -*-
 library(strafica)
-source("write.R")
 source(ancfile("util.R"))
 
 

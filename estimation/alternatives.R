@@ -1,19 +1,6 @@
 # -*- coding: windows-1252-dos -*-
 library(strafica)
-source("write.R")
-
-check_class = function(x, exclude=NA) {
-    cnames = colnames(x)
-    classes = sapply(x, class)
-    scnames = pad(cnames, n=max(nchar(cnames)))
-    sclasses = pad(classes, n=max(nchar(classes)))
-    message("Checking data frame for classes...")
-    for (i in seq_along(cnames)) {
-        if (classes[i] %in% exclude) next
-        messagef(" %s: %s",
-                 scnames[i], sclasses[i])
-    }
-}
+source(ancfile("util.R"))
 
 
 # Output folder location

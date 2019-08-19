@@ -1,27 +1,10 @@
 # -*- coding: windows-1252-dos -*-
 library(strafica)
+source(ancfile("util.R"))
 
 # This scripts writes all background data that is needed from respondents. This
 # is done separately to avoid having survey-specific columns names in too many
 # places... All people are handled whether or not they make any tours.
-
-#' Get age groups from age vector.
-#' 
-#' @param x Age vector.
-#' @param pid Person ID vector.
-#' @return A data frame with first column being \code{pid} and other columns
-#'   being age group columns.
-get_age_groups = function(x, pid) {
-    stopifnot(is.integer(x))
-    df = data.frame(pid=pid)
-    df$age_7_17 = ifelse(x >= 7 & x <= 17, 1, 0)
-    df$age_18_29 = ifelse(x >= 18 & x <= 29, 1, 0)
-    df$age_30_49 = ifelse(x >= 30 & x <= 49, 1, 0)
-    df$age_50_64 = ifelse(x >= 50 & x <= 64, 1, 0)
-    df$age_65 = ifelse(x >= 65, 1, 0)
-    df$age_missing = ifelse(is.na(x) | x < 7, 9, 0)
-    return(df)
-}
 
 zones = read.csv2(ancfile("area/zones.csv"), stringsAsFactors=FALSE)
 
