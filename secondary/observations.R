@@ -4,7 +4,7 @@ library(readxl)
 source(ancfile("util.R"))
 
 zones = read.csv2(ancfile("area/zones.csv"), stringsAsFactors=FALSE)
-background = load1("background.RData")
+background = load1(ancfile("estimation/background.RData"))
 
 message("Formatting tour data...")
 
@@ -46,10 +46,10 @@ m = which(rowSums(tours[,grep("^visits_t[0-9]+", colnames(tours))]) == 1)
 observations$jpeak[m] = NA
 
 if (unique(tours$year) == 2016) {
-    mtypes = read.delims("mtypes-peripheral.txt")
+    mtypes = read.delims(ancfile("estimation/mtypes-peripheral.txt"))
     observations = leftjoin(observations, mtypes)
 } else if (unique(tours$year) == 2018) {
-    mtypes = read.delims("mtypes-metropolitan.txt")
+    mtypes = read.delims(ancfile("estimation/mtypes-metropolitan.txt"))
     observations = leftjoin(observations, mtypes)
 }
 
