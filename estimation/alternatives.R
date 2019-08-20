@@ -1,19 +1,6 @@
 # -*- coding: windows-1252-dos -*-
 library(strafica)
-source("write.R")
-
-check_class = function(x, exclude=NA) {
-    cnames = colnames(x)
-    classes = sapply(x, class)
-    scnames = pad(cnames, n=max(nchar(cnames)))
-    sclasses = pad(classes, n=max(nchar(classes)))
-    message("Checking data frame for classes...")
-    for (i in seq_along(cnames)) {
-        if (classes[i] %in% exclude) next
-        messagef(" %s: %s",
-                 scnames[i], sclasses[i])
-    }
-}
+source(ancfile("util.R"))
 
 
 # Output folder location
@@ -23,8 +10,8 @@ output_folder = ancfile("output/estimation")
 # Load input files
 message("Loading input files...")
 time.start = Sys.time()
-zones = load1("zones.RData")
-matrices = as.data.frame(data.table::fread("matrices.csv",
+zones = read.csv2(ancfile("area/zones.csv"), stringsAsFactors=FALSE)
+matrices = as.data.frame(data.table::fread(ancfile("area/matrices.csv"),
                                            stringsAsFactors=FALSE))
 average = as.data.frame(data.table::fread("average.csv",
                                           stringsAsFactors=FALSE))

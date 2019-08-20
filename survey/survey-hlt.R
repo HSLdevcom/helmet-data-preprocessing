@@ -29,25 +29,25 @@ paik = rename(paik,
 # Start coordinates
 paik_m1 = subset(paik, PA_PAIKKAKOODI=="M1")
 paik_m1 = rename(unpick(paik_m1, PA_PAIKKAKOODI),
-                 x=ix, y=iy, kunta=ikunta, sij2019=isij2019)
+                 x=ix, y=iy, kunta=ikunta, sij2019=izone)
 matk = leftjoin(matk, paik_m1)
 
 # End coordinates
 paik_m2 = subset(paik, PA_PAIKKAKOODI=="M2")
 paik_m2 = rename(unpick(paik_m2, PA_PAIKKAKOODI),
-                 x=jx, y=jy, kunta=jkunta, sij2019=jsij2019)
+                 x=jx, y=jy, kunta=jkunta, sij2019=jzone)
 matk = leftjoin(matk, paik_m2)
 
 # Home coordinates
 paik_k1 = subset(paik, PA_PAIKKAKOODI=="K1")
 paik_k1 = rename(unpick(paik_k1, PA_PAIKKAKOODI, M_TRIPROUTESID),
                  M_TAUSTAID=T_TAUSTAID,
-                 x=rx, y=ry, kunta=rkunta, sij2019=rsij2019)
+                 x=rx, y=ry, kunta=rkunta, sij2019=rzone)
 taus = leftjoin(taus, paik_k1)
 
 # Missing values are marked as zero
-matk = na.to.zero(matk, c("ix", "iy", "ikunta", "isij2019", "jx", "jy", "jkunta", "jsij2019"))
-taus = na.to.zero(taus, c("rx", "ry", "rkunta", "rsij2019"))
+matk = na.to.zero(matk, c("ix", "iy", "ikunta", "izone", "jx", "jy", "jkunta", "jzone"))
+taus = na.to.zero(taus, c("rx", "ry", "rkunta", "rzone"))
 
 
 ###
@@ -101,7 +101,7 @@ matk = mcddply(matk, .(M_TAUSTAID), function(df) {
     return(df)
 })
 matk = mcddply(matk, .(M_TAUSTAID), function(df) {
-    df$matnro = rows.along(df)
+    df$number = rows.along(df)
     return(df)
 })
 
@@ -109,7 +109,7 @@ matk = mcddply(matk, .(M_TAUSTAID), function(df) {
 mcddply(matk, .(M_TAUSTAID), function(df) {
     df = subset(df, !is.na(itime))
     df = arrange(df, itime)
-    stopif(is.unsorted(df$matnro))
+    stopif(is.unsorted(df$number))
 })
 
 
@@ -117,14 +117,14 @@ mcddply(matk, .(M_TAUSTAID), function(df) {
 ### Unique locations
 ###
 
-ikoht = pick(matk, M_TAUSTAID, M_TRIPROUTESID, matnro, M_LTK, ix, iy)
+ikoht = pick(matk, M_TAUSTAID, M_TRIPROUTESID, number, M_LTK, ix, iy)
 ikoht = rename(ikoht, M_LTK=type, ix=x, iy=y)
 ikoht$from = TRUE
-jkoht = pick(matk, M_TAUSTAID, M_TRIPROUTESID, matnro, M_MTK, jx, jy)
+jkoht = pick(matk, M_TAUSTAID, M_TRIPROUTESID, number, M_MTK, jx, jy)
 jkoht = rename(jkoht, M_MTK=type, jx=x, jy=y)
 jkoht$from = FALSE
 koht = rbind_list(ikoht, jkoht)
-koht = arrange(koht, M_TAUSTAID, matnro, -from)
+koht = arrange(koht, M_TAUSTAID, number, -from)
 
 .eucd = function(x, y, tx, ty) {
     dist = eucd(x, y, tx, ty)
@@ -191,10 +191,10 @@ koht = mcddply(koht, .(M_TAUSTAID), function(df) {
 koht$tid = with(koht, classify(M_TAUSTAID, tid))
 
 # Adding location identifiers to trip table.
-ikoht = pick(subset(koht, from), M_TAUSTAID, matnro, tid)
+ikoht = pick(subset(koht, from), M_TAUSTAID, number, tid)
 ikoht = rename(ikoht, tid=itid)
 matk = leftjoin(matk, ikoht)
-ikoht = pick(subset(koht, !from), M_TAUSTAID, matnro, tid)
+ikoht = pick(subset(koht, !from), M_TAUSTAID, number, tid)
 jkoht = rename(ikoht, tid=jtid)
 matk = leftjoin(matk, jkoht)
 
@@ -213,10 +213,10 @@ m = which(matk$M_TAUSTAID %in% students & matk$jtype == 3)
 matk$jtype[m] = 12
 
 # Creating a table of unique locations.
-ipaik = pick(matk, itid, itype, ix, iy, isij2019)
-jpaik = pick(matk, jtid, jtype, jx, jy, jsij2019)
-paik = rbind_list(rename(ipaik, itid=tid, itype=ttype, ix=x, iy=y, isij2019=zone),
-                  rename(jpaik, jtid=tid, jtype=ttype, jx=x, jy=y, jsij2019=zone))
+ipaik = pick(matk, itid, itype, ix, iy, izone)
+jpaik = pick(matk, jtid, jtype, jx, jy, jzone)
+paik = rbind_list(rename(ipaik, itid=tid, itype=ttype, ix=x, iy=y, izone=zone),
+                  rename(jpaik, jtid=tid, jtype=ttype, jx=x, jy=y, jzone=zone))
 paik = dedup(paik, tid)
 paik = arrange(paik, tid)
 
@@ -257,6 +257,12 @@ taus$pid = rows.along(taus) + 300000L
 matk = leftjoin(matk,
                 rename(pick(taus, T_TAUSTAID, pid), T_TAUSTAID=M_TAUSTAID),
                 by="M_TAUSTAID")
+
+###
+### Rename columns
+###
+
+matk = rename(matk, M_TRIPROUTESID=eid)
 
 
 ###

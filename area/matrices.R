@@ -14,7 +14,7 @@ read_emme_csv = function(file, value="value", ...) {
 }
 
 # Read zones
-zones = load1("zones.RData")
+zones = read.csv2("zones.csv", stringsAsFactors=FALSE)
 zones = pick(zones, zone_orig, municipality, capital_region, area)
 
 matrices = expand.grid(izone=zones$zone_orig, jzone=zones$zone_orig)

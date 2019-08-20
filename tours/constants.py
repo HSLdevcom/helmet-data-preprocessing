@@ -84,16 +84,12 @@ def read_people_from_hlt(fname):
                          usecols=[
                                  "pid",
                                  "xfactor",
-                                 "rsij2019"],
+                                 "rzone"],
                          dtype={
                                  "pid": int,
                                  "xfactor": float,
-                                 "rsij2019": int,
+                                 "rzone": int,
                                  })
-    columns = {
-            "rsij2019": "rzone",
-            }
-    df.rename(columns=columns, inplace=True)
     return df
 
 
@@ -104,8 +100,8 @@ def read_trips_from_hlt(fname):
                          skipinitialspace=True,
                          usecols=[
                                  "pid",
-                                 "M_TRIPROUTESID",
-                                 "matnro",
+                                 "eid",
+                                 "number",
                                  "ix",
                                  "iy",
                                  "itype",
@@ -121,8 +117,8 @@ def read_trips_from_hlt(fname):
                                  ],
                          dtype={
                                  "pid": int,
-                                 "M_TRIPROUTESID": int,
-                                 "matnro": int,
+                                 "eid": int,
+                                 "number": int,
                                  "ix": float,
                                  "iy": float,
                                  "itype": int,
@@ -136,19 +132,6 @@ def read_trips_from_hlt(fname):
                                  "mode": int,
                                  "length": float,
                                  })
-    columns = {
-            "M_TRIPROUTESID": "eid",
-            "matnro": "number",
-            "ix": "ix",
-            "iy": "iy",
-            "itype": "itype",
-            "itime": "itime",
-            "jx": "jx",
-            "jy": "jy",
-            "jtype": "jtype",
-            "jtime": "jtime",
-            }
-    df.rename(columns=columns, inplace=True)
     return df
 
 

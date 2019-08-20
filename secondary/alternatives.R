@@ -1,19 +1,6 @@
 # -*- coding: windows-1252-dos -*-
 library(strafica)
-source("write.R")
-
-check_class = function(x, exclude=NA) {
-    cnames = colnames(x)
-    classes = sapply(x, class)
-    scnames = pad(cnames, n=max(nchar(cnames)))
-    sclasses = pad(classes, n=max(nchar(classes)))
-    message("Checking data frame for classes...")
-    for (i in seq_along(cnames)) {
-        if (classes[i] %in% exclude) next
-        messagef(" %s: %s",
-                 scnames[i], sclasses[i])
-    }
-}
+source(ancfile("util.R"))
 
 
 # Output folder location
@@ -23,12 +10,12 @@ output_folder = ancfile("output/estimation")
 # Load input files
 message("Loading input files...")
 time.start = Sys.time()
-zones = load1("zones.RData")
-matrices = as.data.frame(data.table::fread("matrices.csv",
+zones = read.csv2(ancfile("area/zones.csv"), stringsAsFactors=FALSE)
+matrices = as.data.frame(data.table::fread(ancfile("area/matrices.csv"),
                                            stringsAsFactors=FALSE))
-average = as.data.frame(data.table::fread("average.csv",
+average = as.data.frame(data.table::fread(ancfile("estimation/average.csv"),
                                           stringsAsFactors=FALSE))
-average_secondary = as.data.frame(data.table::fread("average-secondary.csv",
+average_secondary = as.data.frame(data.table::fread(ancfile("secondary/average.csv"),
                                           stringsAsFactors=FALSE))
 average = leftjoin(average, average_secondary, by=c("izone","jzone"))
 progress.final(time.start)
@@ -78,6 +65,10 @@ matrices = matrices[, c("izone",
                         "same_zone",
                         "area",
                         grep("bicycle|pedestrian|cost_transit", colnames(matrices), value=TRUE))]
+# Add secondary destination model matrices
+matrices$same_zone_i = matrices$same_zone
+matrices$same_zone_j = matrices$same_zone
+matrices = unpick(matrices, same_zone)
 average$izone = zones$zone[match(average$izone, zones$zone_orig)]
 average$jzone = zones$zone[match(average$jzone, zones$zone_orig)]
 matrices = leftjoin(matrices, average)
@@ -148,8 +139,11 @@ write_estimation_data = function(alternatives,
         }
         
         # Origin-dependent
-        batch = cbind(batch, matrix_list[["same_zone"]][batch$izone, ])
+        batch = cbind(batch, matrix_list[["same_zone_i"]][batch$izone, ])
         batch = cbind(batch, matrix_list[["area"]][batch$izone, ])
+        
+        # Primary destination dependent
+        batch = cbind(batch, matrix_list[["same_zone_j"]][batch$jzone, ])
         
         # Home-dependent
         batch = cbind(batch, matrix_list[["same_municipality"]][batch$rzone, ])
@@ -180,7 +174,6 @@ write_estimation_data = function(alternatives,
 
 
 input = read.delims("input.txt")
-input = subset(input, grepl("^secondary", name))
 for (i in rows.along(input)) {
     
     fname = sprintf("observations-%s.RData", input$name[i])
