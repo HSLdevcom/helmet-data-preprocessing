@@ -15,6 +15,7 @@ strafica/
 *.csv
 estimation/alternatives/*.txt
 output/**/*.txt
+*.log
 
 # IDE-specific folders
 .idea
