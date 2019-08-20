@@ -4,7 +4,7 @@
 install.packages("devtools")
 
 require(devtools)
-cran = "http://cran.us.r-project.org"
+cran = "https://ftp.eenet.ee/pub/cran/"
 
 # strafica dependencies
 install_version("data.table", version="1.12.2", repos=cran)
