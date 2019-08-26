@@ -70,7 +70,7 @@ External dependencies and the data need to be however mapped as external volume,
 see [the run script](run-docker.sh).
 
 ```   
-./build-docker.sh
+docker build -t helmet-data-preprocessing .
 ./run-docker.sh
 ```
 
