@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
   python2.7 \
   python-pip
 RUN pip install pipenv
-RUN pipenv install
+RUN pipenv install --deploy --ignore-pipfile
 
 # Install R and our dependencies
 RUN apt-get update && apt-get install -y \
