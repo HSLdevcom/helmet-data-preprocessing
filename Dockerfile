@@ -16,6 +16,7 @@ RUN pipenv install --deploy --ignore-pipfile
 RUN apt-get update && apt-get install -y \
   apt-utils \
   gdal-bin \
+  git \
   libgdal-dev \
   libgeos-dev \
   libgit2-dev \
