@@ -20,3 +20,4 @@ output/**/*.txt
 # IDE-specific folders
 .idea
 *.code-workspace
+.Rproj.user
