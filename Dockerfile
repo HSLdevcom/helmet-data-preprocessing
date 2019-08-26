@@ -24,6 +24,6 @@ RUN apt-get update && apt-get install -y \
   libgit2-dev \
   libssl-dev \
   libssh2-1-dev
-RUN Rscript --quiet --no-save --encoding=CP1252 ./install-dependencies.R
+RUN R --no-save --encoding=CP1252 -f install-dependencies.R
 
 CMD ["/bin/bash"]
