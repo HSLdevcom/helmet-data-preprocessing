@@ -14,16 +14,16 @@ RUN pipenv install --deploy --ignore-pipfile
 
 # Install R and our dependencies
 RUN apt-get update && apt-get install -y \
-  libgdal-dev \
-  gdal-bin \
-  libproj-dev \
-  proj-data \
-  proj-bin \
-  libgeos-dev \
   apt-utils \
+  gdal-bin \
+  libgdal-dev \
+  libgeos-dev \
   libgit2-dev \
+  libproj-dev \
+  libssh2-1-dev \
   libssl-dev \
-  libssh2-1-dev
+  proj-bin \
+  proj-data
 RUN R --no-save --encoding=CP1252 -f install-dependencies.R
 
 CMD ["/bin/bash"]
