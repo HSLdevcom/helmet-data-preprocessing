@@ -69,11 +69,27 @@ Run-script will open up a bash session where user can start the preprocessing.
 External dependencies and the data need to be however mapped as external volume,
 see `docker run` commands below.
 
-#### Build and run on Windows PowerShell
+#### Build Docker image
+
+Open Windows PowerShell or Linux command line. Docker image can be built either
+from local copy of the source code:
 
 ```
 docker build -t helmet-data-preprocessing .
+```
 
+Or straight from Github:
+
+```
+docker build -t helmet-data-preprocessing https://github.com/HSLdevcom/helmet-data-preprocessing.git
+```
+
+If you wish to use a certain branch for the Github build, add `#branch-name` at
+the end of the repository address.
+
+#### Run on Windows PowerShell
+
+```
 docker run -it --rm `
   -v c:/Users/xxx/input:/input `
   -v c:/Users/xxx/output:/output `
@@ -81,11 +97,9 @@ docker run -it --rm `
   helmet-data-preprocessing
 ```
 
-#### Build and run on Linux command line
+#### Run on Linux command line
 
 ```
-docker build -t helmet-data-preprocessing .
-
 docker run -it --rm \
   -v ~/xxx/input:/input \
   -v ~/xxx/output:/output \
