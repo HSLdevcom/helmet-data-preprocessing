@@ -25,6 +25,6 @@ RUN apt-get update && apt-get install -y \
   libssl-dev \
   proj-bin \
   proj-data
-# RUN R --no-save --encoding=CP1252 -f install-dependencies.R
+RUN R --no-save --encoding=CP1252 -f install-dependencies.R
 
 CMD ["/bin/bash"]
