@@ -4,6 +4,7 @@ read_default() {
     read -p "$1: [$2] " REPLY && echo "${REPLY:-$2}"
 }
 OUTPUT=$(read_default "Path to output folder" "/output")
+git rev-parse HEAD > $OUTPUT/hash
 
 (cd area/ && sh batch.sh)
 (cd survey/ && sh batch.sh)
