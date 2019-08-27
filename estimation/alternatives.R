@@ -3,10 +3,6 @@ library(strafica)
 source(ancfile("util.R"))
 
 
-# Output folder location
-output_folder = ancfile("output/estimation")
-
-
 # Load input files
 message("Loading input files...")
 time.start = Sys.time()
@@ -205,8 +201,8 @@ for (i in rows.along(input)) {
                                              matrix_list=matrix_list,
                                              columns=columns)
         message("Writing column names...")
-        fname = sprintf("%s/alternatives-columns-wss-%s.txt",
-                        output_folder, input$name[i])
+        fname = sprintf("alternatives/columns-wss-%s.txt",
+                        input$name[i])
         writeLines(data_columns, fname)
         
         data_columns = write_estimation_data(alternatives=subset(alternatives,
@@ -217,8 +213,8 @@ for (i in rows.along(input)) {
                                              matrix_list=matrix_list,
                                              columns=columns)
         message("Writing column names...")
-        fname = sprintf("%s/alternatives-columns-spb-%s.txt",
-                        output_folder, input$name[i])
+        fname = sprintf("alternatives/columns-spb-%s.txt",
+                        input$name[i])
         writeLines(data_columns, fname)
         
         data_columns = write_estimation_data(alternatives=subset(alternatives,
@@ -229,8 +225,8 @@ for (i in rows.along(input)) {
                                              matrix_list=matrix_list,
                                              columns=columns)
         message("Writing column names...")
-        fname = sprintf("%s/alternatives-columns-other-%s.txt",
-                        output_folder, input$name[i])
+        fname = sprintf("alternatives/columns-other-%s.txt",
+                        input$name[i])
         writeLines(data_columns, fname)
         
         data_columns = write_estimation_data(alternatives=subset(alternatives,
@@ -241,8 +237,8 @@ for (i in rows.along(input)) {
                                              matrix_list=matrix_list,
                                              columns=columns)
         message("Writing column names...")
-        fname = sprintf("%s/alternatives-columns-wbo-%s.txt",
-                        output_folder, input$name[i])
+        fname = sprintf("alternatives/columns-wbo-%s.txt",
+                        input$name[i])
         writeLines(data_columns, fname)
         
     } else {
@@ -253,8 +249,7 @@ for (i in rows.along(input)) {
                                              matrix_list=matrix_list,
                                              columns=columns)
         message("Writing column names...")
-        fname = sprintf("%s/alternatives-columns-%s.txt",
-                        output_folder,
+        fname = sprintf("alternatives/columns-%s.txt",
                         input$name[i])
         writeLines(data_columns, fname)
     }

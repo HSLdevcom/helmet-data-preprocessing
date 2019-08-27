@@ -7,6 +7,8 @@ pipenv run python ./tours/main.py input-config-hlt.json
 (cd estimation/ && sh batch.sh)
 (cd secondary/ && sh batch.sh)
 
+cp estimation/alternatives/columns-*.txt output/
+
 cat estimation/alternatives/alternatives-peripheral-1_100.txt | fold -w 180 -s > output/estimation/alternatives-peripheral-test.txt
 cat estimation/alternatives/alternatives-constructed-peripheral-1_100.txt | fold -w 180 -s > output/estimation/alternatives-constructed-peripheral-test.txt
 cat estimation/alternatives/alternatives-constructed-metropolitan-1_100.txt | fold -w 180 -s > output/estimation/alternatives-constructed-metropolitan-test.txt
@@ -22,6 +24,8 @@ cat estimation/alternatives/alternatives-wss-metropolitan-*.txt | fold -w 180 -s
 cat estimation/alternatives/alternatives-spb-metropolitan-*.txt | fold -w 180 -s > output/estimation/alternatives-spb-metropolitan.txt
 cat estimation/alternatives/alternatives-other-metropolitan-*.txt | fold -w 180 -s > output/estimation/alternatives-other-metropolitan.txt
 cat estimation/alternatives/alternatives-wbo-metropolitan-*.txt | fold -w 180 -s > output/estimation/alternatives-wbo-metropolitan.txt
+
+cp secondary/alternatives/columns-*.txt output/
 
 cat secondary/alternatives/alternatives-metropolitan-secondary-1_100.txt | fold -w 180 -s > output/estimation/alternatives-metropolitan-secondary-test.txt
 cat secondary/alternatives/alternatives-metropolitan-secondary-*.txt | fold -w 180 -s > output/estimation/alternatives-metropolitan-secondary.txt
