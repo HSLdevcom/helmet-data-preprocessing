@@ -75,10 +75,10 @@ see `docker run` commands below.
 docker build -t helmet-data-preprocessing .
 
 docker run -it --rm `
-    -v //c/Users/xxx/input/:/input/ `
-    -v //c/Users/xxx/output/:/output/ `
-    -v //c/Users/xxx/strafica/:/strafica `
-    helmet-data-preprocessing
+  -v c:/Users/xxx/input:/input `
+  -v c:/Users/xxx/output:/output `
+  -v c:/Users/xxx/strafica:/strafica `
+  helmet-data-preprocessing
 ```
 
 #### Build and run on Linux command line
@@ -87,9 +87,9 @@ docker run -it --rm `
 docker build -t helmet-data-preprocessing .
 
 docker run -it --rm \
-  -v ~/xxx/input/:/input/ \
-  -v ~/xxx/output/:/output/ \
-  -v ~/xxx/strafica/:/strafica \
+  -v ~/xxx/input:/input \
+  -v ~/xxx/output:/output \
+  -v ~/xxx/strafica:/strafica \
   helmet-data-preprocessing
 ```
 
