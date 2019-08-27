@@ -75,9 +75,9 @@ see `docker run` commands below.
 docker build -t helmet-data-preprocessing .
 
 docker run -it --rm `
-    -v //c/Users/xxx/input/:/helmet-data-preprocessing/input/ `
-    -v //c/Users/xxx/helmet-data-preprocessing/output/:/helmet-data-preprocessing/output/ `
-    -v //c/Users/xxx/helmet-data-preprocessing/strafica/:/helmet-data-preprocessing/strafica `
+    -v //c/Users/xxx/input/:/input/ `
+    -v //c/Users/xxx/output/:/output/ `
+    -v //c/Users/xxx/strafica/:/strafica `
     helmet-data-preprocessing
 ```
 
@@ -87,9 +87,9 @@ docker run -it --rm `
 docker build -t helmet-data-preprocessing .
 
 docker run -it --rm \
-  -v ~/xxx/input/:/helmet-data-preprocessing/input/ \
-  -v ~/xxx/helmet-data-preprocessing/output/:/helmet-data-preprocessing/output/ \
-  -v ~/xxx/helmet-data-preprocessing/strafica/:/helmet-data-preprocessing/strafica \
+  -v ~/xxx/input/:/input/ \
+  -v ~/xxx/output/:/output/ \
+  -v ~/xxx/strafica/:/strafica \
   helmet-data-preprocessing
 ```
 
