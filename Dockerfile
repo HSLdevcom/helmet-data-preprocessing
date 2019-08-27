@@ -6,12 +6,25 @@ WORKDIR /helmet-data-preprocessing
 COPY . ./
 
 # Install Python & our dependencies
-RUN apt-get update && apt-get install -y python2.7 python-pip
+RUN apt-get update && apt-get install -y \
+  python2.7 \
+  python-pip
 RUN pip install pipenv
-RUN pipenv install
+RUN pipenv install --deploy --ignore-pipfile
 
 # Install R and our dependencies
-RUN apt-get update && apt-get install -y libgdal-dev gdal-bin libproj-dev proj-data proj-bin libgeos-dev apt-utils libgit2-dev libssl-dev libssh2-1-dev
-RUN Rscript --quiet --no-save --encoding=CP1252 ./install-dependencies.R
+RUN apt-get update && apt-get install -y \
+  apt-utils \
+  gdal-bin \
+  git \
+  libgdal-dev \
+  libgeos-dev \
+  libgit2-dev \
+  libproj-dev \
+  libssh2-1-dev \
+  libssl-dev \
+  proj-bin \
+  proj-data
+RUN R --no-save --encoding=CP1252 -f install-dependencies.R
 
 CMD ["/bin/bash"]
