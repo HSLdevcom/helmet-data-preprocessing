@@ -69,27 +69,41 @@ Run-script will open up a bash session where user can start the preprocessing.
 External dependencies and the data need to be however mapped as external volume,
 see `docker run` commands below.
 
-#### Build and run on Windows PowerShell
+#### Build Docker image
+
+Open Windows PowerShell or Linux command line. Docker image can be built either
+from local copy of the source code:
 
 ```
 docker build -t helmet-data-preprocessing .
+```
 
+Or straight from Github:
+
+```
+docker build -t helmet-data-preprocessing https://github.com/HSLdevcom/helmet-data-preprocessing.git
+```
+
+If you wish to use a certain branch for the Github build, add `#branch-name` at
+the end of the repository address.
+
+#### Run on Windows PowerShell
+
+```
 docker run -it --rm `
-    -v //c/Users/xxx/input/:/helmet-data-preprocessing/input/ `
-    -v //c/Users/xxx/helmet-data-preprocessing/output/:/helmet-data-preprocessing/output/ `
-    -v //c/Users/xxx/helmet-data-preprocessing/strafica/:/helmet-data-preprocessing/strafica `
-    helmet-data-preprocessing
+  -v c:/Users/xxx/input:/input `
+  -v c:/Users/xxx/output:/output `
+  -v c:/Users/xxx/strafica:/strafica `
+  helmet-data-preprocessing
 ```
 
-#### Build and run on Linux command line
+#### Run on Linux command line
 
 ```
-docker build -t helmet-data-preprocessing .
-
 docker run -it --rm \
-  -v ~/xxx/input/:/helmet-data-preprocessing/input/ \
-  -v ~/xxx/helmet-data-preprocessing/output/:/helmet-data-preprocessing/output/ \
-  -v ~/xxx/helmet-data-preprocessing/strafica/:/helmet-data-preprocessing/strafica \
+  -v ~/xxx/input:/input \
+  -v ~/xxx/output:/output \
+  -v ~/xxx/strafica:/strafica \
   helmet-data-preprocessing
 ```
 

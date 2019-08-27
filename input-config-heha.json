@@ -3,5 +3,5 @@
     "people-filepath": "survey/tausta-heha.csv",
     "trips-filepath": "survey/matkat-heha.csv",
     "locations-filepath": "survey/paikat-heha.csv",
-    "tour-filepath": "output/tours/tours-heha.csv"
+    "tour-filepath": "tours/tours-heha.csv"
 }
