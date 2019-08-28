@@ -222,14 +222,6 @@ def read_trips_from_heha(fname):
     columns = {
             "matkaid": "eid",
             "matnro": "number",
-            "ix": "ix",
-            "iy": "iy",
-            "itype": "itype",
-            "itime": "itime",
-            "jx": "jx",
-            "jy": "jy",
-            "jtype": "jtype",
-            "jtime": "jtime",
             "PITUUS": "length",
             }
     df.rename(columns=columns, inplace=True)
