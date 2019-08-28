@@ -184,7 +184,7 @@ def read_trips_from_heha(fname):
                          skipinitialspace=True,
                          usecols=[
                                  "pid",
-                                 "matkaid",
+                                 "eid",
                                  "matnro",
                                  "ix",
                                  "iy",
@@ -201,7 +201,7 @@ def read_trips_from_heha(fname):
                                  ],
                          dtype={
                                  "pid": int,
-                                 "matkaid": int,
+                                 "eid": int,
                                  "matnro": int,
                                  "ix": float,
                                  "iy": float,
@@ -217,7 +217,6 @@ def read_trips_from_heha(fname):
                                  "length": float,
                                  })
     columns = {
-            "matkaid": "eid",
             "matnro": "number",
             }
     df.rename(columns=columns, inplace=True)

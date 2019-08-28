@@ -6,6 +6,7 @@ library(lubridate)
 matk = read_xlsx(ancfile("input/HEHA-aineistot/MATKAT18_V3.xlsx"))
 matk = as.data.frame(matk)
 matk$length = matk$PITUUS
+matk$eid = matk$matkaid
 
 taus = pick(matk,
             juokseva, montako_matkaa, kerroin, ika, sukup_laaj,
@@ -150,7 +151,7 @@ flip_trip = function(trip,
     flipped_trip$juokseva = trip$juokseva
     flipped_trip$username = trip$username
     flipped_trip$xfactor = trip$xfactor
-    flipped_trip$matkaid = 0
+    flipped_trip$eid = 0
     flipped_trip$ix = trip$jx
     flipped_trip$iy = trip$jy
     flipped_trip$jx = trip$ix
@@ -232,17 +233,17 @@ matk = mcddply(matk, .(juokseva), function(df) {
     return(df)
 })
 m = which(matk$imputated)
-matk$matkaid[m] = max(matk$matkaid) + seq(length(m))
+matk$eid[m] = max(matk$eid) + seq(length(m))
 
 
 ###
 ### Unique locations
 ###
 
-ikoht = pick(matk, juokseva, matkaid, matnro, itype, ix, iy)
+ikoht = pick(matk, juokseva, eid, matnro, itype, ix, iy)
 ikoht = rename(ikoht, itype=type, ix=x, iy=y)
 ikoht$from = TRUE
-jkoht = pick(matk, juokseva, matkaid, matnro, jtype, jx, jy)
+jkoht = pick(matk, juokseva, eid, matnro, jtype, jx, jy)
 jkoht = rename(jkoht, jtype=type, jx=x, jy=y)
 jkoht$from = FALSE
 koht = rbind_list(ikoht, jkoht)
