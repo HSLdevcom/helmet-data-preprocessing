@@ -108,7 +108,7 @@ matk = subset(matk, !(is.na(itime) & is.na(jtime) & is.na(LP) & is.na(MP)))
 matk = arrange(matk, juokseva, itime)
 
 matk = mcddply(matk, .(juokseva), function(df) {
-    df$matnro = rows.along(df)
+    df$number = rows.along(df)
     return(df)
 })
 
@@ -169,7 +169,7 @@ flip_trip = function(trip,
     flipped_trip$jtime = hms_string_from_datetime(flipped_trip$jdatetime)
     flipped_trip$Paakulkutapa = trip$Paakulkutapa
     flipped_trip$length = trip$length
-    flipped_trip$matnro = trip$matnro + 0.5
+    flipped_trip$number = trip$number + 0.5
     flipped_trip$imputated = TRUE
     flipped_trip = unpick(flipped_trip,
                           LPdttm, MPdttm,
@@ -191,8 +191,8 @@ matk = mcddply(matk, .(juokseva), function(df) {
         new_trips = rbind_all(new_trips)
 
         df = rbind_list(df, new_trips)
-        df = arrange(df, matnro)
-        df$matnro = rows.along(df)
+        df = arrange(df, number)
+        df$number = rows.along(df)
 
         return(df)
     }
@@ -228,8 +228,8 @@ matk = mcddply(matk, .(juokseva), function(df) {
     }
 
     df = rbind_list(df, new_trips)
-    df = arrange(df, matnro)
-    df$matnro = rows.along(df)
+    df = arrange(df, number)
+    df$number = rows.along(df)
     return(df)
 })
 m = which(matk$imputated)
@@ -240,14 +240,14 @@ matk$eid[m] = max(matk$eid) + seq(length(m))
 ### Unique locations
 ###
 
-ikoht = pick(matk, juokseva, eid, matnro, itype, ix, iy)
+ikoht = pick(matk, juokseva, eid, number, itype, ix, iy)
 ikoht = rename(ikoht, itype=type, ix=x, iy=y)
 ikoht$from = TRUE
-jkoht = pick(matk, juokseva, eid, matnro, jtype, jx, jy)
+jkoht = pick(matk, juokseva, eid, number, jtype, jx, jy)
 jkoht = rename(jkoht, jtype=type, jx=x, jy=y)
 jkoht$from = FALSE
 koht = rbind_list(ikoht, jkoht)
-koht = arrange(koht, juokseva, matnro, -from)
+koht = arrange(koht, juokseva, number, -from)
 
 .eucd = function(x, y, tx, ty) {
     dist = eucd(x, y, tx, ty)
@@ -314,10 +314,10 @@ koht = mcddply(koht, .(juokseva), function(df) {
 koht$tid = with(koht, classify(juokseva, tid))
 
 # Adding location identifiers to trip table.
-ikoht = pick(subset(koht, from), juokseva, matnro, tid)
+ikoht = pick(subset(koht, from), juokseva, number, tid)
 ikoht = rename(ikoht, tid=itid)
 matk = leftjoin(matk, ikoht)
-ikoht = pick(subset(koht, !from), juokseva, matnro, tid)
+ikoht = pick(subset(koht, !from), juokseva, number, tid)
 jkoht = rename(ikoht, tid=jtid)
 matk = leftjoin(matk, jkoht)
 

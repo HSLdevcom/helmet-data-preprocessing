@@ -173,7 +173,6 @@ def read_people_from_heha(fname):
                     "xfactor": float,
                     "rzone": int,
                     })
-    df.rename(columns=columns, inplace=True)
     return df
 
 
@@ -185,7 +184,7 @@ def read_trips_from_heha(fname):
                          usecols=[
                                  "pid",
                                  "eid",
-                                 "matnro",
+                                 "number",
                                  "ix",
                                  "iy",
                                  "itype",
@@ -202,7 +201,7 @@ def read_trips_from_heha(fname):
                          dtype={
                                  "pid": int,
                                  "eid": int,
-                                 "matnro": int,
+                                 "number": int,
                                  "ix": float,
                                  "iy": float,
                                  "itype": int,
@@ -216,10 +215,6 @@ def read_trips_from_heha(fname):
                                  "mode": int,
                                  "length": float,
                                  })
-    columns = {
-            "matnro": "number",
-            }
-    df.rename(columns=columns, inplace=True)
     return df
 
 
