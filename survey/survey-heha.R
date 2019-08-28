@@ -10,7 +10,7 @@ taus = pick(matk,
             juokseva, montako_matkaa, kerroin, ika, sukup_laaj,
             ap_kela, montako_autoa, onko_ajokortti, miten_usein_auto_kaytettavissa, toimi,
             kotitalous_0_6v, kotitalous_kaikki, ap_sij19)
-taus = rename(taus, ap_sij19=rzone)
+taus = rename(taus, ap_sij19=rzone, kerroin=xfactor)
 taus = dedup(taus, juokseva)
 
 matk = subset(matk, montako_matkaa > 0)
@@ -148,7 +148,7 @@ flip_trip = function(trip,
     flipped_trip[,] = NA
     flipped_trip$juokseva = trip$juokseva
     flipped_trip$username = trip$username
-    flipped_trip$kerroin = trip$kerroin
+    flipped_trip$xfactor = trip$xfactor
     flipped_trip$matkaid = 0
     flipped_trip$ix = trip$jx
     flipped_trip$iy = trip$jy
