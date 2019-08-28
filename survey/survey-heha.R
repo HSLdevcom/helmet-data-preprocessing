@@ -10,6 +10,7 @@ taus = pick(matk,
             juokseva, montako_matkaa, kerroin, ika, sukup_laaj,
             ap_kela, montako_autoa, onko_ajokortti, miten_usein_auto_kaytettavissa, toimi,
             kotitalous_0_6v, kotitalous_kaikki, ap_sij19)
+taus = rename(taus, ap_sij19=rzone)
 taus = dedup(taus, juokseva)
 
 matk = subset(matk, montako_matkaa > 0)
