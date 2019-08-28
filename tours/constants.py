@@ -165,16 +165,16 @@ def read_people_from_heha(fname):
             skipinitialspace=True,
             usecols=[
                     "pid",
-                    "paino6",
+                    "kerroin",
                     "ap_sij19",
                     ],
             dtype={
                     "pid": int,
-                    "paino6": float,
+                    "kerroin": float,
                     "ap_sij19": int,
                     })
     columns = {
-        "paino6": "xfactor",
+        "kerroin": "xfactor",
         "ap_sij19": "rzone",
         }
     df.rename(columns=columns, inplace=True)

@@ -7,7 +7,7 @@ matk = read_xlsx(ancfile("input/HEHA-aineistot/MATKAT18_V3.xlsx"))
 matk = as.data.frame(matk)
 
 taus = pick(matk,
-            juokseva, montako_matkaa, kerroin, paino6, ika, sukup_laaj,
+            juokseva, montako_matkaa, kerroin, ika, sukup_laaj,
             ap_kela, montako_autoa, onko_ajokortti, miten_usein_auto_kaytettavissa, toimi,
             kotitalous_0_6v, kotitalous_kaikki, ap_sij19)
 taus = dedup(taus, juokseva)
@@ -147,7 +147,6 @@ flip_trip = function(trip,
     flipped_trip[,] = NA
     flipped_trip$juokseva = trip$juokseva
     flipped_trip$username = trip$username
-    flipped_trip$paino6 = trip$paino6
     flipped_trip$kerroin = trip$kerroin
     flipped_trip$matkaid = 0
     flipped_trip$ix = trip$jx

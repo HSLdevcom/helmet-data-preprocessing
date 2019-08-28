@@ -18,7 +18,7 @@ people = read.csv2(ancfile("survey/tausta-heha.csv"), stringsAsFactors=FALSE)
 df = data.frame(pid=people$pid)
 df$year = 2018
 df$survey = 0
-df$xfactor = people$paino6
+df$xfactor = people$kerroin
 df$cars_owned = NA
 df$cars_owned = ifelse(people$montako_autoa == 0, 0, df$cars_owned)
 df$cars_owned = ifelse(people$montako_autoa == 1, 1, df$cars_owned)
