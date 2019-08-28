@@ -197,7 +197,7 @@ def read_trips_from_heha(fname):
                                  "itid",
                                  "jtid",
                                  "mode",
-                                 "PITUUS",
+                                 "length",
                                  ],
                          dtype={
                                  "pid": int,
@@ -214,12 +214,11 @@ def read_trips_from_heha(fname):
                                  "itid": int,
                                  "jtid": int,
                                  "mode": int,
-                                 "PITUUS": float,
+                                 "length": float,
                                  })
     columns = {
             "matkaid": "eid",
             "matnro": "number",
-            "PITUUS": "length",
             }
     df.rename(columns=columns, inplace=True)
     return df

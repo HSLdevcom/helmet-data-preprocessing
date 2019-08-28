@@ -5,6 +5,7 @@ library(lubridate)
 
 matk = read_xlsx(ancfile("input/HEHA-aineistot/MATKAT18_V3.xlsx"))
 matk = as.data.frame(matk)
+matk$length = matk$PITUUS
 
 taus = pick(matk,
             juokseva, montako_matkaa, kerroin, ika, sukup_laaj,
@@ -166,7 +167,7 @@ flip_trip = function(trip,
     flipped_trip$jdatetime = flipped_trip$idatetime + (trip$jdatetime - trip$idatetime)
     flipped_trip$jtime = hms_string_from_datetime(flipped_trip$jdatetime)
     flipped_trip$Paakulkutapa = trip$Paakulkutapa
-    flipped_trip$PITUUS = trip$PITUUS
+    flipped_trip$length = trip$length
     flipped_trip$matnro = trip$matnro + 0.5
     flipped_trip$imputated = TRUE
     flipped_trip = unpick(flipped_trip,
