@@ -5,11 +5,14 @@ library(lubridate)
 
 matk = read_xlsx(ancfile("input/HEHA-aineistot/MATKAT18_V3.xlsx"))
 matk = as.data.frame(matk)
+matk$length = matk$PITUUS
+matk$eid = matk$matkaid
 
 taus = pick(matk,
-            juokseva, montako_matkaa, kerroin, paino6, ika, sukup_laaj,
+            juokseva, montako_matkaa, kerroin, ika, sukup_laaj,
             ap_kela, montako_autoa, onko_ajokortti, miten_usein_auto_kaytettavissa, toimi,
             kotitalous_0_6v, kotitalous_kaikki, ap_sij19)
+taus = rename(taus, ap_sij19=rzone, kerroin=xfactor)
 taus = dedup(taus, juokseva)
 
 matk = subset(matk, montako_matkaa > 0)
@@ -105,7 +108,7 @@ matk = subset(matk, !(is.na(itime) & is.na(jtime) & is.na(LP) & is.na(MP)))
 matk = arrange(matk, juokseva, itime)
 
 matk = mcddply(matk, .(juokseva), function(df) {
-    df$matnro = rows.along(df)
+    df$number = rows.along(df)
     return(df)
 })
 
@@ -147,9 +150,8 @@ flip_trip = function(trip,
     flipped_trip[,] = NA
     flipped_trip$juokseva = trip$juokseva
     flipped_trip$username = trip$username
-    flipped_trip$paino6 = trip$paino6
-    flipped_trip$kerroin = trip$kerroin
-    flipped_trip$matkaid = 0
+    flipped_trip$xfactor = trip$xfactor
+    flipped_trip$eid = 0
     flipped_trip$ix = trip$jx
     flipped_trip$iy = trip$jy
     flipped_trip$jx = trip$ix
@@ -166,8 +168,8 @@ flip_trip = function(trip,
     flipped_trip$jdatetime = flipped_trip$idatetime + (trip$jdatetime - trip$idatetime)
     flipped_trip$jtime = hms_string_from_datetime(flipped_trip$jdatetime)
     flipped_trip$Paakulkutapa = trip$Paakulkutapa
-    flipped_trip$PITUUS = trip$PITUUS
-    flipped_trip$matnro = trip$matnro + 0.5
+    flipped_trip$length = trip$length
+    flipped_trip$number = trip$number + 0.5
     flipped_trip$imputated = TRUE
     flipped_trip = unpick(flipped_trip,
                           LPdttm, MPdttm,
@@ -189,8 +191,8 @@ matk = mcddply(matk, .(juokseva), function(df) {
         new_trips = rbind_all(new_trips)
 
         df = rbind_list(df, new_trips)
-        df = arrange(df, matnro)
-        df$matnro = rows.along(df)
+        df = arrange(df, number)
+        df$number = rows.along(df)
 
         return(df)
     }
@@ -226,26 +228,26 @@ matk = mcddply(matk, .(juokseva), function(df) {
     }
 
     df = rbind_list(df, new_trips)
-    df = arrange(df, matnro)
-    df$matnro = rows.along(df)
+    df = arrange(df, number)
+    df$number = rows.along(df)
     return(df)
 })
 m = which(matk$imputated)
-matk$matkaid[m] = max(matk$matkaid) + seq(length(m))
+matk$eid[m] = max(matk$eid) + seq(length(m))
 
 
 ###
 ### Unique locations
 ###
 
-ikoht = pick(matk, juokseva, matkaid, matnro, itype, ix, iy)
+ikoht = pick(matk, juokseva, eid, number, itype, ix, iy)
 ikoht = rename(ikoht, itype=type, ix=x, iy=y)
 ikoht$from = TRUE
-jkoht = pick(matk, juokseva, matkaid, matnro, jtype, jx, jy)
+jkoht = pick(matk, juokseva, eid, number, jtype, jx, jy)
 jkoht = rename(jkoht, jtype=type, jx=x, jy=y)
 jkoht$from = FALSE
 koht = rbind_list(ikoht, jkoht)
-koht = arrange(koht, juokseva, matnro, -from)
+koht = arrange(koht, juokseva, number, -from)
 
 .eucd = function(x, y, tx, ty) {
     dist = eucd(x, y, tx, ty)
@@ -312,10 +314,10 @@ koht = mcddply(koht, .(juokseva), function(df) {
 koht$tid = with(koht, classify(juokseva, tid))
 
 # Adding location identifiers to trip table.
-ikoht = pick(subset(koht, from), juokseva, matnro, tid)
+ikoht = pick(subset(koht, from), juokseva, number, tid)
 ikoht = rename(ikoht, tid=itid)
 matk = leftjoin(matk, ikoht)
-ikoht = pick(subset(koht, !from), juokseva, matnro, tid)
+ikoht = pick(subset(koht, !from), juokseva, number, tid)
 jkoht = rename(ikoht, tid=jtid)
 matk = leftjoin(matk, jkoht)
 

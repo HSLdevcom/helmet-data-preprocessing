@@ -165,19 +165,14 @@ def read_people_from_heha(fname):
             skipinitialspace=True,
             usecols=[
                     "pid",
-                    "paino6",
-                    "ap_sij19",
+                    "xfactor",
+                    "rzone",
                     ],
             dtype={
                     "pid": int,
-                    "paino6": float,
-                    "ap_sij19": int,
+                    "xfactor": float,
+                    "rzone": int,
                     })
-    columns = {
-        "paino6": "xfactor",
-        "ap_sij19": "rzone",
-        }
-    df.rename(columns=columns, inplace=True)
     return df
 
 
@@ -188,8 +183,8 @@ def read_trips_from_heha(fname):
                          skipinitialspace=True,
                          usecols=[
                                  "pid",
-                                 "matkaid",
-                                 "matnro",
+                                 "eid",
+                                 "number",
                                  "ix",
                                  "iy",
                                  "itype",
@@ -201,12 +196,12 @@ def read_trips_from_heha(fname):
                                  "itid",
                                  "jtid",
                                  "mode",
-                                 "PITUUS",
+                                 "length",
                                  ],
                          dtype={
                                  "pid": int,
-                                 "matkaid": int,
-                                 "matnro": int,
+                                 "eid": int,
+                                 "number": int,
                                  "ix": float,
                                  "iy": float,
                                  "itype": int,
@@ -218,22 +213,8 @@ def read_trips_from_heha(fname):
                                  "itid": int,
                                  "jtid": int,
                                  "mode": int,
-                                 "PITUUS": float,
+                                 "length": float,
                                  })
-    columns = {
-            "matkaid": "eid",
-            "matnro": "number",
-            "ix": "ix",
-            "iy": "iy",
-            "itype": "itype",
-            "itime": "itime",
-            "jx": "jx",
-            "jy": "jy",
-            "jtype": "jtype",
-            "jtime": "jtime",
-            "PITUUS": "length",
-            }
-    df.rename(columns=columns, inplace=True)
     return df
 
 
