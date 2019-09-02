@@ -37,4 +37,4 @@ all = expand.grid(age_group=1:5,
 all = leftjoin(all, stat, missing=0)
 all = arrange(all, age_group, no_of_homebased_tours)
 
-write.csv2(all, file="no_of_tours_by_age_and_area.txt")
+write.csv2(all, file="no_of_tours_by_age_and_area.txt", row.names=FALSE)
