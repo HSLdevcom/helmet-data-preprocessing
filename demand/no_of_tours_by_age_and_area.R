@@ -1,6 +1,21 @@
 # -*- coding: windows-1252-dos -*-
 library(strafica)
 
+age_groups = dfsas(age_group=0:5,
+                   age_group_name=c("missing",
+                                    "7-17",
+                                    "18-29",
+                                    "30-49",
+                                    "50-64",
+                                    "65-"))
+geographies = dfsas(geography=1:5,
+                    geography_name=c("Helsingin kantakaupunki",
+                                     "muu Helsinki",
+                                     "Espoo-Kauniainen",
+                                     "Vantaa",
+                                     "kehyskunnat"))
+
+
 observations = load1(ancfile("estimation/observations-metropolitan.RData"))
 
 background = load1(ancfile("estimation/background.RData"))
@@ -14,12 +29,13 @@ background$age_group = ifelse(background$age_65 %in% 1, 5, background$age_group)
 background$age_group = ifelse(background$age_missing %in% 1, 0, background$age_group)
 
 zones = read.csv2(ancfile("area/zones.csv"), stringsAsFactors=FALSE, fileEncoding="utf-8")
-zones$temp = zones$municipality_name
-zones$temp = ifelse(zones$cbd %in% 1, "Helsingin kantakaupunki", zones$temp)
-zones$temp = ifelse(zones$cbd %in% 0 & zones$municipality_name %in% "Helsinki", "muu Helsinki", zones$temp)
-zones$temp = ifelse(zones$municipality_name %in% c("Espoo","Kauniainen"), "Espoo-Kauniainen", zones$temp)
-zones$temp = ifelse(zones$surrounding_municipality %in% 1, "kehyskunnat", zones$temp)
-zones = pick(zones, zone, temp)
+zones$geography = NA
+zones$geography = ifelse(zones$cbd %in% 1, 1, zones$geography)
+zones$geography = ifelse(zones$cbd %in% 0 & zones$municipality_name %in% "Helsinki", 2, zones$geography)
+zones$geography = ifelse(zones$municipality_name %in% c("Espoo","Kauniainen"), 3, zones$geography)
+zones$geography = ifelse(zones$municipality_name %in% c("Vantaa"), 4, zones$geography)
+zones$geography = ifelse(zones$surrounding_municipality %in% 1, 5, zones$geography)
+zones = pick(zones, zone, geography)
 zones = rename(zones, zone=rzone)
 
 background = leftjoin(background, zones, by="rzone")
@@ -29,12 +45,14 @@ observations$no_of_homebased_tours = pclip(observations$no_of_homebased_tours, x
 stopifnot(all(observations$pid %in% background$pid))
 
 stat = leftjoin(background, observations, by="pid", missing=0)
-stat = fold(stat, .(age_group, no_of_homebased_tours, temp), xfactor=sum(xfactor), n=length(pid))
+stat = fold(stat, .(age_group, no_of_homebased_tours, geography), xfactor=sum(xfactor), n=length(pid))
 
 all = expand.grid(age_group=1:5,
                   no_of_homebased_tours=0:4,
-                  temp=c("Helsingin kantakaupunki","muu Helsinki","Espoo-Kauniainen","Vantaa","kehyskunnat"))
+                  geography=1:5)
 all = leftjoin(all, stat, missing=0)
 all = arrange(all, age_group, no_of_homebased_tours)
+all = leftjoin(all, age_groups)
+all = leftjoin(all, geographies)
 
-write.csv2(all, file="no_of_tours_by_age_and_area.txt", row.names=FALSE)
+write.csv2(all, file="no_of_tours_by_age_and_area.csv", row.names=FALSE)
