@@ -105,4 +105,4 @@ all$name = unlist(mclapply(rows.along(all), function(i) {
               .rep("M", times=all$class_m[i]))
     paste(types, collapse=" - ")
 }))
-write.csv2(all, file="no_of_tours_by_type.txt", row.names=FALSE)
+write.csv2(all, file="no_of_tours_by_type.csv", row.names=FALSE)
