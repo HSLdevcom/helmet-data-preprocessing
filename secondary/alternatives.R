@@ -59,7 +59,6 @@ matrices = matrices[, c("izone",
                         "jzone",
                         "same_municipality",
                         "same_zone",
-                        "area",
                         grep("bicycle|pedestrian|cost_transit", colnames(matrices), value=TRUE))]
 # Add secondary destination model matrices
 matrices$same_zone_i = matrices$same_zone
@@ -136,7 +135,6 @@ write_estimation_data = function(alternatives,
         
         # Origin-dependent
         batch = cbind(batch, matrix_list[["same_zone_i"]][batch$izone, ])
-        batch = cbind(batch, matrix_list[["area"]][batch$izone, ])
         
         # Primary destination dependent
         batch = cbind(batch, matrix_list[["same_zone_j"]][batch$jzone, ])
