@@ -11,9 +11,6 @@ matrices = as.data.frame(data.table::fread(ancfile("area/matrices.csv"),
                                            stringsAsFactors=FALSE))
 average = as.data.frame(data.table::fread(ancfile("estimation/average.csv"),
                                           stringsAsFactors=FALSE))
-average_secondary = as.data.frame(data.table::fread(ancfile("secondary/average.csv"),
-                                          stringsAsFactors=FALSE))
-average = leftjoin(average, average_secondary, by=c("izone","jzone"))
 progress.final(time.start)
 
 
@@ -59,11 +56,21 @@ matrices = matrices[, c("izone",
                         "jzone",
                         "same_municipality",
                         "same_zone",
+                        "ttime_car_iht_2018",
+                        "cost_car_iht_2018",
+                        "ttime_transit_iht_2018",
                         grep("bicycle|pedestrian|cost_transit", colnames(matrices), value=TRUE))]
 # Add secondary destination model matrices
 matrices$same_zone_i = matrices$same_zone
 matrices$same_zone_j = matrices$same_zone
 matrices = unpick(matrices, same_zone)
+matrices$ttime_car_secondary = matrices$ttime_car_iht_2018
+matrices$cost_car_secondary = matrices$cost_car_iht_2018
+matrices$ttime_transit_secondary = matrices$ttime_transit_iht_2018
+matrices = unpick(matrices,
+                  ttime_car_iht_2018,
+                  cost_car_iht_2018,
+                  ttime_transit_iht_2018)
 average$izone = zones$zone[match(average$izone, zones$zone_orig)]
 average$jzone = zones$zone[match(average$jzone, zones$zone_orig)]
 matrices = leftjoin(matrices, average)
@@ -184,17 +191,17 @@ for (i in rows.along(input)) {
     alternatives$aux2_length_bicycle_adjacent_cycleway = sprintf("length_bicycle_adjacent_cycleway_%d", alternatives$year)
     alternatives$aux2_length_bicycle_mixed_traffic = sprintf("length_bicycle_mixed_traffic_%d", alternatives$year)
     
-    alternatives$aux_ttime_transit = sprintf("ttime_transit_%d_%s", alternatives$year, "secondary")
+    alternatives$aux_ttime_transit = sprintf("ttime_transit_%d_%s", alternatives$year, alternatives$mtype)
     alternatives$aux_cost_transit_work = sprintf("cost_transit_work_%d", alternatives$year)
     alternatives$aux_cost_transit_other = sprintf("cost_transit_other_%d", alternatives$year)
-    alternatives$aux2_ttime_transit = sprintf("ttime_transit_%d_%s", alternatives$year, "secondary")
+    alternatives$aux2_ttime_transit = sprintf("ttime_transit_%s", "secondary")
     alternatives$aux2_cost_transit_work = sprintf("cost_transit_work_%d", alternatives$year)
     alternatives$aux2_cost_transit_other = sprintf("cost_transit_other_%d", alternatives$year)
     
     alternatives$aux_ttime_car = sprintf("ttime_car_%d_%s", alternatives$year, alternatives$mtype)
     alternatives$aux_cost_car = sprintf("cost_car_%d_%s", alternatives$year, alternatives$mtype)
-    alternatives$aux2_ttime_car = sprintf("ttime_car_%d_%s", alternatives$year, "secondary")
-    alternatives$aux2_cost_car = sprintf("cost_car_%d_%s", alternatives$year, "secondary")
+    alternatives$aux2_ttime_car = sprintf("ttime_car_%s", "secondary")
+    alternatives$aux2_cost_car = sprintf("cost_car_%s", "secondary")
     
     alternatives$aux_ttime_pedestrian = sprintf("ttime_pedestrian_%d", alternatives$year)
     alternatives$aux_length_pedestrian = sprintf("length_pedestrian_%d", alternatives$year)
