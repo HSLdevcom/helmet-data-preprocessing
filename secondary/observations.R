@@ -14,7 +14,7 @@ observations = data.frame(pid=tours$pid)
 observations$mode = tours$mode
 observations$ttype = get_ttype(tours$tour_type,
                                tours$constructed)
-observations$other_destinations = ifelse(rowSums(tours[, grepl("^visits_t", colnames(tours), perl=TRUE)]) > 2, 1, 0)
+observations$other_destinations = ifelse(rowSums(tours[, grepl("^visits_t", colnames(tours), perl=TRUE)]) > 3, 1, 0)
 observations$closed = ifelse(tours$closed, 1, 2)
 
 # Origin
