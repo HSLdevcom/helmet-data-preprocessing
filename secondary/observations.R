@@ -37,14 +37,6 @@ observations$jzone_cars_per_people = zones$cars_per_people[m]
 m = match(tours$zone_secondary_destination, zones$zone_orig)
 observations$kzone = zones$zone[m]
 
-observations$ipeak = get_peak(tours$itime_origin)
-observations$jpeak = get_peak(tours$itime_destination)
-
-# If tour visits only one place and returns to it, do not interpret a return
-# time slot.
-m = which(rowSums(tours[,grep("^visits_t[0-9]+", colnames(tours))]) == 1)
-observations$jpeak[m] = NA
-
 if (unique(tours$year) == 2016) {
     mtypes = read.delims(ancfile("estimation/mtypes-peripheral.txt"))
     observations = leftjoin(observations, mtypes)
