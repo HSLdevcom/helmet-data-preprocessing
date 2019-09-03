@@ -129,9 +129,9 @@ write_estimation_data = function(alternatives,
                 mat_ab = batch[j, aux]
                 aux2 = gsub("aux_", "aux2_", aux)
                 mat_abc = batch[j, aux2]
-                from_b_to_c_to_a = matrix_list[[mat_abc]][batch$izone[j], ] +
-                    t(matrix_list[[mat_abc]][, batch$kzone[j]])
-                from_b_to_a = matrix_list[[mat_ab]][batch$kzone[j], batch$izone[j]]
+                from_b_to_c_to_a = matrix_list[[mat_abc]][batch$jzone[j], ] +
+                    t(matrix_list[[mat_abc]][, batch$izone[j]])
+                from_b_to_a = matrix_list[[mat_ab]][batch$jzone[j], batch$izone[j]]
                 matrix_sum = from_b_to_c_to_a - from_b_to_a
                 matrix_sum = as.data.frame(matrix_sum)
                 return(matrix_sum)
