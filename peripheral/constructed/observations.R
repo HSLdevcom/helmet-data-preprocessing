@@ -4,7 +4,7 @@ library(readxl)
 source(ancfile("util.R"))
 
 zones = read.csv2(ancfile("area/zones.csv"), stringsAsFactors=FALSE)
-background = load1("background.RData")
+background = load1(ancfile("primary/background.RData"))
 
 message("Formatting tour data...")
 
