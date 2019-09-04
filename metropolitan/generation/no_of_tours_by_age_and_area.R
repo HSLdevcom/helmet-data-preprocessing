@@ -16,9 +16,9 @@ geographies = dfsas(geography=1:5,
                                      "kehyskunnat"))
 
 
-observations = load1(ancfile("estimation/observations-metropolitan.RData"))
+observations = load1(ancfile("primary/observations.RData"))
 
-background = load1(ancfile("estimation/background.RData"))
+background = load1(ancfile("primary/background.RData"))
 background = subset(background, survey %in% 0 & (rzone_capital_region | rzone_surrounding_municipality))
 background$age_group = NA
 background$age_group = ifelse(background$age_7_17 %in% 1, 1, background$age_group)
