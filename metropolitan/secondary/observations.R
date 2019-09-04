@@ -4,7 +4,7 @@ library(readxl)
 source(ancfile("util.R"))
 
 zones = read.csv2(ancfile("area/zones.csv"), stringsAsFactors=FALSE)
-background = load1(ancfile("estimation/background.RData"))
+background = load1(ancfile("primary/background.RData"))
 
 message("Formatting tour data...")
 
@@ -37,7 +37,7 @@ observations$jzone_cars_per_people = zones$cars_per_people[m]
 m = match(tours$zone_secondary_destination, zones$zone_orig)
 observations$kzone = zones$zone[m]
 
-mtypes = read.delims(ancfile("estimation/mtypes.txt"))
+mtypes = read.delims(ancfile("primary/mtypes.txt"))
 observations = leftjoin(observations, mtypes)
 
 # Add background information

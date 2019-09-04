@@ -9,7 +9,7 @@ time.start = Sys.time()
 zones = read.csv2(ancfile("area/zones.csv"), stringsAsFactors=FALSE)
 matrices = as.data.frame(data.table::fread(ancfile("area/matrices.csv"),
                                            stringsAsFactors=FALSE))
-average = as.data.frame(data.table::fread(ancfile("estimation/average.csv"),
+average = as.data.frame(data.table::fread(ancfile("primary/average.csv"),
                                           stringsAsFactors=FALSE))
 progress.final(time.start)
 
