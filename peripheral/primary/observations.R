@@ -37,13 +37,8 @@ observations$jpeak = get_peak(tours$itime_destination)
 m = which(rowSums(tours[,grep("^visits_t[0-9]+", colnames(tours))]) == 1)
 observations$jpeak[m] = NA
 
-if (unique(tours$year) == 2016) {
-    mtypes = read.delims("mtypes-peripheral.txt")
-    observations = leftjoin(observations, mtypes)
-} else if (unique(tours$year) == 2018) {
-    mtypes = read.delims("mtypes-metropolitan.txt")
-    observations = leftjoin(observations, mtypes)
-}
+mtypes = read.delims("mtypes.txt")
+observations = leftjoin(observations, mtypes)
 
 m = match(tours$zone_secondary_destination, zones$zone_orig)
 observations$kzone = zones$zone[m]
