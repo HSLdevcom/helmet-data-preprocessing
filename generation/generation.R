@@ -22,14 +22,11 @@ background = subset(background, survey %in% 0 & (rzone_capital_region | rzone_su
 generation = background
 generation = leftjoin(generation, zones, by="rzone")
 
-# Add number of home-based tours
-observations = load1(ancfile("estimation/observations-metropolitan.RData"))
-observations = fold(observations, .(pid), homebased_tours=sum(ttype %in% 1:5))
-stopifnot(all(observations$pid %in% background$pid))
-generation = leftjoin(generation, observations, by="pid", missing=0)
-
-# Add tour types
-generation$ttypes = 999
+# Add number and types of home-based tours
+ttypes = load1("ttypes.RData")
+ttypes_list = read.delims("ttypes_list.txt")
+ttypes = leftjoin(ttypes, ttypes_list, by="ttypes_name")
+generation = leftjoin(generation, ttypes, by="pid")
 
 # Check that all needed columns exist and order columns.
 columns = read.delims("order-generation.txt")
