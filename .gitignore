@@ -15,6 +15,7 @@ strafica/
 *.csv
 estimation/alternatives/*.txt
 secondary/alternatives/*.txt
+generation/generation.txt
 output/
 input/
 *.log
