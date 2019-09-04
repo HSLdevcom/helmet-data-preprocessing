@@ -179,47 +179,11 @@ stopifnot(all(matrices_needed %in% names(matrix_list)))
 columns = read.delims("order.txt")
 columns$column = sprintf("^%s$", columns$column)
 
-hb_work_school_study = c(1,2,3)
-hb_shopping_service = c(4)
-hb_other = c(5)
-nhb = c(6,7)
-
-data_columns = write_estimation_data(alternatives=subset(alternatives,
-                                                         ttype %in% hb_work_school_study),
+data_columns = write_estimation_data(alternatives=alternatives,
                                      batch_size=100,
-                                     model_name="wss",
+                                     model_name="",
                                      row=row,
                                      matrix_list=matrix_list,
                                      columns=columns)
 message("Writing column names...")
-writeLines(data_columns, "alternatives/columns-wss.txt")
-
-data_columns = write_estimation_data(alternatives=subset(alternatives,
-                                                         ttype %in% hb_shopping_service),
-                                     batch_size=100,
-                                     model_name="spb",
-                                     row=row,
-                                     matrix_list=matrix_list,
-                                     columns=columns)
-message("Writing column names...")
-writeLines(data_columns, "alternatives/columns-spb.txt")
-
-data_columns = write_estimation_data(alternatives=subset(alternatives,
-                                                         ttype %in% hb_other),
-                                     batch_size=100,
-                                     model_name="other",
-                                     row=row,
-                                     matrix_list=matrix_list,
-                                     columns=columns)
-message("Writing column names...")
-writeLines(data_columns, "alternatives/columns-other.txt")
-
-data_columns = write_estimation_data(alternatives=subset(alternatives,
-                                                         ttype %in% nhb),
-                                     batch_size=100,
-                                     model_name="wbo",
-                                     row=row,
-                                     matrix_list=matrix_list,
-                                     columns=columns)
-message("Writing column names...")
-writeLines(data_columns, "alternatives/columns-wbo.txt")
+writeLines(data_columns, "alternatives/columns.txt")
