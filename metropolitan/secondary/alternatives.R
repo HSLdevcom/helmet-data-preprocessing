@@ -175,9 +175,7 @@ write_estimation_data = function(alternatives,
 }
 
 
-fname = sprintf("observations-%s.RData", input$name[i])
-message(sprintf("%d/%d: %s", i, nrow(input), fname))
-alternatives = load1(fname)
+alternatives = load1("observations.RData")
 
 # From which matrix travel times and lengths are read from?
 alternatives$aux_ttime_bicycle = sprintf("ttime_bicycle_%d", alternatives$year)
