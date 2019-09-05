@@ -13,9 +13,8 @@ strafica/
 # Output files
 *.RData
 *.csv
-estimation/alternatives/*.txt
-secondary/alternatives/*.txt
-generation/generation.txt
+alternatives*.txt
+columns*.txt
 output/
 input/
 *.log
