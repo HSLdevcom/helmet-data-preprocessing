@@ -24,7 +24,7 @@ generation = leftjoin(generation, zones, by="rzone")
 
 # Add number and types of home-based tours
 ttypes = load1("ttypes.RData")
-ttypes_list = read.delims("ttypes_list.txt")
+ttypes_list = read.delims("ttypes_key.txt")
 ttypes = leftjoin(ttypes, ttypes_list, by="ttypes_name")
 generation = leftjoin(generation, ttypes, by="pid")
 
