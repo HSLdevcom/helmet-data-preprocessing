@@ -29,12 +29,12 @@ ttypes	ttypes_model
 28	A - A - M
 29	A - M - M
 30	M - M - M
-31	T - A - A - M+
-32	T - A - M - M+
-33	T - M - M - M+
-34	A - A - A - A+
-35	A - A - A - M+
-36	A - A - M - M+
-37	A - M - M - M+
-38	M - M - M - M+
+31	T - A - A - M
+32	T - A - M - M
+33	T - M - M - M
+34	A - A - A - A
+35	A - A - A - M
+36	A - A - M - M
+37	A - M - M - M
+38	M - M - M - M
 39	muu
