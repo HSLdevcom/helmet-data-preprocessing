@@ -4,7 +4,7 @@ survey
 xfactor
 homebased_tours
 homebased_tours_class
-tours
+ttypes
 cars_owned
 licence
 car_user
