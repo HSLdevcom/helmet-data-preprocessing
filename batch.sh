@@ -25,6 +25,7 @@ cp -ruv metropolitan/primary/alternatives/columns-other.txt $OUTPUT/columns-metr
 cp -ruv metropolitan/primary/alternatives/columns-wbo.txt $OUTPUT/columns-metropolitan-wbo.txt
 cp -ruv metropolitan/constructed/alternatives/columns.txt $OUTPUT/columns-metropolitan-constructed.txt
 cp -ruv metropolitan/secondary/alternatives/columns.txt $OUTPUT/columns-metropolitan-secondary.txt
+cp -ruv metropolitan/generation/alternatives/columns.txt $OUTPUT/columns-metropolitan-generation.txt
 
 cat metropolitan/primary/alternatives/alternatives-wss-1_100.txt | fold -w 180 -s > $OUTPUT/alternatives-metropolitan-wss-test.txt
 cat metropolitan/primary/alternatives/alternatives-spb-1_100.txt | fold -w 180 -s > $OUTPUT/alternatives-metropolitan-spb-test.txt
