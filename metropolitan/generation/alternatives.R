@@ -59,4 +59,4 @@ generation = generation[, unlist(hits)]
 stopifnot(all(sapply(generation, class) %in% c("integer", "numeric")))
 check.na(generation)
 generation = downclass(generation)
-write_alogit(generation, fname="alternatives.txt")
+write_alogit(generation, fname="alternatives/alternatives.txt")
