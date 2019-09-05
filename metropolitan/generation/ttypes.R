@@ -1,6 +1,11 @@
 # -*- coding: windows-1252-dos -*-
 library(strafica)
 
+.rep = function(x, times) {
+    times = na.to.zero(times)
+    return(rep(x=x, times=times))
+}
+
 observations = load1(ancfile("primary/observations.RData"))
 combinations = mcddply(observations, .(pid), function(df) {
     stat = data.frame(pid=df$pid[1])
@@ -11,17 +16,13 @@ combinations = mcddply(observations, .(pid), function(df) {
     stat$class_a = sum(df$ttype %in% 4)
     stat$class_m = sum(df$ttype %in% 5)
     stat$class_tko = sum(df$ttype %in% 1:3)
-    stat$ttypes_name = NA
     return(stat)
 })
+# Remove people with zero home-based tours
 combinations = subset(combinations, homebased_tours > 0)
 
-.rep = function(x, times) {
-    times = na.to.zero(times)
-    return(rep(x=x, times=times))
-}
-
-combinations$full_ttypes = unlist(mclapply(rows.along(combinations), function(i) {
+# Lists all tour types regardless of how many there are
+combinations$ttypes_long = unlist(mclapply(rows.along(combinations), function(i) {
     types = c(.rep("T", times=combinations$class_t[i]),
               .rep("K", times=combinations$class_k[i]),
               .rep("O", times=combinations$class_o[i]),
@@ -29,13 +30,12 @@ combinations$full_ttypes = unlist(mclapply(rows.along(combinations), function(i)
               .rep("M", times=combinations$class_m[i]))
     paste(types, collapse=" - ")
 }))
-combinations$ttypes_name = ifelse(combinations$homebased_tours <= 3,
-                                  combinations$full_ttypes,
-                                  NA)
 
 
-# 4+ tours
-priority = expand.grid(no_of_homebased_tours=0,
+# People with 4 or more tours have short tour types. Tour types are chosen by
+# prioritizing tour types: typically, having even one TKO tour overrides
+# everything else.
+priority = expand.grid(homebased_tours=0,
                    class_tko=0:4,
                    class_a=0:4,
                    class_m=0:4)
@@ -49,13 +49,49 @@ priority$ttypes_name = unlist(mclapply(rows.along(priority), function(i) {
     paste(types, collapse=" - ")
 }))
 
+combinations$ttypes_short = ifelse(combinations$homebased_tours < 4,
+                                   combinations$ttypes_long, NA)
 for (i in rows.along(priority)) {
     selected = with(combinations,
-                    is.na(ttypes_name) &
+                    is.na(combinations$ttypes_short) &
                         class_tko >= priority$class_tko[i] &
                         class_a >= priority$class_a[i] &
                         class_m >= priority$class_m[i])
-    combinations$ttypes_name[selected] = priority$ttypes_name[i]
+    combinations$ttypes_short[selected] = priority$ttypes_name[i]
 }
+
+
+# Modeling is done with exploded TKO-A-A-M, TKO-A-M-M, and TKO-M-M-M tour types.
+combinations$ttypes_model = combinations$ttypes_short
+
+m = which(combinations$ttypes_short %in% "TKO - A - A - M" &
+              grepl("^T", combinations$ttypes_long))
+combinations$ttypes_model[m] = "T - A - A - M"
+m = which(combinations$ttypes_short %in% "TKO - A - A - M" &
+              grepl("^K", combinations$ttypes_long))
+combinations$ttypes_model[m] = "K - A - A - M"
+m = which(combinations$ttypes_short %in% "TKO - A - A - M" &
+              grepl("^O", combinations$ttypes_long))
+combinations$ttypes_model[m] = "O - A - A - M"
+
+m = which(combinations$ttypes_short %in% "TKO - A - M - M" &
+              grepl("^T", combinations$ttypes_long))
+combinations$ttypes_model[m] = "T - A - M - M"
+m = which(combinations$ttypes_short %in% "TKO - A - M - M" &
+              grepl("^K", combinations$ttypes_long))
+combinations$ttypes_model[m] = "K - A - M - M"
+m = which(combinations$ttypes_short %in% "TKO - A - M - M" &
+              grepl("^O", combinations$ttypes_long))
+combinations$ttypes_model[m] = "O - A - M - M"
+
+m = which(combinations$ttypes_short %in% "TKO - M - M - M" &
+              grepl("^T", combinations$ttypes_long))
+combinations$ttypes_model[m] = "T - M - M - M"
+m = which(combinations$ttypes_short %in% "TKO - M - M - M" &
+              grepl("^K", combinations$ttypes_long))
+combinations$ttypes_model[m] = "K - M - M - M"
+m = which(combinations$ttypes_short %in% "TKO - M - M - M" &
+              grepl("^O", combinations$ttypes_long))
+combinations$ttypes_model[m] = "O - M - M - M"
 
 save(combinations, file="ttypes.RData")
