@@ -13,6 +13,7 @@ pipenv run python ./tours/main.py input-config-hlt.json
 (cd metropolitan/primary/ && sh batch.sh)
 (cd metropolitan/constructed/ && sh batch.sh)
 (cd metropolitan/secondary/ && sh batch.sh)
+(cd metropolitan/generation/ && sh batch.sh)
 (cd peripheral/primary/ && sh batch.sh)
 (cd peripheral/constructed/ && sh batch.sh)
 
@@ -24,6 +25,7 @@ cp -ruv metropolitan/primary/alternatives/columns-other.txt $OUTPUT/columns-metr
 cp -ruv metropolitan/primary/alternatives/columns-wbo.txt $OUTPUT/columns-metropolitan-wbo.txt
 cp -ruv metropolitan/constructed/alternatives/columns.txt $OUTPUT/columns-metropolitan-constructed.txt
 cp -ruv metropolitan/secondary/alternatives/columns.txt $OUTPUT/columns-metropolitan-secondary.txt
+cp -ruv metropolitan/generation/alternatives/columns.txt $OUTPUT/columns-metropolitan-generation.txt
 
 cat metropolitan/primary/alternatives/alternatives-wss-1_100.txt | fold -w 180 -s > $OUTPUT/alternatives-metropolitan-wss-test.txt
 cat metropolitan/primary/alternatives/alternatives-spb-1_100.txt | fold -w 180 -s > $OUTPUT/alternatives-metropolitan-spb-test.txt
@@ -38,6 +40,7 @@ cat metropolitan/primary/alternatives/alternatives-other-*.txt | fold -w 180 -s 
 cat metropolitan/primary/alternatives/alternatives-wbo-*.txt | fold -w 180 -s > $OUTPUT/alternatives-metropolitan-wbo.txt
 cat metropolitan/constructed/alternatives/alternatives--*.txt | fold -w 180 -s > $OUTPUT/alternatives-metropolitan-constructed.txt
 cat metropolitan/secondary/alternatives/alternatives--*.txt | fold -w 180 -s > $OUTPUT/alternatives-metropolitan-secondary.txt
+cp -ruv metropolitan/generation/alternatives/alternatives.txt $OUTPUT/alternatives-metropolitan-generation.txt
 
 cp -ruv peripheral/primary/alternatives/columns.txt $OUTPUT/columns-peripheral.txt
 cp -ruv peripheral/constructed/alternatives/columns.txt $OUTPUT/columns-peripheral-constructed.txt

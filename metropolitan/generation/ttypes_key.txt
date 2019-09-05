@@ -1,0 +1,40 @@
+ttypes	ttypes_model
+1	0
+2	T
+3	K
+4	O
+5	A
+6	M
+7	T - T
+8	T - O
+9	T - A
+10	T - M
+11	K - K
+12	K - A
+13	K - M
+14	O - A
+15	O - M
+16	A - A
+17	A - M
+18	M - M
+19	T - T - M
+20	T - A - A
+21	T - A - M
+22	T - M - M
+23	K - A - M
+24	K - M - M
+25	O - A - M
+26	O - M - M
+27	A - A - A
+28	A - A - M
+29	A - M - M
+30	M - M - M
+31	T - A - A - M
+32	T - A - M - M
+33	T - M - M - M
+34	A - A - A - A
+35	A - A - A - M
+36	A - A - M - M
+37	A - M - M - M
+38	M - M - M - M
+39	muu
