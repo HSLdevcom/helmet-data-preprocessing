@@ -1,0 +1,11 @@
+ttype	mtype
+1	hbwork
+2	hbother
+3	hbother
+4	hbother
+5	hbother
+6	nhb
+7	nhb
+8	hbwork
+9	hbother
+

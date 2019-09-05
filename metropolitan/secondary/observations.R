@@ -4,11 +4,11 @@ library(readxl)
 source(ancfile("util.R"))
 
 zones = read.csv2(ancfile("area/zones.csv"), stringsAsFactors=FALSE)
-background = load1(ancfile("estimation/background.RData"))
+background = load1(ancfile("primary/background.RData"))
 
 message("Formatting tour data...")
 
-tours = load1("tours-metropolitan-secondary.RData")
+tours = load1("tours.RData")
 
 observations = data.frame(pid=tours$pid)
 observations$mode = tours$mode
@@ -37,13 +37,8 @@ observations$jzone_cars_per_people = zones$cars_per_people[m]
 m = match(tours$zone_secondary_destination, zones$zone_orig)
 observations$kzone = zones$zone[m]
 
-if (unique(tours$year) == 2016) {
-    mtypes = read.delims(ancfile("estimation/mtypes-peripheral.txt"))
-    observations = leftjoin(observations, mtypes)
-} else if (unique(tours$year) == 2018) {
-    mtypes = read.delims(ancfile("estimation/mtypes-metropolitan.txt"))
-    observations = leftjoin(observations, mtypes)
-}
+mtypes = read.delims(ancfile("primary/mtypes.txt"))
+observations = leftjoin(observations, mtypes)
 
 # Add background information
 observations = leftjoin(observations, background)
@@ -51,4 +46,4 @@ observations = leftjoin(observations, background)
 # Output
 observations = downclass(observations)
 check.na(observations)
-save(observations, file="observations-metropolitan-secondary.RData")
+save(observations, file="observations.RData")
