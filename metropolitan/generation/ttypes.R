@@ -1,7 +1,7 @@
 # -*- coding: windows-1252-dos -*-
 library(strafica)
 
-observations = load1(ancfile("estimation/observations-metropolitan.RData"))
+observations = load1(ancfile("primary/observations.RData"))
 combinations = mcddply(observations, .(pid), function(df) {
     stat = data.frame(pid=df$pid[1])
     stat$homebased_tours = sum(df$ttype %in% 1:5)
