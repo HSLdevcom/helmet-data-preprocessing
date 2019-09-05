@@ -3,7 +3,8 @@ pid
 survey
 xfactor
 homebased_tours
-ttypes
+homebased_tours_class
+tours
 cars_owned
 licence
 car_user
@@ -28,3 +29,8 @@ rzone_cbd
 rzone_municipality
 rzone_income_person
 rzone_income_household
+accessibility_work
+accessibility_study
+accessibility_school
+accessibility_shopping
+accessibility_other

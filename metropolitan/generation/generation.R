@@ -17,16 +17,26 @@ columns = colnames(zones)[-1]
 columns = sprintf("rzone_%s", columns)
 colnames(zones)[-1] = columns
 
-background = load1(ancfile("primary/background.RData"))
-background = subset(background, survey %in% 0 & (rzone_capital_region | rzone_surrounding_municipality))
-generation = background
+generation = load1(ancfile("primary/background.RData"))
 generation = leftjoin(generation, zones, by="rzone")
 
-# Add number and types of home-based tours
+# ttypes_key.txt defines the class of each ttypes group. Groups not mentioned in
+# the file go into "muu / other" class.
 ttypes = load1("ttypes.RData")
-ttypes_list = read.delims("ttypes_key.txt")
-ttypes = leftjoin(ttypes, ttypes_list, by="ttypes_name")
+ttypes_key = read.delims("ttypes_key.txt")
+ttypes = leftjoin(ttypes, ttypes_key, by="ttypes_model", missing=39)
+
+# People with zero tours go into "0" class.
 generation = leftjoin(generation, ttypes, by="pid")
+m = which(is.na(generation$homebased_tours))
+generation$homebased_tours[m] = 0
+m = which(is.na(generation$ttypes))
+generation$ttypes[m] = 1
+
+# Class variable from homebased_tours
+generation$homebased_tours_class = generation$homebased_tours
+m = which(generation$homebased_tours >= 4)
+generation$homebased_tours_class[m] = 4
 
 # Check that all needed columns exist and order columns.
 columns = read.delims("order.txt")
