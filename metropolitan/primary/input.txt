@@ -1,5 +1,0 @@
-file	name
-constructed-peripheral.RData	constructed-peripheral
-constructed-metropolitan.RData	constructed-metropolitan
-tours-peripheral.RData	peripheral
-tours-metropolitan.RData	metropolitan

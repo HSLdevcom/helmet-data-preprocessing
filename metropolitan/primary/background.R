@@ -54,6 +54,7 @@ df$rzone_peripheral_municipality = ifelse(zones$peripheral_municipality[m], 1, 0
 df$rzone_income_person = zones$income_person[m]
 df$rzone_income_household = zones$income_household[m]
 
+# Add personal data to tours
 background = rbind_list(background, df)
 
 stopifnot(length(unique(background$pid)) == nrow(background))
