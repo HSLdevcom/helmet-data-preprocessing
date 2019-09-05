@@ -4,17 +4,17 @@ library(readxl)
 source(ancfile("util.R"))
 
 zones = read.csv2(ancfile("area/zones.csv"), stringsAsFactors=FALSE)
-background = load1(ancfile("estimation/background.RData"))
+background = load1(ancfile("primary/background.RData"))
 
 message("Formatting tour data...")
 
-tours = load1("tours-metropolitan-secondary.RData")
+tours = load1("tours.RData")
 
 observations = data.frame(pid=tours$pid)
 observations$mode = tours$mode
 observations$ttype = get_ttype(tours$tour_type,
                                tours$constructed)
-observations$other_destinations = ifelse(rowSums(tours[, grepl("^visits_t", colnames(tours), perl=TRUE)]) > 2, 1, 0)
+observations$other_destinations = ifelse(rowSums(tours[, grepl("^visits_t", colnames(tours), perl=TRUE)]) > 3, 1, 0)
 observations$closed = ifelse(tours$closed, 1, 2)
 
 # Origin
@@ -37,21 +37,8 @@ observations$jzone_cars_per_people = zones$cars_per_people[m]
 m = match(tours$zone_secondary_destination, zones$zone_orig)
 observations$kzone = zones$zone[m]
 
-observations$ipeak = get_peak(tours$itime_origin)
-observations$jpeak = get_peak(tours$itime_destination)
-
-# If tour visits only one place and returns to it, do not interpret a return
-# time slot.
-m = which(rowSums(tours[,grep("^visits_t[0-9]+", colnames(tours))]) == 1)
-observations$jpeak[m] = NA
-
-if (unique(tours$year) == 2016) {
-    mtypes = read.delims(ancfile("estimation/mtypes-peripheral.txt"))
-    observations = leftjoin(observations, mtypes)
-} else if (unique(tours$year) == 2018) {
-    mtypes = read.delims(ancfile("estimation/mtypes-metropolitan.txt"))
-    observations = leftjoin(observations, mtypes)
-}
+mtypes = read.delims(ancfile("primary/mtypes.txt"))
+observations = leftjoin(observations, mtypes)
 
 # Add background information
 observations = leftjoin(observations, background)
@@ -59,4 +46,4 @@ observations = leftjoin(observations, background)
 # Output
 observations = downclass(observations)
 check.na(observations)
-save(observations, file="observations-metropolitan-secondary.RData")
+save(observations, file="observations.RData")

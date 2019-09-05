@@ -1,9 +1,9 @@
 # -*- coding: windows-1252-dos -*-
 library(strafica)
 
-observations = load1(ancfile("estimation/observations-metropolitan.RData"))
+observations = load1(ancfile("primary/observations.RData"))
 
-background = load1(ancfile("estimation/background.RData"))
+background = load1(ancfile("primary/background.RData"))
 background = subset(background, survey %in% 0 & (rzone_capital_region | rzone_surrounding_municipality))
 
 background = subset(background, pid %nin% observations$pid)

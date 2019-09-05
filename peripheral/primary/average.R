@@ -5,7 +5,7 @@ matrices = as.data.frame(data.table::fread(ancfile("area/matrices.csv"),
                                            stringsAsFactors=FALSE))
 
 # Average travel time, length, and car cost matrices
-observations = load1("observations-metropolitan-secondary.RData")
+observations = load1("observations.RData")
 weights = dfsas(year=c(observations$year, observations$year),
                 xfactor=c(observations$xfactor, observations$xfactor),
                 mtype=c(observations$mtype, observations$mtype),
@@ -35,7 +35,7 @@ for (i in seq_along(columns)) {
         average[, n] = weights$morning[j]*matrices[, morning] +
             weights$afternoon[j]*matrices[, afternoon] +
             weights$other[j]*matrices[, other]
-        average_names[n] = sprintf("%s_%d_secondary",
+        average_names[n] = sprintf("%s_%d_%s",
                                    columns[i],
                                    weights$year[j],
                                    weights$mtype[j])
@@ -44,7 +44,7 @@ for (i in seq_along(columns)) {
 average = as.data.frame(average)
 colnames(average) = average_names
 average = cbind(pick(matrices, izone, jzone),
-                average)
+                         average)
 head(average)
 
 # Output
