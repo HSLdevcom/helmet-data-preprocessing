@@ -16,6 +16,7 @@ observations$ttype = get_ttype(tours$tour_type,
                                tours$constructed)
 observations$other_destinations = ifelse(rowSums(tours[, grepl("^visits_t", colnames(tours), perl=TRUE)]) > 2, 1, 0)
 observations$closed = ifelse(tours$closed, 1, 2)
+observations$order = tours$order
 
 m = match(tours$zone_origin, zones$zone_orig)
 observations$izone = zones$zone[m]
