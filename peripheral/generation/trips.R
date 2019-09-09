@@ -19,22 +19,22 @@ observations$inverted = ifelse(observations$order %in% c("BA","BAC","BCA","CBA")
 
 # If the tour is inverted, the first trip is a return trip (from destination
 # back to origin)
-observations$return = ifelse(observations$inverted,
-                             TRUE,
-                             FALSE)
-observations$time = ifelse(observations$return,
-                           observations$jpeak,
-                           observations$ipeak)
+observations$return_trip = ifelse(observations$inverted,
+                                  TRUE,
+                                  FALSE)
+observations$trip_time = ifelse(observations$return_trip,
+                                observations$jpeak,
+                                observations$ipeak)
 
-# Closed trips are doubled: the return status is negated to account for a trip
+# Closed trips are doubled: the return_trip status is negated to account for a trip
 # to other direction
-trips_return = subset(observations, closed %in% 1)
-trips_return$return = !(trips_return$return)
-trips_return$time = ifelse(trips_return$return,
-                           trips_return$jpeak,
-                           trips_return$ipeak)
+trips_return_trip = subset(observations, closed %in% 1)
+trips_return_trip$return_trip = !(trips_return_trip$return_trip)
+trips_return_trip$trip_time = ifelse(trips_return_trip$return_trip,
+                                     trips_return_trip$jpeak,
+                                     trips_return_trip$ipeak)
 trips = rbind_list(observations,
-                   trips_return)
+                   trips_return_trip)
 
 check.na(trips)
 trips = downclass(trips)
