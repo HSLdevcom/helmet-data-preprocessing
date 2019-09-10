@@ -28,7 +28,7 @@ df$minor = ifelse(!is.na(people$ika) & people$ika <= 17, TRUE, FALSE)
 df$licence = NA
 df$licence = ifelse(people$onko_ajokortti == 1, 1, 0)
 df$licence = ifelse(df$minor, 0, df$licence)
-df$licence = ifelse(is.na(people$onko_ajokortti), 9, df$licence)
+df$licence = ifelse(is.na(df$licence), 9, df$licence)
 df$car_user = NA
 df$car_user = ifelse(df$cars_owned %in% c(1,2) &
                          df$licence == 1 &
@@ -38,7 +38,7 @@ df$car_user = ifelse(is.na(df$car_user), 9, df$car_user)
 df$employed = NA
 df$employed = ifelse(people$toimi == "Työssäkäyvä", 1, 0)
 df$employed = ifelse(df$minor & is.na(people$toimi), 0, df$employed)
-df$employed = ifelse(is.na(people$toimi), 9, df$employed)
+df$employed = ifelse(is.na(df$employed), 9, df$employed)
 df = unpick(df, minor)
 df$children = NA
 df$children = ifelse(people$kotitalous_0_6v > 0, 1, 0)
