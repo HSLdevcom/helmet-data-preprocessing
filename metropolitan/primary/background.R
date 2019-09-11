@@ -36,7 +36,7 @@ df$car_user = ifelse(df$cars_owned %in% c(1,2) &
                          !df$minor, 1, 0)
 df$car_user = ifelse(is.na(df$car_user), 9, df$car_user)
 df$employed = NA
-df$employed = ifelse(people$toimi == "Tyˆss‰k‰yv‰", 1, 0)
+df$employed = ifelse(people$toimi == "Ty√∂ss√§k√§yv√§", 1, 0)
 df$employed = ifelse(df$minor & is.na(people$toimi), 0, df$employed)
 df$employed = ifelse(is.na(df$employed), 9, df$employed)
 df = unpick(df, minor)
