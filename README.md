@@ -41,7 +41,7 @@ pipenv install <your-new-library>
 ```
 
 To use R, install the newest version of R. The scripts were written in R 3.4.4.
-Please note, that scripts use encoding `windows-1252`.
+Please note, that scripts use encoding `UTF-8`.
 
 ### External dependencies
 
@@ -51,8 +51,8 @@ to use. You can check dependencies from the DESCRIPTION file or from the
 [Dockerfile](Dockerfile) and then install it:
 
 ```
-Rscript --quiet --no-save --encoding=CP1252 install-dependencies.R
-(cd strafica && Rscript --quiet --no-save --encoding=CP1252 install.R)
+Rscript --quiet --no-save --encoding=UTF-8 install-dependencies.R
+(cd strafica && Rscript --quiet --no-save --encoding=UTF-8 install.R)
 ```
 
 ### Input data
