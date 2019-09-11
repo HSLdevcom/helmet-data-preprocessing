@@ -1,4 +1,4 @@
-# -*- coding: windows-1252-dos -*-
+# -*- coding: utf-8-unix -*-
 library(strafica)
 
 age_groups = dfsas(age_group=0:5,

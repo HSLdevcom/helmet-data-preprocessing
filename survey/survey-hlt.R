@@ -1,4 +1,4 @@
-# -*- coding: windows-1252-dos -*-
+# -*- coding: utf-8-unix -*-
 library(strafica)
 
 matk = read.csv2(ancfile("input/HLT-aineisto/M_MATKAT.CSV"), stringsAsFactors=FALSE)

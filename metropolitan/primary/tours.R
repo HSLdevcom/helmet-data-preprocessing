@@ -1,4 +1,4 @@
-# -*- coding: windows-1252-dos -*-
+# -*- coding: utf-8-unix -*-
 library(strafica)
 
 # This script is created to get rid of unviable tours before doing any further
