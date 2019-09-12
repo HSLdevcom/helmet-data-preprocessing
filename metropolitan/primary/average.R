@@ -20,18 +20,24 @@ create_time_averaging_weights = function(mtypes, peaks, xfactors) {
 }
 
 # Calculating weights for tours to direction 1
-iweights = create_time_averaging_weights(mtypes=observations$mtype,
+weights_there = create_time_averaging_weights(mtypes=observations$mtype,
                                          peaks=ifelse(observations$inverted,
                                                       observations$jpeak,
                                                       observations$ipeak),
                                          xfactors=observations$xfactor)
+weights_there$direction = "there"
 
 # Calculating weights for tours to direction 2
-jweights = create_time_averaging_weights(mtypes=observations$mtype,
+weights_back = create_time_averaging_weights(mtypes=observations$mtype,
                                          peaks=ifelse(observations$inverted,
                                                       observations$ipeak,
                                                       observations$jpeak),
                                          xfactors=observations$xfactor)
+weights_back$direction = "back"
+
+weights = rbind_list(weights_there,
+                     weights_back)
+print(weights)
 
 # Generate matrices based on weights
 columns = c("ttime_car",
