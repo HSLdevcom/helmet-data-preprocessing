@@ -1,4 +1,4 @@
-# -*- coding: windows-1252-dos -*-
+# -*- coding: utf-8-unix -*-
 library(strafica)
 
 matrices = as.data.frame(data.table::fread(ancfile("area/matrices.csv"),

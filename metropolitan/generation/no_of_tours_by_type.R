@@ -1,4 +1,4 @@
-# -*- coding: windows-1252-dos -*-
+# -*- coding: utf-8-unix -*-
 library(strafica)
 
 observations = load1(ancfile("primary/observations.RData"))

@@ -1,4 +1,4 @@
-# -*- coding: windows-1252-dos -*-
+# -*- coding: utf-8-unix -*-
 library(strafica)
 library(readxl)
 
@@ -29,12 +29,12 @@ municipalities = pick(municipalities,
                       capital_region, surrounding_municipality, peripheral_municipality)
 zones = leftjoin(zones, municipalities, by="municipality")
 
-built_land_area = read_xlsx(.ancfile("input/Maank‰yttˆ/rakennettu_maapinta_ala_2018.xlsx"), sheet="Kaikki")
+built_land_area = read_xlsx(.ancfile("input/Maank√§ytt√∂/rakennettu_maapinta_ala_2018.xlsx"), sheet="Kaikki")
 built_land_area = as.data.frame(built_land_area)
 m = match(zones$zone_orig, built_land_area$SIJ2019)
 zones$area = built_land_area$`Rakennetun alan pinta-ala (km2)`
 
-landuse = read_xlsx(.ancfile("input/Maank‰yttˆ/maankayttotiedot_sijoittelualueittain_kaikki_yhdessa.xlsx"))
+landuse = read_xlsx(.ancfile("input/Maank√§ytt√∂/maankayttotiedot_sijoittelualueittain_kaikki_yhdessa.xlsx"))
 landuse = as.data.frame(landuse)
 m = match(zones$zone_orig, landuse$SIJ2019)
 zones$populated_land_area = landuse$As_ruutujen_maa_ala[m]
@@ -44,34 +44,34 @@ zones$jobs = landuse$tp_yht[m]
 zones$job_density = zones$jobs / zones$area
 zones$population = landuse$Asukkaat_yht[m]
 zones$jobs_service = landuse$varsinais_palvelutpt[m]
-zones$jobs_shopping = landuse$myym‰l‰tpt[m]
+zones$jobs_shopping = landuse$myym√§l√§tpt[m]
 
 m = which(zones$area < 0.000001)
 zones$job_density[m] = 0
 
-parking = read.csv2(.ancfile("input/Estimoinnin_l‰htˆtiedot/md21_pysakointikustannus_tyo_2018.csv"),
+parking = read.csv2(.ancfile("input/Estimoinnin_l√§ht√∂tiedot/md21_pysakointikustannus_tyo_2018.csv"),
                     fileEncoding="utf-8",
                     stringsAsFactors=FALSE)
 zones$parking_fee_work = parking$parking_fee[match(zones$zone_orig, parking$zone)]
-parking = read.csv2(.ancfile("input/Estimoinnin_l‰htˆtiedot/md22_pysakointikustannus_muu_2018.csv"),
+parking = read.csv2(.ancfile("input/Estimoinnin_l√§ht√∂tiedot/md22_pysakointikustannus_muu_2018.csv"),
                     fileEncoding="utf-8",
                     stringsAsFactors=FALSE)
 zones$parking_fee_other = parking$parking_fee[match(zones$zone_orig, parking$zone)]
 zones = na.to.zero(zones, c("parking_fee_work", "parking_fee_other"))
 
-students = read_xlsx(.ancfile("input/Maank‰yttˆ/opla_luettelo_2017_2.xlsx"), sheet="sij19")
+students = read_xlsx(.ancfile("input/Maank√§ytt√∂/opla_luettelo_2017_2.xlsx"), sheet="sij19")
 students = as.data.frame(students)
 m = match(zones$zone_orig, students$SIJ2019)
 zones$students_primary_school = round(students$peruskoulu[m])
-zones$students_high_school = round(students$`aste2 yhteens‰`[m])
-zones$students_university = round(students$`aste3 yhteens‰`[m])
+zones$students_high_school = round(students$`aste2 yhteens√§`[m])
+zones$students_university = round(students$`aste3 yhteens√§`[m])
 
-cars = read_xlsx(.ancfile("input/Maank‰yttˆ/Auto2018_pisteet_sum.xlsx"))
+cars = read_xlsx(.ancfile("input/Maank√§ytt√∂/Auto2018_pisteet_sum.xlsx"))
 m = match(zones$zone_orig, cars$SIJ2019)
 zones$cars_per_people = as.numeric(cars$Autonomistusaste[m]) * 1000
 quantile(zones$cars_per_people, c(0, 0.01, 0.02, 0.98, 0.99, 1), na.rm=TRUE)
 
-income = read_xlsx(.ancfile("input/Maank‰yttˆ/tulotiedot_2016_korjattu.xlsx"), sheet="tulotaso_korjattu")
+income = read_xlsx(.ancfile("input/Maank√§ytt√∂/tulotiedot_2016_korjattu.xlsx"), sheet="tulotaso_korjattu")
 m = match(zones$zone_orig, income$SIJ2019)
 zones$income_person = income$hr_mtu[m]
 zones$income_household = income$tr_mtu[m]
