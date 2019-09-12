@@ -39,6 +39,7 @@ observations$jpeak[m] = NA
 
 mtypes = read.delims("mtypes.txt")
 observations = leftjoin(observations, mtypes)
+observations$inverted = is_inverted(tours$order)
 
 m = match(tours$zone_secondary_destination, zones$zone_orig)
 observations$kzone = zones$zone[m]

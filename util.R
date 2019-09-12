@@ -95,3 +95,18 @@ get_age_groups = function(x, pid) {
     df$age_missing = ifelse(is.na(x) | x < 7, 9, 0)
     return(df)
 }
+
+
+#' Check whether origin and primary destination have been inverted
+#'
+#' @param x Order of visits to origin (A), primary destination (B), and
+#'   secondary destination (C)
+#' @return A logical vector indicating whether the original tour was made from
+#'   origin to primary destination or if the order was inverted.
+is_inverted = function(x) {
+    # Check that the format of x is correct
+    stopifnot(all(x %in% c("A","AB","BA","ABC","ACB","BAC","BCA","CAB","CBA")))
+    # Check inversion (B is visited before A)
+    result = x %in% c("BA","BAC","BCA","CBA")
+    return(result)
+}
