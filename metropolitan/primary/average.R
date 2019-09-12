@@ -7,16 +7,24 @@ matrices = as.data.frame(data.table::fread(ancfile("area/matrices.csv"),
 # Average travel time, length, and car cost matrices
 observations = load1("observations.RData")
 
+create_time_averaging_weights = function(mtypes, peaks, xfactors) {
+    weights = dfsas(mtype=mtypes,
+                    peak=peaks,
+                    xfactor=xfactors)
+    weights = subset(weights, !is.na(peak))
+    weights = fold(weights, .(mtype, peak), xfactor=sum(xfactor))
+    weights = tidyr::spread(weights, key=peak, value=xfactor)
+    cols = c("morning","afternoon","other")
+    weights[, cols] = weights[, cols] / rowSums(weights[, cols])
+    return(weights)
+}
+
 # Calculating weights for tours to direction 1
-weights = dfsas(year=observations$year,
-                xfactor=observations$xfactor,
-                mtype=observations$mtype,
-                peak=ifelse(observations$inverted, observations$jpeak, observations$ipeak))
-weights = subset(weights, !is.na(peak))
-weights = fold(weights, .(year, mtype, peak), xfactor=sum(xfactor))
-weights = tidyr::spread(weights, peak, xfactor)
-cols = c("morning","afternoon","other")
-weights[, cols] = weights[, cols] / rowSums(weights[, cols])
+weights = create_time_averaging_weights(mtypes=observations$mtype,
+                                        peaks=ifelse(observations$inverted,
+                                                     observations$jpeak,
+                                                     observations$ipeak),
+                                        xfactors=observations$xfactor)
 
 # Generate matrices based on weights
 columns = c("ttime_car",
