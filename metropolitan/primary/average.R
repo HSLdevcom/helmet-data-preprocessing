@@ -1,6 +1,8 @@
 # -*- coding: utf-8-unix -*-
 library(strafica)
 
+YEAR = 2018
+
 matrices = as.data.frame(data.table::fread(ancfile("area/matrices.csv"),
                                            stringsAsFactors=FALSE))
 
@@ -50,19 +52,20 @@ n = 0
 for (i in seq_along(columns)) {
     for (j in rows.along(weights)) {
         n = n + 1
-        morning = sprintf("%s_aht_%d", columns[i], weights$year[j])
-        afternoon = sprintf("%s_iht_%d", columns[i], weights$year[j])
-        other = sprintf("%s_pt_%d", columns[i], weights$year[j])
+        morning = sprintf("%s_aht_%d", columns[i], YEAR)
+        afternoon = sprintf("%s_iht_%d", columns[i], YEAR)
+        other = sprintf("%s_pt_%d", columns[i], YEAR)
         stopifnot(morning %in% colnames(matrices))
         stopifnot(afternoon %in% colnames(matrices))
         stopifnot(other %in% colnames(matrices))
         average[, n] = weights$morning[j]*matrices[, morning] +
             weights$afternoon[j]*matrices[, afternoon] +
             weights$other[j]*matrices[, other]
-        average_names[n] = sprintf("%s_%d_%s",
+        average_names[n] = sprintf("%s_%d_%s_%s",
                                    columns[i],
-                                   weights$year[j],
-                                   weights$mtype[j])
+                                   YEAR,
+                                   weights$mtype[j],
+                                   weights$direction[j])
     }
 }
 average = as.data.frame(average)
