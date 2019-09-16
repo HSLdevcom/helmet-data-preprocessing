@@ -112,17 +112,23 @@ is_inverted = function(x) {
 }
 
 
-#' Get value from an impedance matrix
+#' Get value from a matrix
 #'
-#' @param x An impedance matrix. Must be a square matrix!
+#' @param x A square matrix.
 #' @param from Zone ID of the starting zone. Default is all zones.
 #' @param to Zone ID of the ending zone. Default is all zones.
 #' @return A matrix. Returns a 1x1 matrix when both `from` and `to` are scalars.
 #'   Returns a 1xN row matrix when `from` is a vector and `to` is a scalar.
 #'   Returns a Mx1 column matrix when `from` is a scalar and `to` is a vector.
 #'   Returns a MxN matrix when both `from` and `to` are vectors.
-get_impedance = function(x, from=seq(nrow(x)), to=seq(ncol(x))) {
+get_matrix_value = function(x, from=seq(nrow(x)), to=seq(ncol(x))) {
     stopifnot(is.matrix(x))
     stopifnot(nrow(x)==ncol(x))
     return(x[from, to, drop=FALSE])
+}
+
+
+#' Get value from an impedance matrix
+get_impedance = function(x, from=seq(nrow(x)), to=seq(ncol(x))) {
+    return(get_matrix_value(x, from=from, to=to))
 }

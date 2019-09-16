@@ -158,11 +158,11 @@ write_estimation_data = function(alternatives,
         }
         
         # Origin-dependent
-        batch = cbind(batch, matrix_list[["same_zone"]][batch$izone, ])
-        batch = cbind(batch, matrix_list[["area"]][batch$izone, ])
+        batch = cbind(batch, get_matrix_value(matrix_list[["same_zone"]], from=batch$izone))
+        batch = cbind(batch, get_matrix_value(matrix_list[["area"]], from=batch$izone))
         
         # Home-dependent
-        batch = cbind(batch, matrix_list[["same_municipality"]][batch$rzone, ])
+        batch = cbind(batch, get_matrix_value(matrix_list[["same_municipality"]], from=batch$rzone))
         
         # Organize columns
         hits = sapply(rows.along(columns), function(i) {
