@@ -123,10 +123,14 @@ write_estimation_data = function(alternatives,
             emme = mclapply.stop(rows.along(batch), function(j) {
                 mat1 = paste(batch[j, avg], dir1[j], sep="_")
                 mat2 = paste(batch[j, avg], dir2[j], sep="_")
-                matrix_sum1 = matrix_list[[mat1]][batch$izone[j], ]
-                matrix_sum2 = t(matrix_list[[mat2]][, batch$izone[j]])
+                matrix_sum1 = get_impedance(matrix_list[[mat1]],
+                                            from=batch$izone[j])
+                matrix_sum2 = get_impedance(matrix_list[[mat2]],
+                                            to=batch$izone[j])
+                matrix_sum2 = t(matrix_sum2)
                 matrix_sum = matrix_sum1 + matrix_sum2
-                matrix_sum = as.data.frame(matrix_sum)
+                matrix_sum = as.data.frame(matrix_sum, row.names=NULL)
+                colnames(matrix_sum) = sprintf("X%d", seq(ncol(matrix_sum)))
                 return(matrix_sum)
             })
             emme = rbind_all(emme)
@@ -138,8 +142,14 @@ write_estimation_data = function(alternatives,
         for (aux in auxiliary_columns) {
             emme = mclapply.stop(rows.along(batch), function(j) {
                 mat = batch[j, aux]
-                matrix_sum = matrix_list[[mat]][batch$izone[j], ] + t(matrix_list[[mat]][, batch$izone[j]])
-                matrix_sum = as.data.frame(matrix_sum)
+                matrix_sum1 = get_impedance(matrix_list[[mat]],
+                                            from=batch$izone[j])
+                matrix_sum2 = get_impedance(matrix_list[[mat]],
+                                            to=batch$izone[j])
+                matrix_sum2 = t(matrix_sum2)
+                matrix_sum = matrix_sum1 + matrix_sum2
+                matrix_sum = as.data.frame(matrix_sum, row.names=NULL)
+                colnames(matrix_sum) = sprintf("X%d", seq(ncol(matrix_sum)))
                 return(matrix_sum)
             })
             emme = rbind_all(emme)
