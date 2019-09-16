@@ -94,6 +94,7 @@ write_estimation_data = function(alternatives,
                                  matrix_list,
                                  columns) {
     nbatch = ceiling(nrow(alternatives) / batch_size)
+    average_columns = grep("^avg_", colnames(alternatives), value=TRUE)
     auxiliary_columns = grep("^aux_", colnames(alternatives), value=TRUE)
     
     messagef("Writing estimation data in batches for model '%s'...", model_name)
@@ -109,6 +110,29 @@ write_estimation_data = function(alternatives,
         
         static_azone_data = row[rep(1, times=nrow(batch)), ]
         batch = cbind(batch, static_azone_data)
+        
+        # Origin-, year-, group-, and direction-dependent average matrices
+        for (avg in average_columns) {
+            
+            # Looking from origin's perspective, the first trip can be either
+            # "there" (going to destination, majority) or "back" (going to
+            # origin, minority). The second trip is always the other.
+            dir1 = ifelse(alternatives$inverted, "back", "there")
+            dir2 = ifelse(alternatives$inverted, "there", "back")
+            
+            emme = mclapply.stop(rows.along(batch), function(j) {
+                mat1 = paste(batch[j, avg], dir1[j], sep="_")
+                mat2 = paste(batch[j, avg], dir2[j], sep="_")
+                matrix_sum1 = matrix_list[[mat1]][batch$izone[j], ]
+                matrix_sum2 = t(matrix_list[[mat2]][, batch$izone[j]])
+                matrix_sum = matrix_sum1 + matrix_sum2
+                matrix_sum = as.data.frame(matrix_sum)
+                return(matrix_sum)
+            })
+            emme = rbind_all(emme)
+            colnames(emme) = sprintf("azone_%d_%s", seq(ncol(emme)), gsub("avg_", "", avg))
+            batch = cbind(batch, emme)
+        }
         
         # Origin-, year-, and group-dependent
         for (aux in auxiliary_columns) {
@@ -163,15 +187,21 @@ alternatives$aux_length_bicycle_separate_cycleway = sprintf("length_bicycle_sepa
 alternatives$aux_length_bicycle_adjacent_cycleway = sprintf("length_bicycle_adjacent_cycleway_%d", alternatives$year)
 alternatives$aux_length_bicycle_mixed_traffic = sprintf("length_bicycle_mixed_traffic_%d", alternatives$year)
 
-alternatives$aux_ttime_transit = sprintf("ttime_transit_%d_%s", alternatives$year, alternatives$mtype)
 alternatives$aux_cost_transit_work = sprintf("cost_transit_work_%d", alternatives$year)
 alternatives$aux_cost_transit_other = sprintf("cost_transit_other_%d", alternatives$year)
 
-alternatives$aux_ttime_car = sprintf("ttime_car_%d_%s", alternatives$year, alternatives$mtype)
-alternatives$aux_cost_car = sprintf("cost_car_%d_%s", alternatives$year, alternatives$mtype)
-
 alternatives$aux_ttime_pedestrian = sprintf("ttime_pedestrian_%d", alternatives$year)
 alternatives$aux_length_pedestrian = sprintf("length_pedestrian_%d", alternatives$year)
+
+alternatives$avg_ttime_car = sprintf("ttime_car_%d_%s",
+                                     alternatives$year,
+                                     alternatives$mtype)
+alternatives$avg_cost_car = sprintf("cost_car_%d_%s",
+                                    alternatives$year,
+                                    alternatives$mtype)
+alternatives$avg_ttime_transit = sprintf("ttime_transit_%d_%s",
+                                         alternatives$year,
+                                         alternatives$mtype)
 
 matrices_needed = unique(unlist(alternatives[, grepl("^aux_", names(alternatives))]))
 stopifnot(all(matrices_needed %in% names(matrix_list)))
