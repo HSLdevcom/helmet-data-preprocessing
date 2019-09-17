@@ -113,16 +113,9 @@ write_estimation_data = function(alternatives,
         
         # Origin-, year-, group-, and direction-dependent average matrices
         for (avg in average_columns) {
-            
-            # Looking from origin's perspective, the first trip can be either
-            # "there" (going to destination, majority) or "back" (going to
-            # origin, minority). The second trip is always the other.
-            dir1 = ifelse(alternatives$inverted, "back", "there")
-            dir2 = ifelse(alternatives$inverted, "there", "back")
-            
             emme = mclapply.stop(rows.along(batch), function(j) {
-                mat1 = paste(batch[j, avg], dir1[j], sep="_")
-                mat2 = paste(batch[j, avg], dir2[j], sep="_")
+                mat1 = paste(batch[j, avg], "there", sep="_")
+                mat2 = paste(batch[j, avg], "back", sep="_")
                 matrix_sum1 = get_impedance(matrix_list[[mat1]],
                                             from=batch$izone[j])
                 matrix_sum2 = get_impedance(matrix_list[[mat2]],
