@@ -134,7 +134,7 @@ write_estimation_data = function(alternatives,
                 from_c_to_a = t(get_impedance(matrix_list[[mat_abc]], to=batch$izone[j]))
                 from_b_to_c_to_a = from_b_to_c + from_c_to_a
                 from_b_to_a = get_impedance(matrix_list[[mat_ab]], from=batch$jzone[j], to=batch$izone[j])
-                matrix_sum = from_b_to_c_to_a - from_b_to_a
+                matrix_sum = from_b_to_c_to_a - as.numeric(from_b_to_a)
                 matrix_sum = as.data.frame(matrix_sum, row.names=NULL)
                 colnames(matrix_sum) = sprintf("X%d", seq(ncol(matrix_sum)))
                 return(matrix_sum)
@@ -154,7 +154,7 @@ write_estimation_data = function(alternatives,
                 from_c_to_a = t(get_impedance(matrix_list[[mat_abc]], to=batch$izone[j]))
                 from_b_to_c_to_a = from_b_to_c + from_c_to_a
                 from_b_to_a = get_impedance(matrix_list[[mat_ab]], from=batch$jzone[j], to=batch$izone[j])
-                matrix_sum = from_b_to_c_to_a - from_b_to_a
+                matrix_sum = from_b_to_c_to_a - as.numeric(from_b_to_a)
                 matrix_sum = as.data.frame(matrix_sum)
                 return(matrix_sum)
             })
