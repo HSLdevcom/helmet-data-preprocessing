@@ -95,3 +95,40 @@ get_age_groups = function(x, pid) {
     df$age_missing = ifelse(is.na(x) | x < 7, 9, 0)
     return(df)
 }
+
+
+#' Check whether origin and primary destination have been inverted
+#'
+#' @param x Order of visits to origin (A), primary destination (B), and
+#'   secondary destination (C)
+#' @return A logical vector indicating whether the original tour was made from
+#'   origin to primary destination or if the order was inverted.
+is_inverted = function(x) {
+    # Check that the format of x is correct
+    stopifnot(all(x %in% c("A","AB","BA","ABC","ACB","BAC","BCA","CAB","CBA")))
+    # Check inversion (B is visited before A)
+    result = x %in% c("BA","BAC","BCA","CBA")
+    return(result)
+}
+
+
+#' Get value from a matrix
+#'
+#' @param x A square matrix.
+#' @param from Zone ID of the starting zone. Default is all zones.
+#' @param to Zone ID of the ending zone. Default is all zones.
+#' @return A matrix. Returns a 1x1 matrix when both `from` and `to` are scalars.
+#'   Returns a 1xN row matrix when `from` is a vector and `to` is a scalar.
+#'   Returns a Mx1 column matrix when `from` is a scalar and `to` is a vector.
+#'   Returns a MxN matrix when both `from` and `to` are vectors.
+get_matrix_value = function(x, from=seq(nrow(x)), to=seq(ncol(x))) {
+    stopifnot(is.matrix(x))
+    stopifnot(nrow(x)==ncol(x))
+    return(x[from, to, drop=FALSE])
+}
+
+
+#' Get value from an impedance matrix
+get_impedance = function(x, from=seq(nrow(x)), to=seq(ncol(x))) {
+    return(get_matrix_value(x, from=from, to=to))
+}

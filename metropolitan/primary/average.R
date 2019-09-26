@@ -1,19 +1,42 @@
 # -*- coding: utf-8-unix -*-
 library(strafica)
 
+YEAR = 2018
+
 matrices = as.data.frame(data.table::fread(ancfile("area/matrices.csv"),
                                            stringsAsFactors=FALSE))
 
 # Average travel time, length, and car cost matrices
 observations = load1("observations.RData")
-weights = dfsas(year=c(observations$year, observations$year),
-                xfactor=c(observations$xfactor, observations$xfactor),
-                mtype=c(observations$mtype, observations$mtype),
-                peak=c(observations$ipeak, observations$jpeak))
-weights = subset(weights, !is.na(peak))
-weights = fold(weights, .(year, mtype, peak), xfactor=sum(xfactor))
-weights = tidyr::spread(weights, peak, xfactor)
-weights[, c("morning","afternoon","other")] = weights[, c("morning","afternoon","other")] / rowSums(weights[, c("morning","afternoon","other")])
+
+create_time_averaging_weights = function(mtypes, peaks, xfactors) {
+    weights = dfsas(mtype=mtypes,
+                    peak=peaks,
+                    xfactor=xfactors)
+    weights = subset(weights, !is.na(peak))
+    weights = fold(weights, .(mtype, peak), xfactor=sum(xfactor))
+    weights = tidyr::spread(weights, key=peak, value=xfactor)
+    cols = c("morning","afternoon","other")
+    weights[, cols] = weights[, cols] / rowSums(weights[, cols])
+    return(weights)
+}
+
+# Calculating weights from origin
+weights_there = create_time_averaging_weights(mtypes=observations$mtype,
+                                              peaks=observations$ipeak,
+                                              xfactors=observations$xfactor)
+weights_there$direction = "there"
+
+# Calculating weights to origin
+weights_back = create_time_averaging_weights(mtypes=observations$mtype,
+                                             peaks=observations$jpeak,
+                                             xfactors=observations$xfactor)
+weights_back$direction = "back"
+
+weights = rbind_list(weights_there,
+                     weights_back)
+print(weights)
+write.csv2(weights, file="weights.csv", row.names=FALSE)
 
 # Generate matrices based on weights
 columns = c("ttime_car",
@@ -26,25 +49,26 @@ n = 0
 for (i in seq_along(columns)) {
     for (j in rows.along(weights)) {
         n = n + 1
-        morning = sprintf("%s_aht_%d", columns[i], weights$year[j])
-        afternoon = sprintf("%s_iht_%d", columns[i], weights$year[j])
-        other = sprintf("%s_pt_%d", columns[i], weights$year[j])
+        morning = sprintf("%s_aht_%d", columns[i], YEAR)
+        afternoon = sprintf("%s_iht_%d", columns[i], YEAR)
+        other = sprintf("%s_pt_%d", columns[i], YEAR)
         stopifnot(morning %in% colnames(matrices))
         stopifnot(afternoon %in% colnames(matrices))
         stopifnot(other %in% colnames(matrices))
         average[, n] = weights$morning[j]*matrices[, morning] +
             weights$afternoon[j]*matrices[, afternoon] +
             weights$other[j]*matrices[, other]
-        average_names[n] = sprintf("%s_%d_%s",
+        average_names[n] = sprintf("%s_%d_%s_%s",
                                    columns[i],
-                                   weights$year[j],
-                                   weights$mtype[j])
+                                   YEAR,
+                                   weights$mtype[j],
+                                   weights$direction[j])
     }
 }
 average = as.data.frame(average)
 colnames(average) = average_names
 average = cbind(pick(matrices, izone, jzone),
-                         average)
+                average)
 head(average)
 
 # Output
