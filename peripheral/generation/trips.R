@@ -1,16 +1,17 @@
 # -*- coding: utf-8-unix -*-
 library(strafica)
+source(ancfile("util.R"))
 
 observations = load1(ancfile("primary/observations.RData"))
 
 # Tour types in peripheral model
 observations$ttype_peripheral = NA
 m = which(observations$ttype %in% 1)
-observations$ttype_peripheral[m] = 1
+observations$ttype_peripheral[m] = "home-work"
 m = which(observations$ttype %in% 2:5)
-observations$ttype_peripheral[m] = 2
+observations$ttype_peripheral[m] = "home-other"
 m = which(observations$ttype %in% 6:7)
-observations$ttype_peripheral[m] = 3
+observations$ttype_peripheral[m] = "non-home-based"
 
 # If destination is visited before origin, the tour is inverted
 observations$inverted = ifelse(observations$order %in% c("BA","BAC","BCA","CBA"),
