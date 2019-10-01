@@ -71,12 +71,10 @@ matk = subset(matk, M_TAUSTAID %in% taus$T_TAUSTAID)
 # If a person belongs to any extra-sampled region, expansion factor is read from
 # regional expansion factors. Otherwise, expansion factor is read from national
 # expansion factors.
-taus$xfactor = NA
-m = which(!is.na(taus$T_SEUTURAPO))
-taus$xfactor[m] = taus$T_VK_VP_SEUTULAAJENNUS[m]
-m = which(is.na(taus$T_SEUTURAPO == 1))
-taus$xfactor[m] = taus$T_VK_VP_LAAJENNUS[m]
-stopif(any(is.na(taus$xfactor)))
+taus$xfactor = ifelse(is.na(taus$T_SEUTURAPO),
+                      taus$T_VK_VP_LAAJENNUS,
+                      taus$T_VK_VP_SEUTULAAJENNUS)
+stopif(any(taus$xfactor < 0.1))
 
 
 ###
