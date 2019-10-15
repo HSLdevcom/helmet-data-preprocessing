@@ -57,14 +57,6 @@ taus = na.to.zero(taus, c("rx", "ry", "rkunta", "rzone"))
 
 
 ###
-### Removing weekends
-###
-
-taus = subset(taus, T_ARKI_VL == 1)
-matk = subset(matk, M_TAUSTAID %in% taus$T_TAUSTAID)
-
-
-###
 ### Combining expansion factors
 ###
 
@@ -75,6 +67,14 @@ taus$xfactor = ifelse(is.na(taus$T_SEUTURAPO),
                       taus$T_VK_VP_LAAJENNUS,
                       taus$T_VK_VP_SEUTULAAJENNUS)
 stopif(any(taus$xfactor < 0.1))
+
+
+###
+### Removing weekends
+###
+
+taus = subset(taus, T_ARKI_VL == 1)
+matk = subset(matk, M_TAUSTAID %in% taus$T_TAUSTAID)
 
 
 ###
@@ -279,3 +279,11 @@ taus = downclass(taus)
 write.csv2(taus, file="tausta-hlt.csv", row.names=FALSE)
 paik = downclass(paik)
 write.csv2(paik, file="paikat-hlt.csv", row.names=FALSE)
+
+npeople = nrow(taus)
+ntrips = nrow(matk)
+xpeople = sum(taus$xfactor)
+xtrips = sum(taus$xfactor[match(matk$pid, taus$pid)])
+sprintf("People: %.0f (n=%d)", xpeople, npeople)
+sprintf("Trips: %.0f (n=%d)", xtrips, ntrips)
+sprintf("Trips per people: %.2f", xtrips/xpeople)

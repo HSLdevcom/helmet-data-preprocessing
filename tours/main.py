@@ -284,3 +284,24 @@ for person in people:
         errors = errors + 1
 
 print "Number of people with missing trips: {}".format(errors)
+
+npeople = len(people)
+ntours = tour_output.shape[0]
+xpeople = sum(person.get_xfactor() for person in people)
+xtours = tour_output["xfactor"].sum()
+
+tour_output_closed = tour_output[tour_output["closed"]]
+tour_output_open = tour_output[~tour_output["closed"]]
+
+ntours_closed = tour_output_closed.shape[0]
+ntours_open = tour_output_open.shape[0]
+xtours_closed = tour_output_closed["xfactor"].sum()
+xtours_open = tour_output_open["xfactor"].sum()
+
+print "People: {0:.0f} (n={1:d})".format(xpeople, npeople)
+print "Tours: {0:.0f} (n={1:d})".format(xtours, ntours)
+print "Tours per people: {0:.2f}".format(xtours/xpeople)
+print "Closed tours: {0:.0f} (n={1:d})".format(xtours_closed, ntours_closed)
+print "Closed tours per people: {0:.2f}".format(xtours_closed/xpeople)
+print "Open tours: {0:.0f} (n={1:d})".format(xtours_open, ntours_open)
+print "Open tours per people: {0:.2f}".format(xtours_open/xpeople)
