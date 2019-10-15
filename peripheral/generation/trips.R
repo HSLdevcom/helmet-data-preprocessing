@@ -4,7 +4,7 @@ source(ancfile("util.R"))
 
 observations = load1(ancfile("primary/observations.RData"))
 
-# Tour types in peripheral model
+# Tour types in peripheral models
 observations$ttype_peripheral = NA
 m = which(observations$ttype %in% 1)
 observations$ttype_peripheral[m] = 1
@@ -13,10 +13,8 @@ observations$ttype_peripheral[m] = 2
 m = which(observations$ttype %in% 6:7)
 observations$ttype_peripheral[m] = 3
 
-# If destination is visited before origin, the tour is inverted
-observations$inverted = ifelse(observations$order %in% c("BA","BAC","BCA","CBA"),
-                               TRUE,
-                               FALSE)
+# Inverted tours visit destination before origin
+observations$inverted = is_inverted(observations$order)
 
 # If the tour is inverted, the first trip is a return trip (from destination
 # back to origin)
