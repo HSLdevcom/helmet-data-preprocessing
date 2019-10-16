@@ -61,5 +61,5 @@ stat = fold(trips, .(model_type),
             n=length(pid),
             xfactor=sum(xfactor))
 stat$xfactor_per_person = stat$xfactor / sum(background$xfactor)
-write.csv2(stat, file="generation-nhb.csv", row.names=FALSE)
+write.csv2(stat, file="generation.csv", row.names=FALSE)
 print(stat)
