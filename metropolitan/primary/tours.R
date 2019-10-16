@@ -17,6 +17,7 @@ m = match(tours$rzone, zones$zone_orig)
 tours = subset(tours, ((zones$capital_region[m] | zones$surrounding_municipality[m]) &
                            tours$zone_origin %in% zones$zone_orig &
                            tours$zone_destination %in% zones$zone_orig))
+tours = subset(tours, rzone %in% zones$zone_orig)
 tours = subset(tours, mode %in% 1:5)
 tours = downclass(tours)
 check.na(tours)

@@ -14,6 +14,7 @@ background = list()
 
 message("Formatting HEHA 2018 personal data...")
 people = read.csv2(ancfile("survey/tausta-heha.csv"), stringsAsFactors=FALSE)
+people = subset(people, rzone %in% zones$zone_orig)
 
 df = data.frame(pid=people$pid)
 df$year = 2018

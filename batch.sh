@@ -16,6 +16,7 @@ pipenv run python ./tours/main.py input-config-hlt.json
 (cd metropolitan/generation/ && sh batch.sh)
 (cd peripheral/primary/ && sh batch.sh)
 (cd peripheral/constructed/ && sh batch.sh)
+(cd peripheral/generation/ && sh batch.sh)
 
 cp -ruv tours/tours-*.csv $OUTPUT/
 
@@ -41,6 +42,7 @@ cat metropolitan/primary/alternatives/alternatives-wbo-*.txt | fold -w 180 -s > 
 cat metropolitan/constructed/alternatives/alternatives--*.txt | fold -w 180 -s > $OUTPUT/alternatives-metropolitan-constructed.txt
 cat metropolitan/secondary/alternatives/alternatives--*.txt | fold -w 180 -s > $OUTPUT/alternatives-metropolitan-secondary.txt
 cp -ruv metropolitan/generation/alternatives/alternatives.txt $OUTPUT/alternatives-metropolitan-generation.txt
+cp -ruv metropolitan/generation/generation-nhb.csv $OUTPUT/generation-metropolitan-nhb.csv
 
 cp -ruv peripheral/primary/alternatives/columns.txt $OUTPUT/columns-peripheral.txt
 cp -ruv peripheral/constructed/alternatives/columns.txt $OUTPUT/columns-peripheral-constructed.txt
@@ -50,4 +52,4 @@ cat peripheral/constructed/alternatives/alternatives--1_100.txt | fold -w 180 -s
 
 cat peripheral/primary/alternatives/alternatives--*.txt | fold -w 180 -s > $OUTPUT/alternatives-peripheral.txt
 cat peripheral/constructed/alternatives/alternatives--*.txt | fold -w 180 -s > $OUTPUT/alternatives-peripheral-constructed.txt
-
+cp -ruv peripheral/generation/generation.csv $OUTPUT/generation-peripheral.csv
