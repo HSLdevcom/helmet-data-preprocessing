@@ -3,8 +3,7 @@ library(strafica)
 library(readxl)
 library(lubridate)
 
-matk = read_xlsx(ancfile("input/HEHA-aineistot/MATKAT18_V3.xlsx"))
-matk = as.data.frame(matk)
+matk = load1("raw-heha.RData")
 matk$length = matk$PITUUS
 matk$eid = matk$matkaid
 

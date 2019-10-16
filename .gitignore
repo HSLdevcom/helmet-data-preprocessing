@@ -6,6 +6,7 @@
 
 # Sensitive information
 survey/*.csv
+survey/*.RData
 
 # Proprietary libraries
 strafica/
