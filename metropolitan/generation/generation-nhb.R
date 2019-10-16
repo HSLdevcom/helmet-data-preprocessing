@@ -6,7 +6,9 @@ observations = load1(ancfile("primary/observations.RData"))
 
 # Tour types
 observations = subset(observations, ttype %in% c(6,7))
-observations$model_type = "nhb"
+observations$model_type = ifelse(observations$ttype %in% 6,
+                                 "wo",
+                                 "oo")
 
 # Inverted tours visit destination before origin
 observations$inverted = is_inverted(observations$order)
