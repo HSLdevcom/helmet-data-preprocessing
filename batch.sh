@@ -42,7 +42,8 @@ cat metropolitan/primary/alternatives/alternatives-wbo-*.txt | fold -w 180 -s > 
 cat metropolitan/constructed/alternatives/alternatives--*.txt | fold -w 180 -s > $OUTPUT/alternatives-metropolitan-constructed.txt
 cat metropolitan/secondary/alternatives/alternatives--*.txt | fold -w 180 -s > $OUTPUT/alternatives-metropolitan-secondary.txt
 cp -ruv metropolitan/generation/alternatives/alternatives.txt $OUTPUT/alternatives-metropolitan-generation.txt
-cp -ruv metropolitan/generation/generation-nhb.csv $OUTPUT/generation-metropolitan-nhb.csv
+cp -ruv metropolitan/generation/generation.csv $OUTPUT/generation-metropolitan.csv
+cp -ruv metropolitan/generation/generation-secondary.csv $OUTPUT/generation-metropolitan-secondary.csv
 
 cp -ruv peripheral/primary/alternatives/columns.txt $OUTPUT/columns-peripheral.txt
 cp -ruv peripheral/constructed/alternatives/columns.txt $OUTPUT/columns-peripheral-constructed.txt
