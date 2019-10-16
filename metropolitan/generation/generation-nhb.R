@@ -5,10 +5,22 @@ source(ancfile("util.R"))
 observations = load1(ancfile("primary/observations.RData"))
 
 # Tour types
-observations = subset(observations, ttype %in% c(6,7))
-observations$model_type = ifelse(observations$ttype %in% 6,
-                                 "wo",
-                                 "oo")
+observations = subset(observations, ttype %in% c(1:7))
+observations$model_type = NA
+m = which(observations$ttype %in% 1)
+observations$model_type[m] = "hw"
+m = which(observations$ttype %in% 2)
+observations$model_type[m] = "hc"
+m = which(observations$ttype %in% 3)
+observations$model_type[m] = "hu"
+m = which(observations$ttype %in% 4)
+observations$model_type[m] = "hs"
+m = which(observations$ttype %in% 5)
+observations$model_type[m] = "ho"
+m = which(observations$ttype %in% 6)
+observations$model_type[m] = "wo"
+m = which(observations$ttype %in% 7)
+observations$model_type[m] = "oo"
 
 # Inverted tours visit destination before origin
 observations$inverted = is_inverted(observations$order)
