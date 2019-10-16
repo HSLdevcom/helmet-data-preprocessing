@@ -14,6 +14,7 @@ background = list()
 
 message("Formatting HLT 2016 personal data...")
 people = read.csv2(ancfile("survey/tausta-hlt.csv"), stringsAsFactors=FALSE)
+people = subset(people, rzone %in% zones$zone_orig)
 
 df = data.frame(pid=people$pid)
 df$year = 2016
