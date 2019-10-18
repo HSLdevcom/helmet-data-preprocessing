@@ -10,23 +10,6 @@ add_mode_share = function(df_with_modes, df_without_modes) {
     return(df_with_modes)
 }
 
-as_square_matrix = function(df, from, to, value, snames, stitle="square") {
-    cols = c(from, to, value)
-    df = df[, cols]
-    df0 = expand.grid(x=snames, y=snames)
-    colnames(df0) = c(from, to)
-    df = leftjoin(df0, df, missing=0)
-    df = tidyr::spread(df, key=to, value=value, fill=0)
-    # Sort rows
-    df = df[match(snames, df[, 1]), ]
-    # Sort columns
-    sorder = match(snames, colnames(df)[-1]) + 1
-    df = df[, c(1, sorder)]
-    # Rename first column
-    colnames(df) = c(stitle, colnames(df)[-1])
-    return(df)
-}
-
 
 tours = load1("tours.RData")
 model_types = read.delims("models.txt")

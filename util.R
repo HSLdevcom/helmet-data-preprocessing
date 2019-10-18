@@ -132,3 +132,30 @@ get_matrix_value = function(x, from=seq(nrow(x)), to=seq(ncol(x))) {
 get_impedance = function(x, from=seq(nrow(x)), to=seq(ncol(x))) {
     return(get_matrix_value(x, from=from, to=to))
 }
+
+
+#' Spread data frame as square matrix
+#' 
+#' @param df Data frame.
+#' @param from Name of the column which specifies unique rows.
+#' @param to Name of the column which specifies unique columns.
+#' @param value Name of the columns from which values are read from.
+#' @param snames Names of the classes in from and to columns in correct order.
+#' @param stitle Title of the square matrix.
+#' @return A square data frame.
+as_square_matrix = function(df, from, to, value, snames, stitle="square") {
+    cols = c(from, to, value)
+    df = df[, cols]
+    df0 = expand.grid(x=snames, y=snames)
+    colnames(df0) = c(from, to)
+    df = leftjoin(df0, df, missing=0)
+    df = tidyr::spread(df, key=to, value=value, fill=0)
+    # Sort rows
+    df = df[match(snames, df[, 1]), ]
+    # Sort columns
+    sorder = match(snames, colnames(df)[-1]) + 1
+    df = df[, c(1, sorder)]
+    # Rename first column
+    colnames(df) = c(stitle, colnames(df)[-1])
+    return(df)
+}
