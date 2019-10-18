@@ -27,60 +27,35 @@ as_square_matrix = function(df, from, to, value, snames, stitle="square") {
     return(df)
 }
 
-observations1 = load1(ancfile("metropolitan/primary/observations.RData"))
-observations2 = load1(ancfile("peripheral/primary/observations.RData"))
-data = rbind_list(observations1, observations2)
-data = pick(data,
-            pid,
-            mode,
-            ttype,
-            survey,
-            xfactor,
-            izone,
-            jzone,
-            closed,
-            order)
-data$inverted = is_inverted(data$order)
 
-data$old_izone = data$izone
-data$old_jzone = data$jzone
-data$izone = ifelse(data$inverted, data$old_jzone, data$old_izone)
-data$jzone = ifelse(data$inverted, data$old_izone, data$old_jzone)
-
+tours = load1("tours.RData")
 model_types = read.delims("models.txt")
-data = leftjoin(data, model_types)
-
-zones = read.csv2(ancfile("area/zones.csv"))
-data$idistrict = zones$district[match(data$izone, zones$zone)]
-data$jdistrict = zones$district[match(data$jzone, zones$zone)]
-
 modes = read.delims("modes.txt")
-data = leftjoin(data, modes)
-data = unpick(data, mode)
+zones = read.csv2(ancfile("area/zones.csv"))
 
 
 ###
 ### Trips
 ###
 
-fold(data, .(survey, idistrict, jdistrict, model_type, mode_name),
+fold(tours, .(survey, idistrict, jdistrict, model_type, mode_name),
      n=length(pid),
      xfactor=sum(xfactor))
 
-data_district = fold(data, .(survey, idistrict, jdistrict), xfactor=sum(xfactor))
+tours_district = fold(tours, .(survey, idistrict, jdistrict), xfactor=sum(xfactor))
 
-data_model_type = fold(data, .(survey, idistrict, jdistrict, model_type),
+tours_model_type = fold(tours, .(survey, idistrict, jdistrict, model_type),
                        xfactor=sum(xfactor))
 
-data_model_type_mode = fold(data, .(survey, idistrict, jdistrict, model_type, mode_name),
+tours_model_type_mode = fold(tours, .(survey, idistrict, jdistrict, model_type, mode_name),
                             xfactor=sum(xfactor))
-data_model_type_mode = add_mode_share(data_model_type_mode, data_model_type)
+tours_model_type_mode = add_mode_share(tours_model_type_mode, tours_model_type)
 
 models = unique(model_types$model_type)
 modes = unique(modes$mode_name)
 for (i in seq_along(models)) {
     for (j in seq_along(modes)) {
-        output = subset(data_model_type_mode,
+        output = subset(tours_model_type_mode,
                         model_type %in% models[i] & mode_name %in% modes[j])
         print(as_square_matrix(output,
                                from="idistrict",
@@ -101,26 +76,26 @@ for (i in seq_along(models)) {
     }
 }
 
-data_mode = fold(data, .(survey, idistrict, jdistrict, mode_name),
+tours_mode = fold(tours, .(survey, idistrict, jdistrict, mode_name),
                  xfactor=sum(xfactor))
-data_mode = add_mode_share(data_mode, data_district)
+tours_mode = add_mode_share(tours_mode, tours_district)
 
 
 ###
 ### Length
 ###
 
-data$length_class = apply.breaks(data$length,
+tours$length_class = apply.breaks(tours$length,
                                  class=c(0, 1, 3, 5, 10, 20),
                                  lower=c(0, 1, 3, 5, 10, 20),
                                  upper=c(1, 3, 5, 10, 20, Inf))
-stopifnot(all(!is.na(data$length_class)))
+stopifnot(all(!is.na(tours$length_class)))
 
 # Onko kaikki pituuden HA-pituuksia?
 
-length_model_type = fold(data, .(survey, length, model_type),
+length_model_type = fold(tours, .(survey, length, model_type),
                          xfactor=sum(xfactor))
-length_model_type_mode = fold(data, .(survey, length, model_type, mode_name),
+length_model_type_mode = fold(tours, .(survey, length, model_type, mode_name),
                               xfactor=sum(xfactor))
 length_model_type_mode = add_mode_share(length_model_type_mode, length_model_type)
 
@@ -129,15 +104,15 @@ length_model_type_mode = add_mode_share(length_model_type_mode, length_model_typ
 ### Internal and external trips
 ###
 
-data$internal = (data$izone==data$jzone)
+tours$internal = (tours$izone==tours$jzone)
 
-internal = fold(data, .(survey, internal),
+internal = fold(tours, .(survey, internal),
                 xfactor=sum(xfactor))
-internal_district = fold(data, .(survey, internal, idistrict, jdistrict),
+internal_district = fold(tours, .(survey, internal, idistrict, jdistrict),
                      xfactor=sum(xfactor))
-internal_model_type = fold(data, .(survey, internal, model_type),
+internal_model_type = fold(tours, .(survey, internal, model_type),
                            xfactor=sum(xfactor))
 
-internal_mode = fold(data, .(survey, internal, mode_name),
+internal_mode = fold(tours, .(survey, internal, mode_name),
                      xfactor=sum(xfactor))
 internal_mode = add_mode_share(internal_mode, internal)
