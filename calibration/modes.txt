@@ -1,0 +1,6 @@
+mode	mode_name
+1	walk
+2	bike
+3	transit
+4	car
+5	car

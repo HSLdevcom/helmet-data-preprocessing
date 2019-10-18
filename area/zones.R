@@ -29,6 +29,16 @@ municipalities = pick(municipalities,
                       capital_region, surrounding_municipality, peripheral_municipality)
 zones = leftjoin(zones, municipalities, by="municipality")
 
+zones$district = zones$municipality_name
+m = which(zones$municipality_name %in% c("Espoo","Kauniainen","Vantaa"))
+zones$district[m] = "Espoo, Kauniainen ja Vantaa"
+m = which(zones$municipality_name %in% "Helsinki" & zones$cbd)
+zones$district[m] = "Helsingin kantakaupunki"
+m = which(zones$municipality_name %in% "Helsinki" & !zones$cbd)
+zones$district[m] = "Helsingin esikaupunkialue"
+zones$district[zones$surrounding_municipality] = "kehyskunnat"
+zones$district[zones$peripheral_municipality] = "ympäryskunnat"
+
 built_land_area = read_xlsx(.ancfile("input/Maankäyttö/rakennettu_maapinta_ala_2018.xlsx"), sheet="Kaikki")
 built_land_area = as.data.frame(built_land_area)
 m = match(zones$zone_orig, built_land_area$SIJ2019)
