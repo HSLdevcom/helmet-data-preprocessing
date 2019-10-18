@@ -22,17 +22,19 @@ observations$model_type[m] = "wo-secondary"
 m = which(observations$ttype %in% 7)
 observations$model_type[m] = "oo-secondary"
 
-trips = pick(observations,
+tours = pick(observations,
              pid,
              mode,
              xfactor,
-             model_type)
+             model_type,
+             closed)
+tours$weight = ifelse(tours$closed, 1, 0.5) * tours$xfactor
 
-# Calculating generation for non-home-based trips
+# Calculating generation
 background = load1(ancfile("primary/background.RData"))
-stat = fold(trips, .(model_type),
+stat = fold(tours, .(model_type),
             n=length(pid),
-            xfactor=sum(xfactor))
-stat$xfactor_per_person = stat$xfactor / sum(background$xfactor)
+            weight=sum(weight))
+stat$weight_per_person = stat$weight / sum(background$xfactor)
 write.csv2(stat, file="generation-secondary.csv", row.names=FALSE)
 print(stat)
