@@ -21,16 +21,11 @@ zones = read.csv2(ancfile("area/zones.csv"))
 ### Trips
 ###
 
-fold(tours, .(survey, idistrict, jdistrict, model_type, mode_name),
-     n=length(pid),
-     xfactor=sum(xfactor))
+tours_district = fold(tours, .(idistrict, jdistrict), xfactor=sum(xfactor))
 
-tours_district = fold(tours, .(survey, idistrict, jdistrict), xfactor=sum(xfactor))
-
-tours_model_type = fold(tours, .(survey, idistrict, jdistrict, model_type),
+tours_model_type = fold(tours, .(idistrict, jdistrict, model_type),
                        xfactor=sum(xfactor))
-
-tours_model_type_mode = fold(tours, .(survey, idistrict, jdistrict, model_type, mode_name),
+tours_model_type_mode = fold(tours, .(idistrict, jdistrict, model_type, mode_name),
                             xfactor=sum(xfactor))
 tours_model_type_mode = add_mode_share(tours_model_type_mode, tours_model_type)
 
