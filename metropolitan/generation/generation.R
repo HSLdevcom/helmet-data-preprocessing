@@ -22,44 +22,23 @@ observations$model_type[m] = "wo"
 m = which(observations$ttype %in% 7)
 observations$model_type[m] = "oo"
 
-# Inverted tours visit destination before origin
-observations$inverted = is_inverted(observations$order)
-
-# All tours generate at least one trip
-temp = observations
-trips = pick(temp,
+tours = pick(observations,
              pid,
              mode,
              xfactor,
              model_type,
+             closed,
              inverted,
              ipeak,
              jpeak)
-trips$direction = ifelse(trips$inverted, "back", "there")
-trips$trip_time = ifelse(trips$direction=="there", trips$ipeak, trips$jpeak)
-trips = unpick(trips, ipeak, jpeak)
+tours$weight = ifelse(tours$closed, 1, 0.5) * tours$xfactor
 
-# Closed tours with several trips generate one trip more
-temp = subset(observations, closed %in% 1 & no_of_trips>1)
-trips2 = pick(temp,
-              pid,
-              mode,
-              xfactor,
-              model_type,
-              inverted,
-              ipeak,
-              jpeak)
-trips2$direction = ifelse(trips2$inverted, "there", "back")
-trips2$trip_time = ifelse(trips2$direction=="there", trips2$ipeak, trips2$jpeak)
-
-trips = rbind_list(trips, trips2)
-trips = unpick(trips, ipeak, jpeak)
-
-# Calculating generation for non-home-based trips
+# Calculating generation
 background = load1(ancfile("primary/background.RData"))
-stat = fold(trips, .(model_type),
+stat = fold(tours, .(model_type),
             n=length(pid),
-            xfactor=sum(xfactor))
-stat$xfactor_per_person = stat$xfactor / sum(background$xfactor)
+            weight=sum(weight))
+stat$weight_per_person = stat$weight / sum(background$xfactor)
 write.csv2(stat, file="generation.csv", row.names=FALSE)
 print(stat)
+
