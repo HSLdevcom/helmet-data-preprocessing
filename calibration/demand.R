@@ -40,22 +40,22 @@ for (i in seq_along(models)) {
     for (j in seq_along(modes)) {
         output = subset(tours_model_type_mode,
                         model_type %in% models[i] & mode_name %in% modes[j])
-        print(as_square_matrix(output,
+        stitle = sprintf("demand-%s-%s", models[i], modes[j])
+        square = as_square_matrix(output,
                                from="idistrict",
                                to="jdistrict",
                                value="xfactor",
                                snames=unique(zones$district),
-                               stitle=sprintf("demand-%s-%s",
-                                              models[i],
-                                              modes[j])))
-        print(as_square_matrix(output,
+                               stitle=stitle)
+        write.delim(square, fname=sprintf("%s.txt", stitle))
+        stitle = sprintf("modesh-%s-%s", models[i], modes[j])
+        square = as_square_matrix(output,
                                from="idistrict",
                                to="jdistrict",
                                value="modesh",
                                snames=unique(zones$district),
-                               stitle=sprintf("modesh-%s-%s",
-                                              models[i],
-                                              modes[j])))
+                               stitle=stitle)
+        write.delim(square, fname=sprintf("%s.txt", stitle))
     }
 }
 
