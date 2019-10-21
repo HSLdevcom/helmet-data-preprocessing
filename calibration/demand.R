@@ -2,15 +2,6 @@
 library(strafica)
 source(ancfile("util.R"))
 
-add_mode_share = function(df_with_modes, df_without_modes) {
-    df_without_modes = rename(df_without_modes, weight=weight_all)
-    df_with_modes = leftjoin(df_with_modes, df_without_modes)
-    df_with_modes$modesh = df_with_modes$weight / df_with_modes$weight_all
-    df_with_modes = unpick(df_with_modes, weight_all)
-    return(df_with_modes)
-}
-
-
 tours = load1("tours.RData")
 model_types = read.delims("models.txt")
 modes = read.delims("modes.txt")

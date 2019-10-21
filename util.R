@@ -159,3 +159,21 @@ as_square_matrix = function(df, from, to, value, snames, stitle="square") {
     colnames(df) = c(stitle, colnames(df)[-1])
     return(df)
 }
+
+
+#' Calculate mode share
+#'
+#' Uses the weight column instead of xfactor column.
+#'
+#' @param df_with_modes A data frame with a mode column and a weight column
+#'   which indicated the demand in different modes.
+#' @param df_without_modes a data frame without a mode column but with a weight
+#'   column which indicates the total demand.
+#' @return A data frame with percentages for modes.
+add_mode_share = function(df_with_modes, df_without_modes) {
+    df_without_modes = rename(df_without_modes, weight=weight_all)
+    df_with_modes = leftjoin(df_with_modes, df_without_modes)
+    df_with_modes$modesh = df_with_modes$weight / df_with_modes$weight_all
+    df_with_modes = unpick(df_with_modes, weight_all)
+    return(df_with_modes)
+}
