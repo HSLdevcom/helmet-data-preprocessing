@@ -19,6 +19,8 @@ columns*.txt
 output/
 input/
 *.log
+calibration/demand*.txt
+calibration/modesh*.txt
 
 # IDE-specific folders
 .idea
