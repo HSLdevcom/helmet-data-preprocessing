@@ -3,10 +3,10 @@ library(strafica)
 source(ancfile("util.R"))
 
 add_mode_share = function(df_with_modes, df_without_modes) {
-    df_without_modes = rename(df_without_modes, xfactor=xfactor_all)
+    df_without_modes = rename(df_without_modes, weight=weight_all)
     df_with_modes = leftjoin(df_with_modes, df_without_modes)
-    df_with_modes$modesh = df_with_modes$xfactor / df_with_modes$xfactor_all
-    df_with_modes = unpick(df_with_modes, xfactor_all)
+    df_with_modes$modesh = df_with_modes$weight / df_with_modes$weight_all
+    df_with_modes = unpick(df_with_modes, weight_all)
     return(df_with_modes)
 }
 
@@ -21,12 +21,12 @@ zones = read.csv2(ancfile("area/zones.csv"))
 ### Trips
 ###
 
-tours_district = fold(tours, .(idistrict, jdistrict), xfactor=sum(xfactor))
+tours_district = fold(tours, .(idistrict, jdistrict), weight=sum(weight))
 
 tours_model_type = fold(tours, .(idistrict, jdistrict, model_type),
-                       xfactor=sum(xfactor))
+                       weight=sum(weight))
 tours_model_type_mode = fold(tours, .(idistrict, jdistrict, model_type, mode_name),
-                            xfactor=sum(xfactor))
+                            weight=sum(weight))
 tours_model_type_mode = add_mode_share(tours_model_type_mode, tours_model_type)
 
 models = unique(model_types$model_type)
@@ -39,7 +39,7 @@ for (i in seq_along(models)) {
         square = as_square_matrix(output,
                                from="idistrict",
                                to="jdistrict",
-                               value="xfactor",
+                               value="weight",
                                snames=unique(zones$district),
                                stitle=stitle)
         write.delim(square, fname=sprintf("%s.txt", stitle))
@@ -55,5 +55,5 @@ for (i in seq_along(models)) {
 }
 
 tours_mode = fold(tours, .(survey, idistrict, jdistrict, mode_name),
-                 xfactor=sum(xfactor))
+                 weight=sum(weight))
 tours_mode = add_mode_share(tours_mode, tours_district)

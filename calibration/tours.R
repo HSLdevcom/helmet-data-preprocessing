@@ -33,4 +33,5 @@ modes = read.delims("modes.txt")
 tours = leftjoin(tours, modes)
 tours = unpick(tours, mode)
 
+tours$weight = ifelse(tours$closed, 1, 0.5) * tours$xfactor
 save(tours, file="tours.RData")
