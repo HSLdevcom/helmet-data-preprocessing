@@ -15,8 +15,8 @@ zones$municipality = as.integer(zones$municipality)
 zones = arrange(zones, zone_orig)
 zones$zone = rows.along(zones)
 
-zones$cbd = ifelse(zones$zone_orig %in% c(101:999, 1531, 1532), TRUE, FALSE)
-zones$suburb = ifelse(zones$zone_orig %in% c(1000:1999, 244, 367, 368, 1570), TRUE, FALSE)
+zones$cbd = ifelse(zones$zone_orig %in% c(101:999), TRUE, FALSE)
+zones$suburb = ifelse(zones$municipality %in% 91 & !(zones$cbd), TRUE, FALSE)
 
 message("Reading data into zones...")
 
