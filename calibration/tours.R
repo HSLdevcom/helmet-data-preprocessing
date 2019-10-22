@@ -17,10 +17,8 @@ tours = pick(tours,
             order)
 tours$inverted = is_inverted(tours$order)
 
-tours$old_izone = tours$izone
-tours$old_jzone = tours$jzone
-tours$izone = ifelse(tours$inverted, tours$old_jzone, tours$old_izone)
-tours$jzone = ifelse(tours$inverted, tours$old_izone, tours$old_jzone)
+tours$inverted_izone = ifelse(tours$inverted, tours$jzone, tours$izone)
+tours$inverted_jzone = ifelse(tours$inverted, tours$izone, tours$jzone)
 
 model_types = read.delims("models.txt")
 tours = leftjoin(tours, model_types)
