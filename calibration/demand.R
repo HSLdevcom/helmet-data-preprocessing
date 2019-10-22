@@ -14,6 +14,7 @@ zones = read.csv2(ancfile("area/zones.csv"))
 
 models = unique(model_types$model_type)
 modes = unique(modes$mode_name)
+districts = unique(zones$district)
 
 tours_district = fold(tours, .(idistrict, jdistrict), weight=sum(weight))
 stitle = sprintf("demand")
@@ -21,8 +22,9 @@ square = as_square_matrix(tours_district,
                           from="idistrict",
                           to="jdistrict",
                           value="weight",
-                          snames=unique(zones$district),
-                          stitle=stitle)
+                          from_names=districts,
+                          to_names=districts,
+                          matrix_title=stitle)
 write.delim(square, fname=sprintf("output/%s.txt", stitle))
 
 tours_model_type = fold(tours, .(idistrict, jdistrict, model_type),
@@ -36,8 +38,9 @@ for (i in seq_along(models)) {
                               from="idistrict",
                               to="jdistrict",
                               value="weight",
-                              snames=unique(zones$district),
-                              stitle=stitle)
+                              from_names=districts,
+                              to_names=districts,
+                              matrix_title=stitle)
     write.delim(square, fname=sprintf("output/%s.txt", stitle))
 }
 
@@ -53,16 +56,18 @@ for (j in seq_along(modes)) {
                               from="idistrict",
                               to="jdistrict",
                               value="weight",
-                              snames=unique(zones$district),
-                              stitle=stitle)
+                              from_names=districts,
+                              to_names=districts,
+                              matrix_title=stitle)
     write.delim(square, fname=sprintf("output/%s.txt", stitle))
     stitle = sprintf("modesh-all-%s", modes[j])
     square = as_square_matrix(output,
                               from="idistrict",
                               to="jdistrict",
                               value="modesh",
-                              snames=unique(zones$district),
-                              stitle=stitle)
+                              from_names=districts,
+                              to_names=districts,
+                              matrix_title=stitle)
     write.delim(square, fname=sprintf("output/%s.txt", stitle))
 }
 
@@ -79,16 +84,18 @@ for (i in seq_along(models)) {
                                from="idistrict",
                                to="jdistrict",
                                value="weight",
-                               snames=unique(zones$district),
-                               stitle=stitle)
+                               from_names=districts,
+                               to_names=districts,
+                               matrix_title=stitle)
         write.delim(square, fname=sprintf("output/%s.txt", stitle))
         stitle = sprintf("modesh-%s-%s", models[i], modes[j])
         square = as_square_matrix(output,
                                from="idistrict",
                                to="jdistrict",
                                value="modesh",
-                               snames=unique(zones$district),
-                               stitle=stitle)
+                               from_names=districts,
+                               to_names=districts,
+                               matrix_title=stitle)
         write.delim(square, fname=sprintf("output/%s.txt", stitle))
     }
 }

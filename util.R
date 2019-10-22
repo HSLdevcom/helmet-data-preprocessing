@@ -143,20 +143,20 @@ get_impedance = function(x, from=seq(nrow(x)), to=seq(ncol(x))) {
 #' @param snames Names of the classes in from and to columns in correct order.
 #' @param stitle Title of the square matrix.
 #' @return A square data frame.
-as_square_matrix = function(df, from, to, value, snames, stitle="square") {
+as_square_matrix = function(df, from, to, value, from_names, to_names, matrix_title="square") {
     cols = c(from, to, value)
     df = df[, cols]
-    df0 = expand.grid(x=snames, y=snames)
+    df0 = expand.grid(x=from_names, y=to_names)
     colnames(df0) = c(from, to)
     df = leftjoin(df0, df, missing=0)
     df = tidyr::spread(df, key=to, value=value, fill=0)
     # Sort rows
-    df = df[match(snames, df[, 1]), ]
+    df = df[match(from_names, df[, 1]), ]
     # Sort columns
-    sorder = match(snames, colnames(df)[-1]) + 1
+    sorder = match(to_names, colnames(df)[-1]) + 1
     df = df[, c(1, sorder)]
     # Rename first column
-    colnames(df) = c(stitle, colnames(df)[-1])
+    colnames(df) = c(matrix_title, colnames(df)[-1])
     return(df)
 }
 
