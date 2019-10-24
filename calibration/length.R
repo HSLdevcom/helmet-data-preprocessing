@@ -11,18 +11,6 @@ modes = read.delims("modes.txt")
 ### Length
 ###
 
-mat = read.csv(ancfile("input/Estimoinnin_lähtötiedot/Vastukset2018/mf377.csv"), stringsAsFactors=FALSE)
-colnames(mat)[1] = "izone"
-mat = tidyr::gather(mat, key="jzone", value="length", -izone)
-mat$jzone = gsub("X", "", mat$jzone)
-mat$izone = as.integer(mat$izone)
-mat$jzone = as.integer(mat$jzone)
-mat$izone = zones$zone[match(mat$izone, zones$zone_orig)]
-mat$jzone = zones$zone[match(mat$jzone, zones$zone_orig)]
-mat$length = as.numeric(mat$length)
-
-tours = leftjoin(tours, mat)
-
 length_class_names = c("0-1", "1-3", "3-5", "5-10", "10-20", "20--")
 tours$length_class = apply.breaks(tours$length,
                                   class=length_class_names,
