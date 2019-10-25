@@ -51,4 +51,5 @@ tours = leftjoin(tours, modes)
 tours = unpick(tours, mode)
 
 tours$weight = ifelse(tours$closed, 1, 0.5) * tours$xfactor
+check.na(tours)
 save(tours, file="tours.RData")
