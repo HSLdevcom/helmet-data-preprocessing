@@ -132,3 +132,48 @@ get_matrix_value = function(x, from=seq(nrow(x)), to=seq(ncol(x))) {
 get_impedance = function(x, from=seq(nrow(x)), to=seq(ncol(x))) {
     return(get_matrix_value(x, from=from, to=to))
 }
+
+
+#' Spread data frame as square matrix
+#' 
+#' @param df Data frame.
+#' @param from Name of the column which specifies unique rows.
+#' @param to Name of the column which specifies unique columns.
+#' @param value Name of the columns from which values are read from.
+#' @param snames Names of the classes in from and to columns in correct order.
+#' @param stitle Title of the square matrix.
+#' @return A square data frame.
+as_square_matrix = function(df, from, to, value, from_names, to_names, matrix_title="square") {
+    cols = c(from, to, value)
+    df = df[, cols]
+    df0 = expand.grid(x=from_names, y=to_names)
+    colnames(df0) = c(from, to)
+    df = leftjoin(df0, df, missing=0)
+    df = tidyr::spread(df, key=to, value=value, fill=0)
+    # Sort rows
+    df = df[match(from_names, df[, 1]), ]
+    # Sort columns
+    sorder = match(to_names, colnames(df)[-1]) + 1
+    df = df[, c(1, sorder)]
+    # Rename first column
+    colnames(df) = c(matrix_title, colnames(df)[-1])
+    return(df)
+}
+
+
+#' Calculate mode share
+#'
+#' Uses the weight column instead of xfactor column.
+#'
+#' @param df_with_modes A data frame with a mode column and a weight column
+#'   which indicated the demand in different modes.
+#' @param df_without_modes a data frame without a mode column but with a weight
+#'   column which indicates the total demand.
+#' @return A data frame with percentages for modes.
+add_mode_share = function(df_with_modes, df_without_modes) {
+    df_without_modes = rename(df_without_modes, weight=weight_all)
+    df_with_modes = leftjoin(df_with_modes, df_without_modes)
+    df_with_modes$modesh = df_with_modes$weight / df_with_modes$weight_all
+    df_with_modes = unpick(df_with_modes, weight_all)
+    return(df_with_modes)
+}

@@ -15,8 +15,8 @@ zones$municipality = as.integer(zones$municipality)
 zones = arrange(zones, zone_orig)
 zones$zone = rows.along(zones)
 
-zones$cbd = ifelse(zones$zone_orig %in% c(101:999, 1531, 1532), TRUE, FALSE)
-zones$suburb = ifelse(zones$zone_orig %in% c(1000:1999, 244, 367, 368, 1570), TRUE, FALSE)
+zones$cbd = ifelse(zones$zone_orig %in% c(101:999), TRUE, FALSE)
+zones$suburb = ifelse(zones$municipality %in% 91 & !(zones$cbd), TRUE, FALSE)
 
 message("Reading data into zones...")
 
@@ -28,6 +28,16 @@ municipalities = pick(municipalities,
                       municipality, municipality_name,
                       capital_region, surrounding_municipality, peripheral_municipality)
 zones = leftjoin(zones, municipalities, by="municipality")
+
+zones$district = zones$municipality_name
+m = which(zones$municipality_name %in% c("Espoo","Kauniainen","Vantaa"))
+zones$district[m] = "espoo_vant_kau"
+m = which(zones$municipality_name %in% "Helsinki" & zones$cbd)
+zones$district[m] = "helsinki_cbd"
+m = which(zones$municipality_name %in% "Helsinki" & !zones$cbd)
+zones$district[m] = "helsinki_other"
+zones$district[zones$surrounding_municipality] = "surrounding"
+zones$district[zones$peripheral_municipality] = "peripheral"
 
 built_land_area = read_xlsx(.ancfile("input/Maankäyttö/rakennettu_maapinta_ala_2018.xlsx"), sheet="Kaikki")
 built_land_area = as.data.frame(built_land_area)
