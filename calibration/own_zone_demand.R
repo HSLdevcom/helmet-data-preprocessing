@@ -48,3 +48,5 @@ for (i in seq_along(models)) {
                               matrix_title=stitle)
     write.delim(square, fname=sprintf("output/%s.txt", stitle))
 }
+
+save(internal_district_model_type_mode, file="own_zone_demand.RData")

@@ -44,7 +44,7 @@ for (i in seq_along(models)) {
     write.delim(square, fname=sprintf("output/%s.txt", stitle))
 }
 
-tours_mode = fold(tours, .(survey, idistrict, jdistrict, mode_name),
+tours_mode = fold(tours, .(idistrict, jdistrict, mode_name),
                   weight=sum(weight))
 tours_mode = add_mode_share(tours_mode, tours_district)
 
@@ -100,3 +100,4 @@ for (i in seq_along(models)) {
     }
 }
 
+save(tours_model_type_mode, file="demand.RData")

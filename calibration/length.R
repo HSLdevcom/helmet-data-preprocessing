@@ -44,3 +44,5 @@ for (i in seq_along(models)) {
                               matrix_title=stitle)
     write.delim(square, fname=sprintf("output/%s.txt", stitle))
 }
+
+save(length_model_type_mode, file="length.RData")
