@@ -100,4 +100,15 @@ for (i in seq_along(models)) {
     }
 }
 
-save(tours_model_type_mode, file="demand.RData")
+all = expand.grid(idistrict=unique(tours_model_type_mode$idistrict),
+                  jdistrict=unique(tours_model_type_mode$jdistrict),
+                  model_type=models,
+                  mode_name=modes,
+                  stringsAsFactors=FALSE)
+all = arrange(all, idistrict, jdistrict, model_type, mode_name)
+all = subset(all, !(model_type %in% c("hwp","hop","oop") & mode_name %in% c("walk","bike")))
+all = fulljoin(all, tours_model_type_mode)
+all$weight[is.na(all$weight)] = 0
+all$modesh[is.na(all$modesh)] = 0
+check.na(all)
+save(all, file="demand.RData")
