@@ -31,11 +31,11 @@ zones = leftjoin(zones, municipalities, by="municipality")
 
 zones$district = zones$municipality_name
 m = which(zones$municipality_name %in% c("Espoo","Kauniainen","Vantaa"))
-zones$district[m] = "capital_region_other"
+zones$district[m] = "espoo_vant_kau"
 m = which(zones$municipality_name %in% "Helsinki" & zones$cbd)
-zones$district[m] = "cbd"
+zones$district[m] = "helsinki_cbd"
 m = which(zones$municipality_name %in% "Helsinki" & !zones$cbd)
-zones$district[m] = "suburb"
+zones$district[m] = "helsinki_other"
 zones$district[zones$surrounding_municipality] = "surrounding"
 zones$district[zones$peripheral_municipality] = "peripheral"
 
