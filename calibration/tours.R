@@ -34,14 +34,27 @@ mat = fulljoin(mat1, mat2, by=c("izone","jzone"))
 mat$izone = zones$zone[match(mat$izone, zones$zone_orig)]
 mat$jzone = zones$zone[match(mat$jzone, zones$zone_orig)]
 mat = mat[, c("izone","jzone",grep("^length_car", colnames(mat), value=TRUE))]
-tours = mcddply(tours, .(year, mtype, inverted), function(df) {
-    direction = ifelse(df$inverted[1], "back", "there")
-    col_name = sprintf("length_car_%d_%s_%s", df$year[1], df$mtype[1], direction)
-    mat = mat[, c("izone","jzone",col_name)]
-    colnames(mat) = c("izone","jzone","length")
-    df = leftjoin(df, mat)
-    return(df)
-})
+tours$length = NA
+all = expand.grid(year=unique(tours$year),
+                  mtype=unique(tours$mtype),
+                  inverted=c(TRUE, FALSE))
+for (i in rows.along(all)) {
+    m = which(tours$year %in% all$year[i] &
+                  tours$mtype %in% all$mtype[i] &
+                  tours$inverted %in% all$inverted[i])
+    if (length(m) == 0) next
+    direction = ifelse(all$inverted[i], "back", "there")
+    col_name = sprintf("length_car_%d_%s_%s",
+                       all$year[i],
+                       all$mtype[i],
+                       direction)
+    print(col_name)
+    mat0 = mat[, c("izone", "jzone", col_name)]
+    tours = leftjoin(tours, mat0)
+    tours$length[m] = tours[m, col_name]
+
+}
+tours = tours[, -grep("^length_car", colnames(tours))]
 
 tours$idistrict = zones$district[match(tours$izone, zones$zone)]
 tours$jdistrict = zones$district[match(tours$jzone, zones$zone)]
