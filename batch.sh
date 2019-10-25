@@ -18,6 +18,8 @@ pipenv run python ./tours/main.py input-config-hlt.json
 (cd peripheral/constructed/ && sh batch.sh)
 (cd peripheral/generation/ && sh batch.sh)
 
+(cd calibration/ && sh batch.sh)
+
 cp -ruv tours/tours-*.csv $OUTPUT/
 
 cp -ruv metropolitan/primary/alternatives/columns-wss.txt $OUTPUT/columns-metropolitan-wss.txt
@@ -54,3 +56,6 @@ cat peripheral/constructed/alternatives/alternatives--1_100.txt | fold -w 180 -s
 cat peripheral/primary/alternatives/alternatives--*.txt | fold -w 180 -s > $OUTPUT/alternatives-peripheral.txt
 cat peripheral/constructed/alternatives/alternatives--*.txt | fold -w 180 -s > $OUTPUT/alternatives-peripheral-constructed.txt
 cp -ruv peripheral/generation/generation.csv $OUTPUT/generation-peripheral.csv
+
+mkdir $OUTPUT/calibration
+cp -ruv calibration/output/*.txt $OUTPUT/calibration/
