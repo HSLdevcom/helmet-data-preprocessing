@@ -10,13 +10,10 @@ git rev-parse HEAD > $OUTPUT/hash
 (cd survey/ && sh batch.sh)
 pipenv run python ./tours/main.py input-config-heha.json
 pipenv run python ./tours/main.py input-config-hlt.json
-(cd metropolitan/primary/ && sh batch.sh)
-(cd metropolitan/constructed/ && sh batch.sh)
-(cd metropolitan/secondary/ && sh batch.sh)
-(cd metropolitan/generation/ && sh batch.sh)
-(cd peripheral/primary/ && sh batch.sh)
-(cd peripheral/constructed/ && sh batch.sh)
-(cd peripheral/generation/ && sh batch.sh)
+(cd metropolitan/ && sh prepare.sh)
+(cd peripheral/ && sh prepare.sh)
+(cd metropolitan/ && sh process.sh)
+(cd peripheral/ && sh process.sh)
 
 (cd calibration/ && sh batch.sh)
 
