@@ -1,6 +1,6 @@
 #!/bin/bash
 # -*- coding: utf-8-unix -*-
-(sh primary/ && sh process.sh)
-(sh secondary/ && sh process.sh)
-(sh constructed/ && sh process.sh)
-(sh generation/ && sh process.sh)
+(cd primary/ && sh process.sh)
+(cd secondary/ && sh process.sh)
+(cd constructed/ && sh process.sh)
+(cd generation/ && sh process.sh)
