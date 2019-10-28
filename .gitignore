@@ -5,22 +5,22 @@
 .pytest_cache
 
 # Sensitive information
-survey/*.csv
-survey/*.RData
+/survey/*.csv
+/survey/*.RData
 
 # Proprietary libraries
-strafica/
+/strafica/
 
 # Output files
 *.RData
 *.csv
 alternatives*.txt
 columns*.txt
-output/
-input/
+/output/
+/input/
 *.log
-calibration/demand*.txt
-calibration/modesh*.txt
+/calibration/output/*.txt
+/calibration/output/*.xlsx
 
 # IDE-specific folders
 .idea
