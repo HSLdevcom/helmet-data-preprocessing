@@ -5,4 +5,3 @@ rm -fv *.RData *.csv
 
 Rscript --quiet --no-save --encoding=UTF-8 tours.R
 Rscript --quiet --no-save --encoding=UTF-8 observations.R
-Rscript --quiet --no-save --encoding=UTF-8 alternatives.R
