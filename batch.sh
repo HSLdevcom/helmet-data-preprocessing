@@ -56,3 +56,4 @@ cp -ruv peripheral/generation/generation.csv $OUTPUT/generation-peripheral.csv
 
 mkdir $OUTPUT/calibration
 cp -ruv calibration/output/*.txt $OUTPUT/calibration/
+cp -ruv calibration/output/*.xlsx $OUTPUT/calibration/
