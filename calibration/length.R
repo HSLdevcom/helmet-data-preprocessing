@@ -18,8 +18,6 @@ tours$length_class = apply.breaks(tours$length,
                                   upper=c(1, 3, 5, 10, 20, Inf))
 stopifnot(all(!is.na(tours$length_class)))
 
-# Onko kaikki pituuden HA-pituuksia?
-
 length_all = fold(tours, .(length_class, model_type),
                   weight=sum(weight))
 
@@ -45,11 +43,11 @@ for (i in seq_along(models)) {
     write.delim(square, fname=sprintf("output/%s.txt", stitle))
 }
 
-all = expand.grid(length=unique(length_model_type_mode$length_class),
+all = expand.grid(length_class=length_class_names,
                   model_type=models,
                   mode_name=mode_names,
                   stringsAsFactors=FALSE)
-all = arrange(all, model_type, mode_name)
+all = arrange(all, length_class, model_type, mode_name)
 all = subset(all, !(model_type %in% c("hwp","hop","oop") & mode_name %in% c("walk","bike")))
 all = fulljoin(all, length_model_type_mode)
 all$weight[is.na(all$weight)] = 0
