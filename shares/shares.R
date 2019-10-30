@@ -15,19 +15,21 @@ shares = ddply(trips, .(model_type, mode_name, from_origin), function(df) {
                  from_origin=df$from_origin[1],
                  demand_share=0)
     
+    df = subset(df, !is.na(itime))
+    
     temp = leftjoin(df, peaks[["morning"]])
     m = which(with(temp, itime >= lower & itime < upper))
-    share = sum(temp$xfactor[m] * temp$percentage[m]) / sum(trips$xfactor)
+    share = sum(temp$xfactor[m] * temp$percentage[m]) / sum(df$xfactor)
     stat$demand_share[1] = share
     
     temp = leftjoin(df, peaks[["other"]])
     m = which(with(temp, itime >= lower & itime < upper))
-    share = sum(temp$xfactor[m] * temp$percentage[m]) / sum(trips$xfactor)
+    share = sum(temp$xfactor[m] * temp$percentage[m]) / sum(df$xfactor)
     stat$demand_share[2] = share
     
     temp = leftjoin(df, peaks[["afternoon"]])
     m = which(with(temp, itime >= lower & itime < upper))
-    share = sum(temp$xfactor[m] * temp$percentage[m]) / sum(trips$xfactor)
+    share = sum(temp$xfactor[m] * temp$percentage[m]) / sum(df$xfactor)
     stat$demand_share[3] = share
     
     return(stat)
