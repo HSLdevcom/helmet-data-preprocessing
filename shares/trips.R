@@ -21,20 +21,20 @@ tours = pick(tours,
              closed,
              order,
              no_of_trips)
-tours$inverted = is_inverted(tours$order)
 tours = leftjoin(tours, model_types)
 tours = leftjoin(tours, modes)
 tours = unpick(tours, mode)
 
 trips = tours
-trips$direction = ifelse(trips$inverted, "back", "there")
-trips$itime_trip = ifelse(trips$inverted, trips$jtime, trips$itime)
+trips$from_origin = !(is_inverted(tours$order))
+trips$itime = trips$itime
 
 trips2 = subset(tours, closed %in% 1 & no_of_trips>1)
-trips2$direction = ifelse(trips2$inverted, "there", "back")
-trips2$itime_trip = ifelse(trips2$inverted, trips2$itime, trips2$jtime)
+trips2$from_origin = (is_inverted(trips2$order))
+trips2$itime = trips2$jtime
 
 trips = rbind_list(trips, trips2)
+trips = unpick(trips, jtime)
 
 # Output
 check.na(trips)
