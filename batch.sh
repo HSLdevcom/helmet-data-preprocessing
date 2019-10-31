@@ -55,6 +55,9 @@ cat peripheral/primary/alternatives/alternatives--*.txt | fold -w 180 -s > $OUTP
 cat peripheral/constructed/alternatives/alternatives--*.txt | fold -w 180 -s > $OUTPUT/alternatives-peripheral-constructed.txt
 cp -ruv peripheral/generation/generation.csv $OUTPUT/generation-peripheral.csv
 
+cp -ruv metropolitan/primary/weights.csv $OUTPUT/weights-metropolitan.csv
+cp -ruv peripheral/primary/weights.csv $OUTPUT/weights-peripheral.csv
+
 mkdir $OUTPUT/calibration
 cp -ruv calibration/output/*.txt $OUTPUT/calibration/
 cp -ruv calibration/output/*.xlsx $OUTPUT/calibration/
