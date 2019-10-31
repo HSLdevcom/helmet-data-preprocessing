@@ -12,30 +12,30 @@ shares = ddply(trips, .(model_type, mode_name), function(df) {
     stat = dfsas(model_type=df$model_type[1],
                  mode_name=df$mode_name[1],
                  scenario=c("aht","pt","iht"),
-                 share_from_origin=0,
-                 share_to_origin=0)
+                 share_forward=0,
+                 share_backward=0)
     
     df = subset(df, !is.na(itime))
     
     temp = leftjoin(df, peaks[["morning"]])
     m = which(with(temp, itime >= lower & itime < upper))
-    stat$share_from_origin[1] = sum(temp$xfactor[m] * temp$percentage[m] * temp$from_origin[m]) / sum(df$xfactor)
-    stat$share_to_origin[1] = sum(temp$xfactor[m] * temp$percentage[m] * !temp$from_origin[m]) / sum(df$xfactor)
+    stat$share_forward[1] = sum(temp$xfactor[m] * temp$percentage[m] * temp$forward[m]) / sum(df$xfactor)
+    stat$share_backward[1] = sum(temp$xfactor[m] * temp$percentage[m] * !temp$forward[m]) / sum(df$xfactor)
     
     temp = leftjoin(df, peaks[["other"]])
     m = which(with(temp, itime >= lower & itime < upper))
-    stat$share_from_origin[2] = sum(temp$xfactor[m] * temp$percentage[m] * temp$from_origin[m]) / sum(df$xfactor)
-    stat$share_to_origin[2] = sum(temp$xfactor[m] * temp$percentage[m] * !temp$from_origin[m]) / sum(df$xfactor)
+    stat$share_forward[2] = sum(temp$xfactor[m] * temp$percentage[m] * temp$forward[m]) / sum(df$xfactor)
+    stat$share_backward[2] = sum(temp$xfactor[m] * temp$percentage[m] * !temp$forward[m]) / sum(df$xfactor)
     
     temp = leftjoin(df, peaks[["afternoon"]])
     m = which(with(temp, itime >= lower & itime < upper))
-    stat$share_from_origin[3] = sum(temp$xfactor[m] * temp$percentage[m] * temp$from_origin[m]) / sum(df$xfactor)
-    stat$share_to_origin[3] = sum(temp$xfactor[m] * temp$percentage[m] * !temp$from_origin[m]) / sum(df$xfactor)
+    stat$share_forward[3] = sum(temp$xfactor[m] * temp$percentage[m] * temp$forward[m]) / sum(df$xfactor)
+    stat$share_backward[3] = sum(temp$xfactor[m] * temp$percentage[m] * !temp$forward[m]) / sum(df$xfactor)
     
     return(stat)
 })
 
-model_types = unique(read.delims("models.txt")$model_type)
+model_types = c(unique(read.delims("models.txt")$model_type), "hoo_leg2", "hoo_leg3")
 mode_names = rev(unique(read.delims("modes.txt")$mode_name))
 
 all = expand.grid(model_type=model_types,

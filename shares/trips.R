@@ -18,23 +18,43 @@ tours = pick(tours,
              xfactor,
              itime,
              jtime,
+             ktime,
              closed,
              order,
              no_of_trips)
 tours = leftjoin(tours, model_types)
 tours = leftjoin(tours, modes)
-tours = unpick(tours, mode)
+tours = unpick(tours, ttype, mode)
 
-trips = tours
-trips$from_origin = !(is_inverted(tours$order))
-trips$itime = trips$itime
+positive = c("A", "AB", "ABC", "BCA", "CAB")
 
-trips2 = subset(tours, closed %in% 1 & no_of_trips>1)
-trips2$from_origin = (is_inverted(trips2$order))
-trips2$itime = trips2$jtime
+leg1 = tours
+leg1$forward = ifelse(leg1$order %in% positive, TRUE, FALSE)
+leg1$itime = ifelse(leg1$order %in% positive,
+                    leg1$itime,
+                    leg1$jtime)
+leg1 = subset(leg1, !(closed %in% 2 & order %in% c("ACB", "BCA")))
 
-trips = rbind_list(trips, trips2)
-trips = unpick(trips, jtime)
+leg2 = subset(tours, nchar(order) > 1)
+leg2$forward = ifelse(leg2$order %in% positive, TRUE, FALSE)
+leg2$itime = ifelse(leg2$order %in% positive,
+                    leg2$jtime,
+                    ifelse(leg2$order %in% "BA",
+                           leg2$itime,
+                           leg2$ktime))
+leg2$model_type = ifelse(nchar(leg2$order)==2, leg2$model_type, "hoo_leg2")
+leg2 = subset(leg2, !(closed %in% 2 & order %in% c("AB", "BA", "BAC", "CAB")))
+
+leg3 = subset(tours, nchar(order) > 2)
+leg3$forward = ifelse(leg3$order %in% positive, TRUE, FALSE)
+leg3$itime = ifelse(leg3$order %in% positive,
+                    leg3$ktime,
+                    leg3$itime)
+leg3$model_type = "hoo_leg3"
+leg3 = subset(leg3, !(closed %in% 2 & order %in% c("ABC", "CBA")))
+
+trips = rbind_list(leg1, leg2, leg3)
+trips = unpick(trips, jtime, ktime)
 
 # Output
 check.na(trips)
