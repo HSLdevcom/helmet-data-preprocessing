@@ -36,7 +36,7 @@ shares = ddply(trips, .(model_type, mode_name), function(df) {
 })
 
 model_types = unique(read.delims("models.txt")$model_type)
-mode_names = unique(read.delims("modes.txt")$mode_name)
+mode_names = rev(unique(read.delims("modes.txt")$mode_name))
 
 all = expand.grid(model_type=model_types,
                   mode_name=mode_names,
