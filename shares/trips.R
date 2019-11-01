@@ -26,6 +26,12 @@ tours = leftjoin(tours, model_types)
 tours = leftjoin(tours, modes)
 tours = unpick(tours, ttype, mode)
 
+# HLT tours have never a secondary destination
+m = which(tours$survey %in% 2 & tours$order %in% c("ABC", "ACB", "CAB"))
+tours$order[m] = "AB"
+m = which(tours$survey %in% 2 & tours$order %in% c("CBA", "BCA", "BAC"))
+tours$order[m] = "BA"
+
 positive = c("A", "AB", "ABC", "BCA", "CAB")
 
 leg1 = tours
