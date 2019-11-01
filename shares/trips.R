@@ -34,35 +34,75 @@ tours$order[m] = "BA"
 
 positive = c("A", "AB", "ABC", "BCA", "CAB")
 
-leg1 = tours
-leg1$forward = ifelse(leg1$order %in% positive, TRUE, FALSE)
-leg1$itime = ifelse(leg1$order %in% positive,
-                    leg1$itime,
-                    leg1$jtime)
-leg1 = subset(leg1, !(closed %in% 2 & order %in% c("ACB", "BCA")))
 
-leg2 = subset(tours, nchar(order) > 1)
-leg2$forward = ifelse(leg2$order %in% positive, TRUE, FALSE)
-leg2$itime = ifelse(leg2$order %in% positive,
-                    leg2$jtime,
-                    ifelse(leg2$order %in% "BA",
-                           leg2$itime,
-                           leg2$ktime))
-leg2$model_type = ifelse(nchar(leg2$order)==2, leg2$model_type, "hoo_leg2")
-leg2 = subset(leg2, !(closed %in% 2 & order %in% c("AB", "BA", "BAC", "CAB")))
+###
+### One-trip tours
+###
 
-leg3 = subset(tours, nchar(order) > 2)
-leg3$forward = ifelse(leg3$order %in% positive, TRUE, FALSE)
-leg3$itime = ifelse(leg3$order %in% positive,
-                    leg3$ktime,
-                    leg3$itime)
+leg1 = subset(tours, order %in% "A")
+leg1$forward = TRUE
+leg1$itime = leg1$itime
+
+trips1 = leg1
+
+
+###
+### Two-trip tours
+###
+
+leg1 = subset(tours, nchar(order)==2)
+leg1$forward = TRUE
+leg1$itime = leg1$itime
+leg1 = vsubset(leg1, !(closed %in% 2 & order %in% "BA"))
+
+leg2 = subset(tours, nchar(order)==2)
+leg2$forward = FALSE
+leg2$itime = leg2$jtime
+leg2 = vsubset(leg2, !(closed %in% 2 & order %in% "AB"))
+
+trips2 = rbind_list(leg1, leg2)
+
+
+###
+### Three-trip tours
+###
+
+leg1 = subset(tours, nchar(order)==3)
+leg1$forward = (leg1$order %in% positive)
+leg1$itime = ifelse(leg1$forward, leg1$itime, leg1$jtime)
+leg1 = vsubset(leg1, !(closed %in% 2 & order %in% "ACB"))
+leg1 = vsubset(leg1, !(closed %in% 2 & order %in% "BCA"))
+
+leg2 = subset(tours, nchar(order)==3)
+leg2$model_type = "hoo_leg2"
+leg2$forward = (leg2$order %in% positive)
+leg2$itime = ifelse(leg2$forward, leg2$jtime, leg2$ktime)
+leg2 = vsubset(leg2, !(closed %in% 2 & order %in% "BAC"))
+leg2 = vsubset(leg2, !(closed %in% 2 & order %in% "CAB"))
+
+leg3 = subset(tours, nchar(order)==3)
 leg3$model_type = "hoo_leg3"
-leg3 = subset(leg3, !(closed %in% 2 & order %in% c("ABC", "CBA")))
+leg3$forward = (leg3$order %in% positive)
+leg3$itime = ifelse(leg3$forward, leg3$ktime, leg3$itime)
+leg3 = vsubset(leg3, !(closed %in% 2 & order %in% "ABC"))
+leg3 = vsubset(leg3, !(closed %in% 2 & order %in% "CBA"))
 
-trips = rbind_list(leg1, leg2, leg3)
+trips3 = rbind_list(leg1, leg2, leg3)
+
+
+###
+### Trips
+###
+
+trips = rbind_list(trips1, trips2, trips3)
 trips = unpick(trips, jtime, ktime)
 
-# Output
+
+###
+### Output
+###
+
+print(fold(trips, .(model_type), xfactor=sum(xfactor)))
 check.na(trips)
 trips = downclass(trips)
 save(trips, file="trips.RData")
