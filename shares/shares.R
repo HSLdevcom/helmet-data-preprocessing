@@ -1,6 +1,7 @@
 # -*- coding: utf-8-unix -*-
 library(strafica)
 
+tours = load1("tours.RData")
 trips = load1("trips.RData")
 
 peaks = list(morning=load1("peak_morning.RData"),
@@ -12,51 +13,55 @@ shares = ddply(trips, .(model_type, mode_name), function(df) {
     stat = dfsas(model_type=df$model_type[1],
                  mode_name=df$mode_name[1],
                  scenario=c("aht","pt","iht"),
-                 share_forward=0,
-                 share_backward=0,
                  xfactor_forward=0,
                  xfactor_backward=0)
     
+    all = df
     df = subset(df, !is.na(itime))
     
     temp = leftjoin(df, peaks[["morning"]])
     m = which(with(temp, itime >= lower & itime < upper))
-    stat$xfactor_forward[1] = sum(temp$xfactor[m] * temp$percentage[m] * temp$forward[m])
-    stat$xfactor_backward[1] = sum(temp$xfactor[m] * temp$percentage[m] * !temp$forward[m])
-    stat$share_forward[1] = stat$xfactor_forward[1] / sum(df$xfactor)
-    stat$share_backward[1] = stat$xfactor_backward[1] / sum(df$xfactor)
+    xfactor_forward = sum(temp$xfactor[m] * temp$percentage[m] * temp$forward[m])
+    xfactor_backward = sum(temp$xfactor[m] * temp$percentage[m] * !temp$forward[m])
+    share_forward = xfactor_forward / sum(df$xfactor)
+    share_backward = xfactor_backward / sum(df$xfactor)
+    # Expansion factors are raised to account for missing itimes.
+    stat$xfactor_forward[1] = share_forward * sum(all$xfactor)
+    stat$xfactor_backward[1] = share_backward * sum(all$xfactor)
     
     temp = leftjoin(df, peaks[["other"]])
     m = which(with(temp, itime >= lower & itime < upper))
-    stat$xfactor_forward[2] = sum(temp$xfactor[m] * temp$percentage[m] * temp$forward[m])
-    stat$xfactor_backward[2] = sum(temp$xfactor[m] * temp$percentage[m] * !temp$forward[m])
-    stat$share_forward[2] = stat$xfactor_forward[2] / sum(df$xfactor)
-    stat$share_backward[2] = stat$xfactor_backward[2] / sum(df$xfactor)
+    xfactor_forward = sum(temp$xfactor[m] * temp$percentage[m] * temp$forward[m])
+    xfactor_backward = sum(temp$xfactor[m] * temp$percentage[m] * !temp$forward[m])
+    share_forward = xfactor_forward / sum(df$xfactor)
+    share_backward = xfactor_backward / sum(df$xfactor)
+    # Expansion factors are raised to account for missing itimes.
+    stat$xfactor_forward[2] = share_forward * sum(all$xfactor)
+    stat$xfactor_backward[2] = share_backward * sum(all$xfactor)
     
     temp = leftjoin(df, peaks[["afternoon"]])
     m = which(with(temp, itime >= lower & itime < upper))
-    stat$xfactor_forward[3] = sum(temp$xfactor[m] * temp$percentage[m] * temp$forward[m])
-    stat$xfactor_backward[3] = sum(temp$xfactor[m] * temp$percentage[m] * !temp$forward[m])
-    stat$share_forward[3] = stat$xfactor_forward[3] / sum(df$xfactor)
-    stat$share_backward[3] = stat$xfactor_backward[3] / sum(df$xfactor)
+    xfactor_forward = sum(temp$xfactor[m] * temp$percentage[m] * temp$forward[m])
+    xfactor_backward = sum(temp$xfactor[m] * temp$percentage[m] * !temp$forward[m])
+    share_forward = xfactor_forward / sum(df$xfactor)
+    share_backward = xfactor_backward / sum(df$xfactor)
+    # Expansion factors are raised to account for missing itimes.
+    stat$xfactor_forward[3] = share_forward * sum(all$xfactor)
+    stat$xfactor_backward[3] = share_backward * sum(all$xfactor)
     
     return(stat)
 })
 
-# Demand share for hoo_leg2 and hoo_leg3 classes is the amount of trips in
-# hoo_leg2 and hoo_leg3 classes divided by the amount of trips in the whole hoo
-# class (without separate legs).
-trips_hoo = subset(trips, model_type %in% c("hoo_leg2", "hoo_leg3"))
-trips_hoo = subset(trips_hoo, !is.na(itime))
-trips_hoo = fold(trips_hoo, .(mode_name), xfactor=sum(xfactor))
-for (i in rows.along(trips_hoo)) {
-    m = which(shares$model_type %in% c("hoo_leg2", "hoo_leg3") &
-                  shares$mode_name %in% trips_hoo$mode_name[i])
-    shares$share_forward[m] = shares$xfactor_forward[m] / trips_hoo$xfactor[i]
-    shares$share_backward[m] = shares$xfactor_backward[m] / trips_hoo$xfactor[i]
-}
+# The unit of demand shares is "trips per tour".
+shares = leftjoin(shares, tours)
+shares$share_forward = shares$xfactor_forward / shares$weight
+shares$share_backward = shares$xfactor_backward / shares$weight
+shares = unpick(shares, xfactor_forward, xfactor_backward, weight)
 
-shares = unpick(shares, xfactor_forward, xfactor_backward)
+
+###
+### Output
+###
 
 model_types = c(unique(read.delims("models.txt")$model_type), "hoo_leg2", "hoo_leg3")
 mode_names = rev(unique(read.delims("modes.txt")$mode_name))
