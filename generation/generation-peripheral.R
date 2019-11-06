@@ -21,7 +21,10 @@ tours = pick(observations,
              closed)
 tours$weight = ifelse(tours$closed %in% 1, 1, 0.5) * tours$xfactor
 
-# Output
-check.na(tours)
-tours = downclass(tours)
-save(tours, file="tours.RData")
+background = load1(ancfile("primary/background.RData"))
+stat = fold(tours, .(model_type),
+            n=length(pid),
+            weight=sum(weight))
+stat$weight_per_person = stat$weight / sum(background$xfactor)
+write.csv2(stat, file="generation.csv", row.names=FALSE)
+print(stat)
