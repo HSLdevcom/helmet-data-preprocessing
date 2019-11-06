@@ -31,7 +31,7 @@ tours = pick(observations,
              inverted,
              ipeak,
              jpeak)
-tours$weight = ifelse(tours$closed, 1, 0.5) * tours$xfactor
+tours$weight = ifelse(tours$closed %in% 1, 1, 0.5) * tours$xfactor
 
 # Calculating generation
 background = load1(ancfile("primary/background.RData"))
