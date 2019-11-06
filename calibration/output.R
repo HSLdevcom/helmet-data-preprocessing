@@ -4,5 +4,6 @@ library(writexl)
 
 output = list(demand=load1("demand.RData"),
               length=load1("length.RData"),
-              own_zone_demand=load1("own_zone_demand.RData"))
+              own_zone_demand=load1("own_zone_demand.RData"),
+              car_user=load1("car_user.RData"))
 write_xlsx(output, path="output/calibration.xlsx", format_headers=FALSE)
