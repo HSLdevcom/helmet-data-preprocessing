@@ -2,25 +2,25 @@
 library(strafica)
 source(ancfile("util.R"))
 
-observations = load1(ancfile("secondary/observations.RData"))
+observations = load1(ancfile("metropolitan/primary/observations.RData"))
 
 # Tour types
 observations = subset(observations, ttype %in% c(1:7))
 observations$model_type = NA
 m = which(observations$ttype %in% 1)
-observations$model_type[m] = "hw-secondary"
+observations$model_type[m] = "hw"
 m = which(observations$ttype %in% 2)
-observations$model_type[m] = "hc-secondary"
+observations$model_type[m] = "hc"
 m = which(observations$ttype %in% 3)
-observations$model_type[m] = "hu-secondary"
+observations$model_type[m] = "hu"
 m = which(observations$ttype %in% 4)
-observations$model_type[m] = "hs-secondary"
+observations$model_type[m] = "hs"
 m = which(observations$ttype %in% 5)
-observations$model_type[m] = "ho-secondary"
+observations$model_type[m] = "ho"
 m = which(observations$ttype %in% 6)
-observations$model_type[m] = "wo-secondary"
+observations$model_type[m] = "wo"
 m = which(observations$ttype %in% 7)
-observations$model_type[m] = "oo-secondary"
+observations$model_type[m] = "oo"
 
 tours = pick(observations,
              pid,
@@ -28,13 +28,13 @@ tours = pick(observations,
              xfactor,
              model_type,
              closed)
-tours$weight = ifelse(tours$closed, 1, 0.5) * tours$xfactor
+tours$weight = ifelse(tours$closed %in% 1, 1, 0.5) * tours$xfactor
+check.na(tours)
 
-# Calculating generation
-background = load1(ancfile("primary/background.RData"))
+background = load1(ancfile("metropolitan/primary/background.RData"))
 stat = fold(tours, .(model_type),
             n=length(pid),
             weight=sum(weight))
 stat$weight_per_person = stat$weight / sum(background$xfactor)
-write.csv2(stat, file="generation-secondary.csv", row.names=FALSE)
+write.csv2(stat, file="generation-metropolitan.csv", row.names=FALSE)
 print(stat)
