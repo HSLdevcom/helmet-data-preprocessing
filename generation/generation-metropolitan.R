@@ -27,13 +27,10 @@ tours = pick(observations,
              mode,
              xfactor,
              model_type,
-             closed,
-             inverted,
-             ipeak,
-             jpeak)
+             closed)
 tours$weight = ifelse(tours$closed %in% 1, 1, 0.5) * tours$xfactor
+check.na(tours)
 
-# Calculating generation
 background = load1(ancfile("metropolitan/primary/background.RData"))
 stat = fold(tours, .(model_type),
             n=length(pid),
@@ -41,4 +38,3 @@ stat = fold(tours, .(model_type),
 stat$weight_per_person = stat$weight / sum(background$xfactor)
 write.csv2(stat, file="generation-metropolitan.csv", row.names=FALSE)
 print(stat)
-

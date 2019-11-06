@@ -4,7 +4,8 @@ source(ancfile("util.R"))
 
 observations = load1(ancfile("peripheral/primary/observations.RData"))
 
-# Tour types in peripheral models
+# Tour types
+observations = subset(observations, ttype %in% c(1:7))
 observations$model_type = NA
 m = which(observations$ttype %in% 1)
 observations$model_type[m] = "hwp"

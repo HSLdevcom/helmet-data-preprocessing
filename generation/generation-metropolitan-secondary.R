@@ -29,8 +29,8 @@ tours = pick(observations,
              model_type,
              closed)
 tours$weight = ifelse(tours$closed %in% 1, 1, 0.5) * tours$xfactor
+check.na(tours)
 
-# Calculating generation
 background = load1(ancfile("metropolitan/primary/background.RData"))
 stat = fold(tours, .(model_type),
             n=length(pid),
