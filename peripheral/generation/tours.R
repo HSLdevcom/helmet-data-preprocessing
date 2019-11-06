@@ -22,7 +22,7 @@ tours = pick(observations,
              inverted,
              ipeak,
              jpeak)
-tours$weight = ifelse(tours$closed, 1, 0.5) * tours$xfactor
+tours$weight = ifelse(tours$closed %in% 1, 1, 0.5) * tours$xfactor
 
 # Output
 check.na(tours)
