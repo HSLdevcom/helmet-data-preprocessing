@@ -2,7 +2,7 @@
 library(strafica)
 source(ancfile("util.R"))
 
-observations = load1(ancfile("primary/observations.RData"))
+observations = load1(ancfile("peripheral/primary/observations.RData"))
 
 # Tour types in peripheral models
 observations$model_type = NA
@@ -20,11 +20,12 @@ tours = pick(observations,
              model_type,
              closed)
 tours$weight = ifelse(tours$closed %in% 1, 1, 0.5) * tours$xfactor
+check.na(tours)
 
-background = load1(ancfile("primary/background.RData"))
+background = load1(ancfile("peripheral/primary/background.RData"))
 stat = fold(tours, .(model_type),
             n=length(pid),
             weight=sum(weight))
 stat$weight_per_person = stat$weight / sum(background$xfactor)
-write.csv2(stat, file="generation.csv", row.names=FALSE)
+write.csv2(stat, file="generation-peripheral.csv", row.names=FALSE)
 print(stat)

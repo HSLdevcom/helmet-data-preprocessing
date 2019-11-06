@@ -2,7 +2,7 @@
 library(strafica)
 source(ancfile("util.R"))
 
-observations = load1(ancfile("secondary/observations.RData"))
+observations = load1(ancfile("metropolitan/secondary/observations.RData"))
 
 # Tour types
 observations = subset(observations, ttype %in% c(1:7))
@@ -31,10 +31,10 @@ tours = pick(observations,
 tours$weight = ifelse(tours$closed %in% 1, 1, 0.5) * tours$xfactor
 
 # Calculating generation
-background = load1(ancfile("primary/background.RData"))
+background = load1(ancfile("metropolitan/primary/background.RData"))
 stat = fold(tours, .(model_type),
             n=length(pid),
             weight=sum(weight))
 stat$weight_per_person = stat$weight / sum(background$xfactor)
-write.csv2(stat, file="generation-secondary.csv", row.names=FALSE)
+write.csv2(stat, file="generation-metropolitan-secondary.csv", row.names=FALSE)
 print(stat)
