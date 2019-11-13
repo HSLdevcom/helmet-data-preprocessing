@@ -1,0 +1,15 @@
+survey	ttype	model_type
+0	1	hw
+0	2	hc
+0	3	hu
+0	4	hs
+0	5	ho
+0	6	wo
+0	7	oo
+2	1	hwp
+2	2	hop
+2	3	hop
+2	4	hop
+2	5	hop
+2	6	oop
+2	7	oop

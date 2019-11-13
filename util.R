@@ -44,7 +44,7 @@ get_peak = function(x) {
                         c("08:59:59","17:59:59"))
     m = which(is.na(peak))
     peak[m] = "other"
-    m = which(x == "")
+    m = which(x %in% c("", "nan", NA))
     peak[m] = NA
     return(peak)
 }
