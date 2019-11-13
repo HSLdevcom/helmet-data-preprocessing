@@ -24,6 +24,7 @@ tours$weight = ifelse(tours$closed %in% 1, 1, 0.5) * tours$xfactor
 check.na(tours)
 
 background = load1(ancfile("peripheral/primary/background.RData"))
+background = subset(background, rzone_peripheral_municipality %in% 1)
 stat = fold(tours, .(model_type),
             n=length(pid),
             weight=sum(weight))
