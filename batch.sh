@@ -17,6 +17,7 @@ pipenv run python ./tours/main.py input-config-hlt.json
 
 (cd generation/ && sh batch.sh)
 (cd calibration/ && sh batch.sh)
+(cd shares/ && sh batch.sh)
 
 cp -ruv tours/tours-*.csv $OUTPUT/
 
@@ -54,6 +55,11 @@ cat peripheral/constructed/alternatives/alternatives--*.txt | fold -w 180 -s > $
 
 cp -ruv generation/*.csv $OUTPUT/
 
+cp -ruv metropolitan/primary/weights.csv $OUTPUT/weights-metropolitan.csv
+cp -ruv peripheral/primary/weights.csv $OUTPUT/weights-peripheral.csv
+
 mkdir $OUTPUT/calibration
 cp -ruv calibration/output/*.txt $OUTPUT/calibration/
 cp -ruv calibration/output/*.xlsx $OUTPUT/calibration/
+
+cp -ruv shares/shares.csv $OUTPUT/

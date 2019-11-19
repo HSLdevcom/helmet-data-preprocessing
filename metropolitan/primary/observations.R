@@ -31,6 +31,9 @@ observations$izone_cars_per_people = zones$cars_per_people[m]
 m = match(tours$zone_destination, zones$zone_orig)
 observations$jzone = zones$zone[m]
 
+observations$itime = ifelse(tours$itime_origin %in% c("", "nan"), NA, tours$itime_origin)
+observations$jtime = ifelse(tours$itime_destination %in% c("", "nan"), NA, tours$itime_destination)
+observations$ktime = ifelse(tours$itime_secondary_destination %in% c("", "nan"), NA, tours$itime_secondary_destination)
 observations$ipeak = get_peak(tours$itime_origin)
 observations$jpeak = get_peak(tours$itime_destination)
 
