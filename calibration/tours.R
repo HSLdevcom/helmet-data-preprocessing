@@ -61,7 +61,7 @@ tours$jdistrict = zones$district[match(tours$jzone, zones$zone)]
 
 tours = leftjoin(tours, model_types)
 tours = leftjoin(tours, modes)
-tours = unpick(tours, mode)
+tours = rename(tours, mode=mode_original)
 
 tours$weight = ifelse(tours$closed %in% 1, 1, 0.5) * tours$xfactor
 check.na(tours)
