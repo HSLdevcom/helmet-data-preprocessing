@@ -1,0 +1,38 @@
+tour_combination
+T
+K
+O
+A
+M
+T - T
+T - O
+T - A
+T - M
+K - K
+K - A
+K - M
+O - A
+O - M
+A - A
+A - M
+M - M
+T - T - M
+T - A - A
+T - A - M
+T - M - M
+K - A - M
+K - M - M
+O - A - M
+O - M - M
+A - A - A
+A - A - M
+A - M - M
+M - M - M
+T - A - A - M
+T - A - M - M
+T - M - M - M
+A - A - A - A
+A - A - A - M
+A - A - M - M
+A - M - M - M
+M - M - M - M
