@@ -6,7 +6,6 @@ zones = read.csv2(ancfile("area/zones.csv"))
 model_types = read.delims("models.txt")
 modes = read.delims("modes.txt")
 
-
 observations1 = load1(ancfile("metropolitan/primary/observations.RData"))
 observations2 = load1(ancfile("peripheral/primary/observations.RData"))
 tours = rbind_list(observations1, observations2)
@@ -26,6 +25,11 @@ tours$inverted = is_inverted(tours$order)
 
 tours$inverted_izone = ifelse(tours$inverted, tours$jzone, tours$izone)
 tours$inverted_jzone = ifelse(tours$inverted, tours$izone, tours$jzone)
+
+m = match(tours$izone, zones$zone)
+tours$izone_orig = zones$zone_orig[m]
+m = match(tours$jzone, zones$zone)
+tours$jzone_orig = zones$zone_orig[m]
 
 # Lengths
 mat1 = as.data.frame(data.table::fread(ancfile("metropolitan/primary/average.csv"), stringsAsFactors=FALSE))
