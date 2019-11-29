@@ -16,7 +16,7 @@ ttypes = leftjoin(ttypes, people)
 
 # People with 0 or 1 homebased tours have all been modelled.
 
-# People with 3 homebased tours:
+# People with 2 homebased tours:
 m1 = which(ttypes$homebased_tours == 2 & !ttypes$not_modelled)
 m2 = which(ttypes$homebased_tours == 2 & ttypes$not_modelled)
 sum(ttypes$xfactor[m2]) / sum(ttypes$xfactor[m1])
