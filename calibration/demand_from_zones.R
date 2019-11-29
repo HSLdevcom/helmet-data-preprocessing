@@ -11,5 +11,4 @@ stat = fold(tours, .(izone_orig, model_type),
             n=length(pid),
             weight=sum(weight))
 stat = rename(stat, izone_orig=izone)
-write.csv2(stat, file="demand_from_zones.csv", row.names=FALSE)
-print(stat)
+save(stat, file="demand_from_zones.RData")
