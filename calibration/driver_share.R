@@ -1,8 +1,6 @@
 # -*- coding: utf-8-unix -*-
 library(strafica)
 
-tours = load1("tours.RData")
-
 observations3 = load1(ancfile("metropolitan/secondary/observations.RData"))
 observations3 = pick(observations3,
              pid,
@@ -19,7 +17,9 @@ observations3 = leftjoin(observations3, read.delims("models.txt"))
 observations3 = leftjoin(observations3, read.delims("modes.txt"))
 observations3 = rename(observations3, mode=mode_original)
 observations3$model_type = "hoo"
+observations3$weight = ifelse(observations3$closed %in% 1, 1, 0.5) * observations3$xfactor
 
+tours = load1("tours.RData")
 tours = rbind_list(tours, observations3)
 
 tours = subset(tours, mode_name %in% "car")
@@ -28,8 +28,6 @@ tours$model_type = factor(tours$model_type,
                                    "hoo","so","wo","oo",
                                    "hwp","hop",
                                    "sop","oop"))
-
-tours$weight = ifelse(tours$closed %in% 1, 1, 0.5) * tours$xfactor
 
 stat = fold(tours, .(model_type),
             weight_car_driver=sum(ifelse(mode_original %in% 4, weight, 0)),
