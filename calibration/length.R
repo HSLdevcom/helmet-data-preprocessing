@@ -11,11 +11,11 @@ modes = read.delims("modes.txt")
 ### Length
 ###
 
-length_class_names = c("0-1", "1-3", "3-5", "5-10", "10-20", "20--")
+length_class_names = c("0-1", "1-3", "3-5", "5-10", "10-20", "20-30", "30-40", "40--")
 tours$length_class = apply.breaks(tours$length,
                                   class=length_class_names,
-                                  lower=c(0, 1, 3, 5, 10, 20),
-                                  upper=c(1, 3, 5, 10, 20, Inf))
+                                  lower=c(0, 1, 3,  5, 10, 20, 30, 40),
+                                  upper=c(1, 3, 5, 10, 20, 30, 40, Inf))
 stopifnot(all(!is.na(tours$length_class)))
 
 length_all = fold(tours, .(length_class, model_type),
