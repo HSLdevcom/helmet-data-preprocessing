@@ -27,6 +27,8 @@ tours = pick(observations,
              mode,
              xfactor,
              model_type,
+             ttype,
+             base_ttype,
              closed)
 tours$weight = ifelse(tours$closed %in% 1, 1, 0.5) * tours$xfactor
 check.na(tours)
@@ -62,6 +64,25 @@ print(stat)
 
 # Adding aggregate generation for printing
 stat = fold(tours, .(model_type),
+            n=length(pid),
+            weight=sum(weight))
+stat$weight_per_person = stat$weight / sum(background$xfactor)
+print(stat)
+
+# Division of nhb tours to their base ttypes
+tours = subset(tours, ttype %in% 6:7)
+tours$model_base = NA
+m = which(tours$base_ttype %in% 1)
+tours$model_base[m] = "hw"
+m = which(tours$base_ttype %in% 2)
+tours$model_base[m] = "hc"
+m = which(tours$base_ttype %in% 3)
+tours$model_base[m] = "hu"
+m = which(tours$base_ttype %in% 4)
+tours$model_base[m] = "hs"
+m = which(tours$base_ttype %in% 5)
+tours$model_base[m] = "ho"
+stat = fold(tours, .(model_type, model_base),
             n=length(pid),
             weight=sum(weight))
 stat$weight_per_person = stat$weight / sum(background$xfactor)
