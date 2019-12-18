@@ -61,7 +61,6 @@ write.csv2(stat, file="generation-metropolitan.csv", row.names=FALSE)
 print(stat)
 
 # Adding aggregate generation for printing
-background = load1(ancfile("peripheral/primary/background.RData"))
 stat = fold(tours, .(model_type),
             n=length(pid),
             weight=sum(weight))
