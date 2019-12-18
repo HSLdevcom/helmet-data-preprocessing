@@ -63,7 +63,7 @@ print(stat)
 # Adding aggregate generation for printing
 background = load1(ancfile("peripheral/primary/background.RData"))
 stat = fold(tours, .(model_type),
-            n=sum(n),
+            n=length(pid),
             weight=sum(weight))
 stat$weight_per_person = stat$weight / sum(background$xfactor)
 print(stat)
