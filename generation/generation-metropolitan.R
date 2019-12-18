@@ -59,3 +59,11 @@ stat = leftjoin(stat, background)
 stat$weight_per_person = stat$weight / stat$xfactor
 write.csv2(stat, file="generation-metropolitan.csv", row.names=FALSE)
 print(stat)
+
+# Adding aggregate generation for printing
+background = load1(ancfile("peripheral/primary/background.RData"))
+stat = fold(tours, .(model_type),
+            n=sum(n),
+            weight=sum(weight))
+stat$weight_per_person = stat$weight / sum(background$xfactor)
+print(stat)
