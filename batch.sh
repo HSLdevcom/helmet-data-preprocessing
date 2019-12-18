@@ -58,9 +58,7 @@ cp -ruv generation/*.csv $OUTPUT/
 cp -ruv metropolitan/primary/weights.csv $OUTPUT/weights-metropolitan.csv
 cp -ruv peripheral/primary/weights.csv $OUTPUT/weights-peripheral.csv
 
-mkdir $OUTPUT/calibration
-cp -ruv calibration/output/*.txt $OUTPUT/calibration/
-cp -ruv calibration/output/*.xlsx $OUTPUT/calibration/
+cp -ruv calibration/output/*.xlsx $OUTPUT/
 
 cp -ruv shares/shares.csv $OUTPUT/
 
