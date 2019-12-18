@@ -67,7 +67,6 @@ for (i in rows.along(all)) {
     tours = tours[, colnames(tours) %nin% c(col_name1, col_name2)]
 
 }
-tours = tours[, -grep("^length_car", colnames(tours))]
 
 tours$idistrict = zones$district[match(tours$izone, zones$zone)]
 tours$jdistrict = zones$district[match(tours$jzone, zones$zone)]
