@@ -73,10 +73,11 @@ stopif(any(taus$xfactor < 0.1))
 ### Removing weekends
 ###
 
+xfactor_all = sum(taus$xfactor)
 taus = subset(taus, T_ARKI_VL == 1)
 matk = subset(matk, M_TAUSTAID %in% taus$T_TAUSTAID)
 # Raising expansion factors to account for removing two days
-taus$xfactor = 7/5 * taus$xfactor
+taus$xfactor = xfactor_all / sum(taus$xfactor) * taus$xfactor
 
 
 ###
