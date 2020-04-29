@@ -23,6 +23,7 @@ RUN apt-get update && apt-get install -y \
   libproj-dev \
   libssh2-1-dev \
   libssl-dev \
+  nano \
   proj-bin \
   proj-data
 RUN R --no-save --encoding=UTF-8 -f install-dependencies.R
