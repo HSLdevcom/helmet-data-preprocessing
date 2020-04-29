@@ -1,4 +1,4 @@
-FROM r-base:3.6.0
+FROM rocker/r-ver:3.6.0
 
 WORKDIR /helmet-data-preprocessing
 
