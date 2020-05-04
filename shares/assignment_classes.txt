@@ -1,0 +1,13 @@
+model_type	assignment_class
+hw	work
+hc	leisure
+hu	leisure
+hs	leisure
+ho	leisure
+hoo	work
+wo	work
+oo	leisure
+hwp	work
+hop	leisure
+oop	leisure
+external	leisure

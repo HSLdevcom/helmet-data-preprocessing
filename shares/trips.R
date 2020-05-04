@@ -88,6 +88,7 @@ leg3 = vsubset(leg3, !(closed %in% 2 & order %in% "ABC"))
 leg3 = vsubset(leg3, !(closed %in% 2 & order %in% "CBA"))
 
 trips3 = rbind_list(leg1, leg2, leg3)
+trips3$hoo = TRUE
 
 
 ###
@@ -95,6 +96,7 @@ trips3 = rbind_list(leg1, leg2, leg3)
 ###
 
 trips = rbind_list(trips1, trips2, trips3)
+trips$hoo[is.na(trips$hoo)] = FALSE
 trips = unpick(trips, jtime, ktime)
 
 
