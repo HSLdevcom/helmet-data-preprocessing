@@ -24,7 +24,9 @@ shares_mode_name = ddply(trips, .(mode_name), function(df) {
     df$xfactor = (sum(all$xfactor) / sum(df$xfactor)) * df$xfactor
     
     df_aht = subset(df, itime >= "06:00:00" & itime < "09:00:00")
-    df_pt = subset(df, itime >= "09:00:00" & itime < "15:00:00")
+    df_pt = subset(df, (itime < "06:00:00") |
+                       (itime >= "09:00:00" & itime < "15:00:00") |
+                       (itime >= "18:00:00"))
     df_iht = subset(df, itime >= "15:00:00" & itime < "18:00:00")
     
     temp = leftjoin(df_aht, peaks[["morning"]])
@@ -57,7 +59,9 @@ shares_transport_class = ddply(trips, .(transport_class), function(df) {
     df$xfactor = (sum(all$xfactor) / sum(df$xfactor)) * df$xfactor
     
     df_aht = subset(df, itime >= "06:00:00" & itime < "09:00:00")
-    df_pt = subset(df, itime >= "09:00:00" & itime < "15:00:00")
+    df_pt = subset(df, (itime < "06:00:00") |
+                       (itime >= "09:00:00" & itime < "15:00:00") |
+                       (itime >= "18:00:00"))
     df_iht = subset(df, itime >= "15:00:00" & itime < "18:00:00")
     
     temp = leftjoin(df_aht, peaks[["morning"]])
