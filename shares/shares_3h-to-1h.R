@@ -94,7 +94,12 @@ shares = arrange(shares, mode_name, scenario)
 save(shares, file="shares_by_mode_3h-to-1h.RData")
 write.csv2(shares, file="shares_by_mode_3h-to-1h.csv", row.names=FALSE)
 
-all = expand.grid(transport_class=paste(mode_names, c("work", "leisure"), sep = "_"),
+transport_classes = expand.grid(assignment_class = c("work", "leisure"),
+                                mode_name = mode_names)
+transport_classes$transport_class = paste(transport_classes$mode_name,
+                                          transport_classes$assignment_class,
+                                          sep = "_")
+all = expand.grid(transport_class=transport_classes$transport_class,
                   scenario=c("aht","pt","iht"),
                   stringsAsFactors=TRUE)
 shares = leftjoin(all, shares_transport_class, missing=0)
