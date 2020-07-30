@@ -7,9 +7,6 @@
 # Sensitive information
 survey/*.csv
 
-# Proprietary libraries
-strafica/
-
 # Output files
 *.RData
 *.csv

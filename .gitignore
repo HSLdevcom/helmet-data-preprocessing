@@ -8,9 +8,6 @@
 /survey/*.csv
 /survey/*.RData
 
-# Proprietary libraries
-/strafica/
-
 # Output files
 *.RData
 *.csv

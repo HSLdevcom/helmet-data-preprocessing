@@ -6,6 +6,8 @@ install.packages("devtools")
 require(devtools)
 cran = "https://ftp.eenet.ee/pub/cran/"
 
+Sys.setenv(R_REMOTES_UPGRADE = "never") 
+
 # strafica dependencies
 install_version("data.table", version="1.12.2", repos=cran)
 install_version("ggplot2", version="3.1.1", repos=cran)
@@ -18,8 +20,13 @@ install_version("rgeos", version="0.4-3", repos=cran)
 install_version("sp", version="1.3-1", repos=cran)
 install_version("magrittr", version="1.5", repos=cran)
 
+# strafica package
+install_github("Ramboll/strafica@44e17fc")
+
 # helmet-data-preprocessing -specific dependencies
 install_version("readxl", version="1.3.1", repos=cran)
 install_version("lubridate", version="1.7.4", repos=cran)
 install_version("tidyr", version="0.8.3", repos=cran)
 install_version("writexl", version="1.1", repos=cran)
+
+print(installed.packages()[, c("Package", "Version", "Built")])
