@@ -14,7 +14,7 @@ Please note, that scripts use encoding `UTF-8`.
 R and Python environment is virtualized using Docker. See
 [Dockerfile](Dockerfile) for details. Build and run using commands below.
 Run-script will open up a bash session where user can start the preprocessing.
-External dependencies and the data need to be however mapped as external volume,
+The data needs to be however mapped as external volume,
 see `docker run` commands below.
 
 ### Build Docker image
@@ -41,7 +41,6 @@ the end of the repository address.
 docker run -it --rm `
   -v c:/Users/xxx/input:/input `
   -v c:/Users/xxx/output:/output `
-  -v c:/Users/xxx/strafica:/strafica `
   helmet-data-preprocessing
 ```
 
@@ -51,21 +50,18 @@ docker run -it --rm `
 docker run -it --rm \
   -v ~/xxx/input:/input \
   -v ~/xxx/output:/output \
-  -v ~/xxx/strafica:/strafica \
   helmet-data-preprocessing
 ```
 
 ### External dependencies
 
-R-scripts use proprietary library called `strafica` which needs to be installed
-separately. `strafica` package can be found from the office for selected people
-to use. You can check dependencies from the DESCRIPTION file or from the
-[Dockerfile](Dockerfile) and then install it:
+You can install dependencies with:
 
 ```
 Rscript --quiet --no-save --encoding=UTF-8 install-dependencies.R
-(cd strafica && Rscript --quiet --no-save --encoding=UTF-8 install.R)
 ```
+
+Dockerfile installs these dependencies automatically.
 
 ### Input data
 
