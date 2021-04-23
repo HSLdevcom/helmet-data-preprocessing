@@ -9,15 +9,15 @@ git rev-parse HEAD > $OUTPUT/hash
 (cd area/ && sh batch.sh)
 (cd survey/ && sh batch.sh)
 pipenv run python ./tours/main.py input-config-heha.json
-pipenv run python ./tours/main.py input-config-hlt.json
+# pipenv run python ./tours/main.py input-config-hlt.json
 (cd metropolitan/ && sh prepare.sh)
-(cd peripheral/ && sh prepare.sh)
+# (cd peripheral/ && sh prepare.sh)
 (cd metropolitan/ && sh process.sh)
-(cd peripheral/ && sh process.sh)
+# (cd peripheral/ && sh process.sh)
 
-(cd generation/ && sh batch.sh)
-(cd calibration/ && sh batch.sh)
-(cd shares/ && sh batch.sh)
+# (cd generation/ && sh batch.sh)
+# (cd calibration/ && sh batch.sh)
+# (cd shares/ && sh batch.sh)
 
 cp -ruv tours/tours-*.csv $OUTPUT/
 
@@ -44,22 +44,22 @@ cat metropolitan/constructed/alternatives/alternatives--*.txt | fold -w 180 -s >
 cat metropolitan/secondary/alternatives/alternatives--*.txt | fold -w 180 -s > $OUTPUT/alternatives-metropolitan-secondary.txt
 cp -ruv metropolitan/generation/alternatives/alternatives.txt $OUTPUT/alternatives-metropolitan-generation.txt
 
-cp -ruv peripheral/primary/alternatives/columns.txt $OUTPUT/columns-peripheral.txt
-cp -ruv peripheral/constructed/alternatives/columns.txt $OUTPUT/columns-peripheral-constructed.txt
+# cp -ruv peripheral/primary/alternatives/columns.txt $OUTPUT/columns-peripheral.txt
+# cp -ruv peripheral/constructed/alternatives/columns.txt $OUTPUT/columns-peripheral-constructed.txt
 
-cat peripheral/primary/alternatives/alternatives--1_100.txt | fold -w 180 -s > $OUTPUT/alternatives-peripheral-test.txt
-cat peripheral/constructed/alternatives/alternatives--1_100.txt | fold -w 180 -s > $OUTPUT/alternatives-peripheral-constructed-test.txt
+# cat peripheral/primary/alternatives/alternatives--1_100.txt | fold -w 180 -s > $OUTPUT/alternatives-peripheral-test.txt
+# cat peripheral/constructed/alternatives/alternatives--1_100.txt | fold -w 180 -s > $OUTPUT/alternatives-peripheral-constructed-test.txt
 
-cat peripheral/primary/alternatives/alternatives--*.txt | fold -w 180 -s > $OUTPUT/alternatives-peripheral.txt
-cat peripheral/constructed/alternatives/alternatives--*.txt | fold -w 180 -s > $OUTPUT/alternatives-peripheral-constructed.txt
+# cat peripheral/primary/alternatives/alternatives--*.txt | fold -w 180 -s > $OUTPUT/alternatives-peripheral.txt
+# cat peripheral/constructed/alternatives/alternatives--*.txt | fold -w 180 -s > $OUTPUT/alternatives-peripheral-constructed.txt
 
-cp -ruv generation/*.csv $OUTPUT/
+# cp -ruv generation/*.csv $OUTPUT/
 
-cp -ruv metropolitan/primary/weights.csv $OUTPUT/weights-metropolitan.csv
-cp -ruv peripheral/primary/weights.csv $OUTPUT/weights-peripheral.csv
+# cp -ruv metropolitan/primary/weights.csv $OUTPUT/weights-metropolitan.csv
+# cp -ruv peripheral/primary/weights.csv $OUTPUT/weights-peripheral.csv
 
-cp -ruv calibration/output/*.xlsx $OUTPUT/
+# cp -ruv calibration/output/*.xlsx $OUTPUT/
 
-cp -ruv shares/shares.csv $OUTPUT/
+# cp -ruv shares/shares.csv $OUTPUT/
 
-cp -ruv calibration/driver_share.csv $OUTPUT/
+# cp -ruv calibration/driver_share.csv $OUTPUT/
