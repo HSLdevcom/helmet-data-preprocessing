@@ -47,6 +47,12 @@ df$children = ifelse(is.na(people$kotitalous_0_6v), 9, df$children)
 df$female = ifelse(people$sukup_laaj == "Nainen", 1, 0)
 df = leftjoin(df, get_age_groups(people$ika, df$pid), by="pid")
 
+df$lippu_hsl_kausi = ifelse(people$lippu_hsl_kausi == "Kyllä", 1, 0)
+df$lippu_hsl_arvo = ifelse(people$lippu_hsl_arvo == "Kyllä", 1, 0)
+df$lippu_mobiililippu = ifelse(people$lippu_mobiililippu == "Kyllä", 1, 0)
+df$lippu_muu_kausi = ifelse(people$lippu_muu_kausi == "Kyllä", 1, 0)
+df$lippu_muu_arvo = ifelse(people$lippu_muu_arvo == "Kyllä", 1, 0)
+
 m = match(people$rzone, zones$zone_orig)
 df$rzone = zones$zone[m]
 df$rzone_capital_region = ifelse(zones$capital_region[m], 1, 0)

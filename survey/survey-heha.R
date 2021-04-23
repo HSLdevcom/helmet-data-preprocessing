@@ -10,7 +10,8 @@ matk$eid = matk$matkaid
 taus = pick(matk,
             juokseva, montako_matkaa, kerroin, ika, sukup_laaj,
             ap_kela, montako_autoa, onko_ajokortti, miten_usein_auto_kaytettavissa, toimi,
-            kotitalous_0_6v, kotitalous_kaikki, ap_sij19)
+            kotitalous_0_6v, kotitalous_kaikki, ap_sij19,
+            lippu_hsl_kausi, lippu_hsl_arvo, lippu_mobiililippu, lippu_muu_kausi, lippu_muu_arvo)
 taus = rename(taus, ap_sij19=rzone, kerroin=xfactor)
 taus = dedup(taus, juokseva)
 

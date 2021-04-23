@@ -20,6 +20,11 @@ age_30_49
 age_50_64
 age_65
 age_missing
+lippu_hsl_kausi
+lippu_hsl_arvo
+lippu_mobiililippu
+lippu_muu_kausi
+lippu_muu_arvo
 izone
 izone_population_density
 izone_housing
