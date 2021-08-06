@@ -15,8 +15,8 @@ lpcoords <- matk %>%
   sf::st_as_sf(coords = c("lpGK25_i", "lpGK25_p"), crs = 3879) %>% 
   sf::st_transform(crs = sf::st_crs(4326)) %>% 
   dplyr::mutate(
-    lp_x = sf::st_coordinates(.)[,1],
-    lp_y = sf::st_coordinates(.)[,2]
+    lp_x = as.numeric(sf::st_coordinates(.)[,1]),
+    lp_y = as.numeric(sf::st_coordinates(.)[,2])
   ) %>% 
   sf::st_drop_geometry() %>% 
   dplyr::select(tunnus2, lp_x, lp_y)
@@ -28,8 +28,8 @@ mpcoords <- matk %>%
   sf::st_as_sf(coords = c("mpGK25_i", "mpGK25_p"), crs = 3879) %>% 
   sf::st_transform(crs = sf::st_crs(4326)) %>% 
   dplyr::mutate(
-    mp_x = sf::st_coordinates(.)[,1],
-    mp_y = sf::st_coordinates(.)[,2]
+    mp_x = as.numeric(sf::st_coordinates(.)[,1]),
+    mp_y = as.numeric(sf::st_coordinates(.)[,2])
   ) %>% 
   sf::st_drop_geometry() %>% 
   dplyr::select(tunnus2, mp_x, mp_y)
@@ -41,8 +41,8 @@ apcoords <- matk %>%
   sf::st_as_sf(coords = c("apGK25_i", "apGK25_p"), crs = 3879) %>% 
   sf::st_transform(crs = sf::st_crs(4326)) %>% 
   dplyr::mutate(
-    ap_x = sf::st_coordinates(.)[,1],
-    ap_y = sf::st_coordinates(.)[,2]
+    ap_x = as.numeric(sf::st_coordinates(.)[,1]),
+    ap_y = as.numeric(sf::st_coordinates(.)[,2])
   ) %>% 
   sf::st_drop_geometry() %>% 
   dplyr::select(tunnus2, ap_x, ap_y)
