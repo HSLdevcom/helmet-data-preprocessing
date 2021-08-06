@@ -3,10 +3,10 @@ library(here)
 library(tidyverse)
 library(haven)
 
-matk <- haven::read_sas("aineistot/HEHA12 Laurille/matk12_4.sas7bdat",
-                        catalog_file = "aineistot/HEHA12 Laurille/formats.sas7bcat")
-taus <- haven::read_sas("aineistot/HEHA12 Laurille/taus12_3.sas7bdat",
-                        catalog_file = "aineistot/HEHA12 Laurille/formats.sas7bcat")
+matk <- haven::read_sas(ancfile("aineistot/HEHA12 Laurille/matk12_4.sas7bdat"),
+                        catalog_file = ancfile("aineistot/HEHA12 Laurille/formats.sas7bcat"))
+taus <- haven::read_sas(ancfile("aineistot/HEHA12 Laurille/taus12_3.sas7bdat"),
+                        catalog_file = ancfile("aineistot/HEHA12 Laurille/formats.sas7bcat"))
 
 lpcoords <- matk %>% 
   dplyr::select(tunnus2, lpkrd_p, lpkrd_i, lpkrd3_p, lpkrd3_i, lpGK25_p, lpGK25_i) %>% 
@@ -106,4 +106,4 @@ matk_formatted <- matk %>%
   dplyr::select(juokseva:MPdttm, lp_x:ap_y)
 
 
-save(matk_formatted, file="raw-heha.RData")
+save(matk_formatted, file="raw-heha12.RData")

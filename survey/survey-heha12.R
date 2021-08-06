@@ -3,7 +3,7 @@ library(strafica)
 library(readxl)
 library(lubridate)
 
-matk = load1("raw-heha.RData")
+matk = load1("raw-heha12.RData")
 matk$length = matk$PITUUS
 matk$eid = matk$matkaid
 
