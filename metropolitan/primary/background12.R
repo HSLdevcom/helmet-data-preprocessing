@@ -13,11 +13,11 @@ background = list()
 # HEHA 2018
 
 message("Formatting HEHA 2018 personal data...")
-people = read.csv2(ancfile("survey/tausta-heha.csv"), stringsAsFactors=FALSE)
+people = read.csv2(ancfile("survey/tausta-heha12.csv"), stringsAsFactors=FALSE)
 people = subset(people, rzone %in% zones$zone_orig)
 
 df = data.frame(pid=people$pid)
-df$year = 2018
+df$year = 2012
 df$survey = 0
 df$xfactor = people$xfactor
 df$cars_owned = NA
@@ -33,7 +33,7 @@ df$licence = ifelse(is.na(df$licence), 9, df$licence)
 df$car_user = NA
 df$car_user = ifelse(df$cars_owned %in% c(1,2) &
                          df$licence == 1 &
-                         people$miten_usein_auto_kaytettavissa == "Aina tai melkein aina" &
+                         people$miten_usein_auto_kaytettavissa %in% 1 &
                          !df$minor, 1, 0)
 df$car_user = ifelse(is.na(df$car_user), 9, df$car_user)
 df$employed = NA
@@ -47,11 +47,11 @@ df$children = ifelse(is.na(people$kotitalous_0_6v), 9, df$children)
 df$female = ifelse(people$sukup_laaj == "Nainen", 1, 0)
 df = leftjoin(df, get_age_groups(people$ika, df$pid), by="pid")
 
-df$lippu_hsl_kausi = ifelse(people$lippu_hsl_kausi == "Kyllä", 1, 0)
-df$lippu_hsl_arvo = ifelse(people$lippu_hsl_arvo == "Kyllä", 1, 0)
-df$lippu_mobiililippu = ifelse(people$lippu_mobiililippu == "Kyllä", 1, 0)
-df$lippu_muu_kausi = ifelse(people$lippu_muu_kausi == "Kyllä", 1, 0)
-df$lippu_muu_arvo = ifelse(people$lippu_muu_arvo == "Kyllä", 1, 0)
+df$lippu_hsl_kausi = people$lippu_hsl_kausi
+df$lippu_hsl_arvo = people$lippu_hsl_arvo
+df$lippu_mobiililippu = people$lippu_mobiililippu
+df$lippu_muu_kausi = people$lippu_muu_kausi
+df$lippu_muu_arvo = people$lippu_muu_arvo
 
 m = match(people$rzone, zones$zone_orig)
 df$rzone = zones$zone[m]
