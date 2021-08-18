@@ -127,7 +127,7 @@ fold(times, .(type), tmed=median(staytime), tmean=mean(staytime), tmin=min(stayt
 
 # Staytimes are given in minutes based on estimated in previous part.
 flip_trip = function(trip,
-                     staytimes=c(90, 420, 300, 10, 30, 90, 90, 90, 90, 30, NA, 240)) {
+                     staytimes=c(90, 420, 300, 10, 30, 90, 90, 90, 90, 30, 45, 240)) {
     # Argument trip refers to one row in travel survey data
     stopif(nrow(trip) != 1)
     flipped_trip = trip
