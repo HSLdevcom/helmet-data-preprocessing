@@ -22,11 +22,11 @@ matk = subset(matk, montako_matkaa > 0)
 ### Location types
 ###
 
-types = read.delims("types-heha.txt", fileEncoding="utf-8")
-m = match(matk$LP, types$type_name)
-matk$itype = types$type[m]
-m = match(matk$MP, types$type_name)
-matk$jtype = types$type[m]
+types = read.delims("types-heha12.txt", fileEncoding="utf-8")
+m = match(matk$LP, types$type_heha2012)
+matk$itype = types$type_heha2018[m]
+m = match(matk$MP, types$type_heha2012)
+matk$jtype = types$type_heha2018[m]
 # Children under 18 go to school (3) and adults at and over 18 go to university.
 m = which(matk$ika >= 18 & matk$itype == 3)
 matk$itype[m] = 12
@@ -318,7 +318,7 @@ paik = arrange(paik, tid)
 ### Modes
 ###
 
-modes = read.delims("modes-heha.txt", fileEncoding="utf-8")
+modes = read.delims("modes-heha12.txt", fileEncoding="utf-8")
 m = match(matk$PKTAPA2, modes$PKTAPA2)
 matk$mode = modes$mode[m]
 m = is.na(matk$mode)
