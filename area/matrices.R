@@ -152,6 +152,7 @@ walk_speed = 5.0 / 60  # km/min
 matrices$ttime_pedestrian_2018 = matrices$length_pedestrian_2018 / walk_speed  # min
 matrices$length_pedestrian_2016 = matrices$length_pedestrian_2018
 matrices$ttime_pedestrian_2016 = matrices$ttime_pedestrian_2018
+matrices$length_pedestrian_2012 = matrices$length_pedestrian_pt_2012
 matrices$ttime_pedestrian_2012 = matrices$length_pedestrian_pt_2012 / walk_speed  # min
 
 # Municipalities
