@@ -10,6 +10,12 @@ matk <- haven::read_sas("../../aineistot/HEHA12 Laurille/matk12_4.sas7bdat",
 taus <- haven::read_sas("../../aineistot/HEHA12 Laurille/taus12_3.sas7bdat",
                         catalog_file = "../../aineistot/HEHA12 Laurille/formats.sas7bcat")
 
+zones <- "../../aineistot/aluejaot_2019_SHP/sijoittelualueet2019.shp" %>%
+  sf::read_sf(options = "ENCODING=UTF-8") %>%
+  sf::st_set_crs(3879) %>%
+  sf::st_transform(crs = sf::st_crs(3067)) %>% 
+  dplyr::select(SIJ2019)
+
 lpcoords <- matk %>% 
   dplyr::select(tunnus2, lpkrd_p, lpkrd_i, lpkrd3_p, lpkrd3_i, lpGK25_p, lpGK25_i) %>% 
   dplyr::filter(!(is.na(lpGK25_p) | is.na(lpGK25_i))) %>% 
@@ -20,8 +26,12 @@ lpcoords <- matk %>%
     lp_x = as.numeric(sf::st_coordinates(.)[,1]),
     lp_y = as.numeric(sf::st_coordinates(.)[,2])
   ) %>% 
+  sf::st_join(zones) %>% 
+  dplyr::rename(
+    lp_sij19 = SIJ2019
+  ) %>% 
   sf::st_drop_geometry() %>% 
-  dplyr::select(tunnus2, lp_x, lp_y)
+  dplyr::select(tunnus2, lp_x, lp_y, lp_sij19)
 
 mpcoords <- matk %>% 
   dplyr::select(tunnus2, mpkrd_p, mpkrd_i, mpkrd3_p, mpkrd3_i, mpGK25_p, mpGK25_i) %>% 
@@ -33,8 +43,12 @@ mpcoords <- matk %>%
     mp_x = as.numeric(sf::st_coordinates(.)[,1]),
     mp_y = as.numeric(sf::st_coordinates(.)[,2])
   ) %>% 
+  sf::st_join(zones) %>% 
+  dplyr::rename(
+    mp_sij19 = SIJ2019
+  ) %>% 
   sf::st_drop_geometry() %>% 
-  dplyr::select(tunnus2, mp_x, mp_y)
+  dplyr::select(tunnus2, mp_x, mp_y, mp_sij19)
 
 apcoords <- matk %>% 
   dplyr::select(tunnus2, apkrd_p, apkrd_i, apkrd3_p, apkrd3_i, apGK25_p, apGK25_i) %>% 
@@ -46,8 +60,12 @@ apcoords <- matk %>%
     ap_x = as.numeric(sf::st_coordinates(.)[,1]),
     ap_y = as.numeric(sf::st_coordinates(.)[,2])
   ) %>% 
+  sf::st_join(zones) %>% 
+  dplyr::rename(
+    ap_sij19 = SIJ2019
+  ) %>% 
   sf::st_drop_geometry() %>% 
-  dplyr::select(tunnus2, ap_x, ap_y)
+  dplyr::select(tunnus2, ap_x, ap_y, ap_sij19)
 
 matk <- matk %>% 
   dplyr::left_join(lpcoords, by = "tunnus2") %>% 
@@ -67,7 +85,7 @@ matk_formatted <- matk %>%
     miten_usein_auto_kaytettavissa = HKAUTO,
     kotitalous_0_6v = ALLE7V,
     kotitalous_kaikki = PEKOKO2,
-    ap_sij19 = apsij16,
+    ap_sij19 = ap_sij19,
   ) %>%
   dplyr::mutate(
     toimi = dplyr::if_else(tyoaik2 %in% c(1, 2), "Työssäkäyvä", "Ei työssäkäyvä")
@@ -88,8 +106,8 @@ matk_formatted <- matk %>%
     PITUUS = MATPIT,
     LP = as.vector(LPLAA5, mode = "integer"),
     MP = as.vector(MPLAA5, mode = "integer"),
-    lp_sij19 = lpsij16,
-    mp_sij19 = mpsij16,
+    lp_sij19 = lp_sij19,
+    mp_sij19 = mp_sij19,
     Paakulkutapa = pktapa2,
     PKTAPA2 = pktapa2
   )  %>% 
