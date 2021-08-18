@@ -38,34 +38,18 @@ matk$jtype[m] = 12
 ### Coordinates
 ###
 
-matk$ix = as.numeric(matk$lp_x)
-matk$iy = as.numeric(matk$lp_y)
-matk$jx = as.numeric(matk$mp_x)
-matk$jy = as.numeric(matk$mp_y)
-m = which(matk$jx == 20190925)
-matk$jx[m] = 25.09
-
-m = which(matk$ix < 1 | matk$iy < 1)
-matk$ix[m] = NA
-matk$iy[m] = NA
-m = which(matk$jx < 1 | matk$jy < 1)
-matk$jx[m] = NA
-matk$jy[m] = NA
-
-matk = reproject(matk, from=4326, to=3067, names=c("ix","iy"))
-matk = reproject(matk, from=4326, to=3067, names=c("jx","jy"))
+matk$ix = matk$lp_x
+matk$iy = matk$lp_y
+matk$jx = matk$mp_x
+matk$jy = matk$mp_y
 
 
 ###
 ### Home coordinates
 ###
 
-matk$rx = as.numeric(matk$ap_x)
-matk$ry = as.numeric(matk$ap_y)
-m = which(matk$rx < 1 | matk$rx < 1)
-matk$rx[m] = NA
-matk$ry[m] = NA
-matk = reproject(matk, from=4326, to=3067, names=c("rx","ry"))
+matk$rx = matk$ap_x
+matk$ry = matk$ap_y
 # If trip is going home but missing coordinates, they are copied from
 # background information.
 m = which(matk$itype == 1 & is.na(matk$ix) & is.na(matk$iy))

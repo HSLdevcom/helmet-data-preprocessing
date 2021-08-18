@@ -14,7 +14,7 @@ lpcoords <- matk %>%
   dplyr::select(tunnus2, lpkrd_p, lpkrd_i, lpkrd3_p, lpkrd3_i, lpGK25_p, lpGK25_i) %>% 
   dplyr::filter(!(is.na(lpGK25_p) | is.na(lpGK25_i))) %>% 
   dplyr::filter(!(lpGK25_p == 6500000 & lpGK25_i == 25000000)) %>% 
-  sf::st_as_sf(coords = c("lpGK25_i", "lpGK25_p"), crs = 3879) %>% 
+  sf::st_as_sf(coords = c("lpGK25_i", "lpGK25_p"), crs = 3067) %>% 
   sf::st_transform(crs = sf::st_crs(4326)) %>% 
   dplyr::mutate(
     lp_x = as.numeric(sf::st_coordinates(.)[,1]),
@@ -27,7 +27,7 @@ mpcoords <- matk %>%
   dplyr::select(tunnus2, mpkrd_p, mpkrd_i, mpkrd3_p, mpkrd3_i, mpGK25_p, mpGK25_i) %>% 
   dplyr::filter(!(is.na(mpGK25_p) | is.na(mpGK25_i))) %>% 
   dplyr::filter(!(mpGK25_p == 6500000 & mpGK25_i == 25000000)) %>% 
-  sf::st_as_sf(coords = c("mpGK25_i", "mpGK25_p"), crs = 3879) %>% 
+  sf::st_as_sf(coords = c("mpGK25_i", "mpGK25_p"), crs = 3067) %>% 
   sf::st_transform(crs = sf::st_crs(4326)) %>% 
   dplyr::mutate(
     mp_x = as.numeric(sf::st_coordinates(.)[,1]),
@@ -40,7 +40,7 @@ apcoords <- matk %>%
   dplyr::select(tunnus2, apkrd_p, apkrd_i, apkrd3_p, apkrd3_i, apGK25_p, apGK25_i) %>% 
   dplyr::filter(!(is.na(apGK25_p) | is.na(apGK25_i))) %>% 
   dplyr::filter(!(apGK25_p == 6500000 & apGK25_i == 25000000)) %>% 
-  sf::st_as_sf(coords = c("apGK25_i", "apGK25_p"), crs = 3879) %>% 
+  sf::st_as_sf(coords = c("apGK25_i", "apGK25_p"), crs = 3067) %>% 
   sf::st_transform(crs = sf::st_crs(4326)) %>% 
   dplyr::mutate(
     ap_x = as.numeric(sf::st_coordinates(.)[,1]),
