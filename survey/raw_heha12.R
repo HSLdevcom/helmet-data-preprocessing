@@ -1,6 +1,7 @@
 # -*- coding: utf-8-unix -*-
 library(here)
 library(tidyverse)
+library(sf)
 library(haven)
 
 matk <- haven::read_sas(ancfile("aineistot/HEHA12 Laurille/matk12_4.sas7bdat"),
@@ -63,11 +64,13 @@ matk_formatted <- matk %>%
     montako_autoa = HALKM2,
     onko_ajokortti = ajokor,
     miten_usein_auto_kaytettavissa = HKAUTO,
-    toimi = tyoaik2,
     kotitalous_0_6v = ALLE7V,
     kotitalous_kaikki = PEKOKO2,
     ap_sij19 = apsij16,
   ) %>%
+  dplyr::mutate(
+    toimi = dplyr::if_else(tyoaik2 %in% c(1, 2), "Työssäkäyvä", "Ei työssäkäyvä")
+  ) %>% 
   dplyr::mutate(
     lippu_hsl_kausi = as.integer((YTV_SEU + YTV_HKI + YTV_ESP + YTV_VAN + YTV_KER +
                                     YTV_KIR + YTV_3V + YTV_2V + YTV_KOUL + YTV_VAPA +
@@ -82,8 +85,8 @@ matk_formatted <- matk %>%
   dplyr::mutate(
     matkaid = tunnus2,
     PITUUS = MATPIT,
-    LP = LPLAA5,
-    MP = MPLAA5,
+    LP = as.vector(LPLAA5, mode = "integer"),
+    MP = as.vector(MPLAA5, mode = "integer"),
     lp_sij19 = lpsij16,
     mp_sij19 = mpsij16,
     Paakulkutapa = pktapa2,
@@ -105,5 +108,5 @@ matk_formatted <- matk %>%
   # Coordinate system
   dplyr::select(juokseva:MPdttm, lp_x:ap_y)
 
-
+matk_formatted <- as.data.frame(matk_formatted)
 save(matk_formatted, file="raw-heha12.RData")
