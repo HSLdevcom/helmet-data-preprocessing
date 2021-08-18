@@ -128,4 +128,4 @@ matk_formatted <- matk %>%
   dplyr::select(juokseva:MPdttm, lp_x:ap_sij19)
 
 matk_formatted <- as.data.frame(matk_formatted)
-save(matk_formatted, file="raw-heha12.RData")
+save(matk_formatted, file="../../input/raw-heha12.RData")
