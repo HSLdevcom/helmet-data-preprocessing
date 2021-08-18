@@ -11,7 +11,7 @@ tours = read.csv2(ancfile("tours/tours-heha.csv"),
                   stringsAsFactors=FALSE)
 tours$closed = ifelse(tours$closed == "True", TRUE, FALSE)
 tours$model = 1
-tours$year = 2018
+tours$year = 2012
 tours$constructed = FALSE
 m = match(tours$rzone, zones$zone_orig)
 tours = subset(tours, ((zones$capital_region[m] | zones$surrounding_municipality[m]) &

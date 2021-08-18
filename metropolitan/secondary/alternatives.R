@@ -56,21 +56,21 @@ matrices = matrices[, c("izone",
                         "jzone",
                         "same_municipality",
                         "same_zone",
-                        "ttime_car_iht_2018",
-                        "cost_car_iht_2018",
-                        "ttime_transit_iht_2018",
+                        "ttime_car_iht_2012",
+                        "cost_car_iht_2012",
+                        "ttime_transit_iht_2012",
                         grep("bicycle|pedestrian|cost_transit", colnames(matrices), value=TRUE))]
 # Add secondary destination model matrices
 matrices$same_zone_i = matrices$same_zone
 matrices$same_zone_j = matrices$same_zone
 matrices = unpick(matrices, same_zone)
-matrices$ttime_car_secondary = matrices$ttime_car_iht_2018
-matrices$cost_car_secondary = matrices$cost_car_iht_2018
-matrices$ttime_transit_secondary = matrices$ttime_transit_iht_2018
+matrices$ttime_car_secondary = matrices$ttime_car_iht_2012
+matrices$cost_car_secondary = matrices$cost_car_iht_2012
+matrices$ttime_transit_secondary = matrices$ttime_transit_iht_2012
 matrices = unpick(matrices,
-                  ttime_car_iht_2018,
-                  cost_car_iht_2018,
-                  ttime_transit_iht_2018)
+                  ttime_car_iht_2012,
+                  cost_car_iht_2012,
+                  ttime_transit_iht_2012)
 average$izone = zones$zone[match(average$izone, zones$zone_orig)]
 average$jzone = zones$zone[match(average$jzone, zones$zone_orig)]
 matrices = leftjoin(matrices, average)

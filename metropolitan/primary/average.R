@@ -1,7 +1,7 @@
 # -*- coding: utf-8-unix -*-
 library(strafica)
 
-YEAR = 2018
+YEAR = 2012
 
 matrices = as.data.frame(data.table::fread(ancfile("area/matrices.csv"),
                                            stringsAsFactors=FALSE))
