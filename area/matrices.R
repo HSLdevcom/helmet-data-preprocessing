@@ -95,6 +95,14 @@ for (i in rows.along(files)) {
 }
 progress.final(time.start)
 
+matrices = leftjoin(matrices, read.csv(ancfile("input/Estimoinnin_lähtötiedot/Vastukset2012/cost_aht.csv"), stringsAsFactors = FALSE))
+matrices = leftjoin(matrices, read.csv(ancfile("input/Estimoinnin_lähtötiedot/Vastukset2012/dist_aht.csv"), stringsAsFactors = FALSE))
+matrices = leftjoin(matrices, read.csv(ancfile("input/Estimoinnin_lähtötiedot/Vastukset2012/dist_pt.csv"), stringsAsFactors = FALSE))
+matrices = leftjoin(matrices, read.csv(ancfile("input/Estimoinnin_lähtötiedot/Vastukset2012/dist_iht.csv"), stringsAsFactors = FALSE))
+matrices = leftjoin(matrices, read.csv(ancfile("input/Estimoinnin_lähtötiedot/Vastukset2012/time_aht.csv"), stringsAsFactors = FALSE))
+matrices = leftjoin(matrices, read.csv(ancfile("input/Estimoinnin_lähtötiedot/Vastukset2012/time_pt.csv"), stringsAsFactors = FALSE))
+matrices = leftjoin(matrices, read.csv(ancfile("input/Estimoinnin_lähtötiedot/Vastukset2012/time_iht.csv"), stringsAsFactors = FALSE))
+
 # Car costs from lengths
 lengths = grep("^length_car_(.+)_2016", colnames(matrices), perl=TRUE, value=TRUE)
 costs = matrices[, lengths]
@@ -108,6 +116,12 @@ costs = costs * 0.144
 colnames(costs) = gsub("length", "cost", colnames(costs))
 matrices = cbind(matrices, costs)
 
+lengths = grep("^length_car_(.+)_2012", colnames(matrices), perl=TRUE, value=TRUE)
+costs = matrices[, lengths]
+costs = costs * 0.157
+colnames(costs) = gsub("length", "cost", colnames(costs))
+matrices = cbind(matrices, costs)
+
 
 # Transit costs from monthly tickets
 izone_in_capital_region = zones$capital_region[match(matrices$izone, zones$zone_orig)]
@@ -118,17 +132,24 @@ matrices$cost_transit_work_2018 = ifelse(izone_in_capital_region & jzone_in_capi
 matrices$cost_transit_other_2018 = matrices$cost_transit_monthly_2018 / 30
 matrices$cost_transit_work_2016 = matrices$cost_transit_work_2018
 matrices$cost_transit_other_2016 = matrices$cost_transit_other_2018
+matrices$cost_transit_work_2012 = ifelse(izone_in_capital_region & jzone_in_capital_region,
+                                         matrices$cost_transit_monthly_2012 / 60,
+                                         matrices$cost_transit_monthly_2012 / 44)
+matrices$cost_transit_other_2012 = matrices$cost_transit_monthly_2012 / 30
 matrices = unpick(matrices, cost_transit_monthly_2018)
+matrices = unpick(matrices, cost_transit_monthly_2012)
 
 # Bicycling
 matrices$ttime_bicycle_2016 = pclip(matrices$ttime_bicycle_2016, -Inf, 9999)
 matrices$ttime_bicycle_2018 = pclip(matrices$ttime_bicycle_2018, -Inf, 9999)
+matrices$ttime_bicycle_2012 = pclip(matrices$ttime_bicycle_pt_2012, -Inf, 9999)
 
 # Walking
 walk_speed = 5.0 / 60  # km/min
 matrices$ttime_pedestrian_2018 = matrices$length_pedestrian_2018 / walk_speed  # min
 matrices$length_pedestrian_2016 = matrices$length_pedestrian_2018
 matrices$ttime_pedestrian_2016 = matrices$ttime_pedestrian_2018
+matrices$ttime_pedestrian_2012 = matrices$length_pedestrian_pt_2012 / walk_speed  # min
 
 # Municipalities
 matrices$imunicipality = zones$municipality[match(matrices$izone, zones$zone_orig)]
