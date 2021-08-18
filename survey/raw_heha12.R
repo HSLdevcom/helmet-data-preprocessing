@@ -3,6 +3,7 @@ library(here)
 library(tidyverse)
 library(sf)
 library(haven)
+library(lubridate)
 
 matk <- haven::read_sas("../../aineistot/HEHA12 Laurille/matk12_4.sas7bdat",
                         catalog_file = "../../aineistot/HEHA12 Laurille/formats.sas7bcat")
