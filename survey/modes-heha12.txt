@@ -1,0 +1,12 @@
+PKTAPA2	PKTAPA2_name	mode_name	mode
+1	jalankulku	ka	1
+2	polkupyörä	py	2
+3	linja-auto	jl	3
+4	raitiovaunu	jl	3
+5	juna	jl	3
+6	metro	jl	3
+7	taksi	am	5
+8	kuljettaja henkilöautossa	ak	4
+9	matkustaja henkilöautossa	am	5
+10	muu	muu	-1
+11	ei osaa sanoa	muu	-1

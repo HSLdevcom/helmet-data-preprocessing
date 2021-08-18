@@ -1,0 +1,24 @@
+type_heha2012	type_name_heha2012	type_heha2018	type_name_heha2018
+1	oma koti	1	Oma koti tai asuinpaikka
+2	muu asuinpaikka	1	Oma koti tai asuinpaikka
+3	oma työpaikka	2	Oma työpaikka
+4	toinen työpaikka	2	Oma työpaikka
+5	oma koulu	3	Oma koulu tai opiskelupaikka
+6	oma opiskelupaik	3	Oma koulu tai opiskelupaikka
+7	avoin AMK/kansop	3	Oma koulu tai opiskelupaikka
+8	työasiointi	6	Työhön liittyvä asiointipaikka
+9	nouto/jättö	4	Lapsen hoitopaikka, koulu tai harrastuspaikka (hain tai vein lapsen)
+10	päivähoi/esikou	4	Lapsen hoitopaikka, koulu tai harrastuspaikka (hain tai vein lapsen)
+11	päivittäisostos	5	Kauppa, posti, lääkäri tai muu asiointipaikka
+12	kauppakeskus	5	Kauppa, posti, lääkäri tai muu asiointipaikka
+13	muu ostospaikka	5	Kauppa, posti, lääkäri tai muu asiointipaikka
+14	asiointipaikka	5	Kauppa, posti, lääkäri tai muu asiointipaikka
+15	ravintola	11	Ruokailupaikka
+16	liikuntapaikka	8	Liikunta- tai ulkoilupaikka
+17	kulttuuripaikka	9	Muu vapaa-ajanviettopaikka
+18	vierailupaikka	7	Kyläilypaikka (esim. ystävät, sukulaiset)
+19	muu vapaa-aika	9	Muu vapaa-ajanviettopaikka
+20	mökki	10	Muu paikka
+21	hotelli tms.	10	Muu paikka
+22	muu kohde	10	Muu paikka
+23	ei osaa sanoa	10	Muu paikka
