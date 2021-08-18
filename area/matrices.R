@@ -122,6 +122,9 @@ costs = costs * 0.157
 colnames(costs) = gsub("length", "cost", colnames(costs))
 matrices = cbind(matrices, costs)
 
+matrices$length_bicycle_separate_cycleway_2012 = 0.0
+matrices$length_bicycle_adjacent_cycleway_2012 = 0.0
+matrices$length_bicycle_mixed_traffic_2012 = 0.0
 
 # Transit costs from monthly tickets
 izone_in_capital_region = zones$capital_region[match(matrices$izone, zones$zone_orig)]
