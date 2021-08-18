@@ -336,6 +336,14 @@ matk = leftjoin(matk, pick(taus, juokseva, pid), by="juokseva")
 
 
 ###
+### Python fixes
+###
+
+m = which(is.na(matk$ap_sij19))
+matk$ap_sij19[m] = -1
+
+
+###
 ### Output
 ###
 
