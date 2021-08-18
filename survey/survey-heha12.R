@@ -341,6 +341,8 @@ matk = leftjoin(matk, pick(taus, juokseva, pid), by="juokseva")
 
 m = which(is.na(taus$rzone))
 taus$rzone[m] = -1
+m = which(is.na(paik$zone))
+paik$zone[m] = -1
 
 
 ###
