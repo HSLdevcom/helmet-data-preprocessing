@@ -22,7 +22,7 @@ combinations = mcddply(observations, .(pid), function(df) {
 combinations = subset(combinations, homebased_tours > 0)
 
 # Lists all tour types regardless of how many there are
-combinations$ttypes_long = unlist(mclapply(rows.along(combinations), function(i) {
+combinations$ttypes_long = unlist(mclapply.stop(rows.along(combinations), function(i) {
     types = c(.rep("T", times=combinations$class_t[i]),
               .rep("K", times=combinations$class_k[i]),
               .rep("O", times=combinations$class_o[i]),
@@ -42,7 +42,7 @@ priority = expand.grid(homebased_tours=0,
 priority$homebased_tours = rowSums(priority)
 priority = subset(priority, homebased_tours %in% 4)
 priority = arrange(priority, homebased_tours, -class_tko, -class_a, -class_m)
-priority$ttypes_name = unlist(mclapply(rows.along(priority), function(i) {
+priority$ttypes_name = unlist(mclapplystop(rows.along(priority), function(i) {
     types = c(.rep("TKO", times=priority$class_tko[i]),
               .rep("A", times=priority$class_a[i]),
               .rep("M", times=priority$class_m[i]))

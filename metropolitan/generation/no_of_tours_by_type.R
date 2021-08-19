@@ -96,7 +96,7 @@ for (i in rows.along(all2)) {
 # Output
 all = rbind_list(all0, all1, all2)
 all = pick(all, no_of_homebased_tours, class_t, class_k, class_o, class_tko, class_a, class_m, xfactor, n)
-all$name = unlist(mclapply(rows.along(all), function(i) {
+all$name = unlist(mclapply.stop(rows.along(all), function(i) {
     types = c(.rep("T", times=all$class_t[i]),
               .rep("K", times=all$class_k[i]),
               .rep("O", times=all$class_o[i]),
