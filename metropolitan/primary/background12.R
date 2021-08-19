@@ -44,7 +44,7 @@ df = unpick(df, minor)
 df$children = NA
 df$children = ifelse(people$kotitalous_0_6v > 0, 1, 0)
 df$children = ifelse(is.na(people$kotitalous_0_6v), 9, df$children)
-df$female = ifelse(people$sukup_laaj == "Nainen", 1, 0)
+df$female = ifelse(people$sukup_laaj == 1, 1, 0)
 df = leftjoin(df, get_age_groups(people$ika, df$pid), by="pid")
 
 df$lippu_hsl_kausi = people$lippu_hsl_kausi
