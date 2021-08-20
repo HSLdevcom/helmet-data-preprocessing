@@ -59,14 +59,12 @@ zones$jobs_shopping = landuse$myymälätpt[m]
 m = which(zones$area < 0.000001)
 zones$job_density[m] = 0
 
-parking = read.csv2(.ancfile("input/Estimoinnin_lähtötiedot/md21_pysakointikustannus_tyo_2018.csv"),
+parking = read.delim(.ancfile("input/Estimoinnin_lähtötiedot/2012.prk"),
                     fileEncoding="utf-8",
-                    stringsAsFactors=FALSE)
-zones$parking_fee_work = parking$parking_fee[match(zones$zone_orig, parking$zone)]
-parking = read.csv2(.ancfile("input/Estimoinnin_lähtötiedot/md22_pysakointikustannus_muu_2018.csv"),
-                    fileEncoding="utf-8",
-                    stringsAsFactors=FALSE)
-zones$parking_fee_other = parking$parking_fee[match(zones$zone_orig, parking$zone)]
+                    stringsAsFactors=FALSE,
+                    skip = 5)
+zones$parking_fee_work = parking$parcosw[match(zones$zone_orig, parking$X)]
+zones$parking_fee_other = parking$parcose[match(zones$zone_orig, parking$X)]
 zones = na.to.zero(zones, c("parking_fee_work", "parking_fee_other"))
 
 students = read_xlsx(.ancfile("input/Maankäyttö/opla_luettelo_2017_2.xlsx"), sheet="sij19")
