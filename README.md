@@ -12,7 +12,7 @@ Please note, that scripts use encoding `UTF-8`.
 ## R environment setup
 
 Aftr installing R v3.6.0, you can restore correct R environment (dependencies
-etc.) via (`renv`)[https://rstudio.github.io/renv/articles/renv.html] command
+etc.) via [`renv`](https://rstudio.github.io/renv/articles/renv.html) command
 `renv::restore()`. Previously, this package used a Docker image but it was
 abanboned in favour of `renv`.
 
