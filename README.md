@@ -6,62 +6,15 @@ This repository includes data preprocessing scripts. Preprocessed data is fed
 into `helmet-estimation`, and estimation results are programmed into
 `helmet-model-system`.
 
-To use R, install the newest version of R. The scripts were written in R 3.4.4.
+To use R, install the newest version of R. The scripts were written in R 3.6.0.
 Please note, that scripts use encoding `UTF-8`.
 
-## Docker setup
+## R environment setup
 
-R and Python environment is virtualized using Docker. See
-[Dockerfile](Dockerfile) for details. Build and run using commands below.
-Run-script will open up a bash session where user can start the preprocessing.
-The data needs to be however mapped as external volume,
-see `docker run` commands below.
-
-### Build Docker image
-
-Open Windows PowerShell or Linux command line. Docker image can be built either
-from local copy of the source code:
-
-```
-docker build -t helmet-data-preprocessing .
-```
-
-Or straight from Github:
-
-```
-docker build -t helmet-data-preprocessing https://github.com/HSLdevcom/helmet-data-preprocessing.git
-```
-
-If you wish to use a certain branch for the Github build, add `#branch-name` at
-the end of the repository address.
-
-### Run on Windows PowerShell
-
-```
-docker run -it --rm `
-  -v c:/Users/xxx/input:/input `
-  -v c:/Users/xxx/output:/output `
-  helmet-data-preprocessing
-```
-
-### Run on Linux command line
-
-```
-docker run -it --rm \
-  -v ~/xxx/input:/input \
-  -v ~/xxx/output:/output \
-  helmet-data-preprocessing
-```
-
-### External dependencies
-
-You can install dependencies with:
-
-```
-Rscript --quiet --no-save --encoding=UTF-8 install-dependencies.R
-```
-
-Dockerfile installs these dependencies automatically.
+Aftr installing R v3.6.0, you can restore correct R environment (dependencies
+etc.) via (`renv`)[https://rstudio.github.io/renv/articles/renv.html] command
+`renv::restore()`. Previously, this package used a Docker image but it was
+abanboned in favour of `renv`.
 
 ### Input data
 
@@ -69,18 +22,22 @@ All input data is located in private EXT-HELMET_KEHI_40 Sharepoint group. Just
 download the folder `5 Data`, and either rename it as `input` to run scripts on
 your local environment, or mount it to Docker.
 
+Travel survey data is not included in `5 Data` because of privacy reasons.
+
 ### Running
 
-Run every script by running `sh batch.sh`. Output files in CSV or RData format
-will be created to `output` folder.
+Run every script by running `batch.R`. Output files in CSV or RData format
+will be created to different folders. Please note, that Python scripts are
+not run automatically - at least not yet. Moreover, Alogit will need
+estimation data wrapped in 180 characters. Please use fast UNIX tools for that.
 
 ## Information about Python
 
 ### Setup
 
 We're using `pipenv` to isolate our environment from the other Python modules.
-Python version is 2.7 because our final deployment target (EMME) supports only
-2.7.
+Python version is 2.7 because our final deployment target (EMME) supported only
+2.7 at the time of the development.
 
 Intro to pipenv can be found from these links:
 - https://docs.python-guide.org/dev/virtualenvs/
