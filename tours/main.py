@@ -269,7 +269,7 @@ tour_output.to_csv(RESULT_FILE_NAME,
                             "visits_t11",
                             "visits_t12",
                             ])
-print "Finished!"
+print ("Finished!")
 
 
 # Are there the same amount of trips in diaries and in tours?
@@ -283,7 +283,7 @@ for person in people:
     if number_of_diary_trips != number_of_tour_trips:
         errors = errors + 1
 
-print "Number of people with missing trips: {}".format(errors)
+print ("Number of people with missing trips: {}".format(errors))
 
 npeople = len(people)
 ntours = tour_output.shape[0]
@@ -298,10 +298,10 @@ ntours_open = tour_output_open.shape[0]
 xtours_closed = tour_output_closed["xfactor"].sum()
 xtours_open = tour_output_open["xfactor"].sum()
 
-print "People: {0:.0f} (n={1:d})".format(xpeople, npeople)
-print "Tours: {0:.0f} (n={1:d})".format(xtours, ntours)
-print "Tours per people: {0:.2f}".format(xtours/xpeople)
-print "Closed tours: {0:.0f} (n={1:d})".format(xtours_closed, ntours_closed)
-print "Closed tours per people: {0:.2f}".format(xtours_closed/xpeople)
-print "Open tours: {0:.0f} (n={1:d})".format(xtours_open, ntours_open)
-print "Open tours per people: {0:.2f}".format(xtours_open/xpeople)
+print ("People: {0:.0f} (n={1:d})".format(xpeople, npeople))
+print ("Tours: {0:.0f} (n={1:d})".format(xtours, ntours))
+print ("Tours per people: {0:.2f}".format(xtours/xpeople))
+print ("Closed tours: {0:.0f} (n={1:d})".format(xtours_closed, ntours_closed))
+print ("Closed tours per people: {0:.2f}".format(xtours_closed/xpeople))
+print ("Open tours: {0:.0f} (n={1:d})".format(xtours_open, ntours_open))
+print ("Open tours per people: {0:.2f}".format(xtours_open/xpeople))

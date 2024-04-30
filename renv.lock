@@ -764,16 +764,6 @@
       ],
       "Hash": "8bdf5a526863e28c5fd0960793320810"
     },
-    "renv": {
-      "Package": "renv",
-      "Version": "1.0.4",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "utils"
-      ],
-      "Hash": "11abaf7c540ff33f94514d50f929bfd1"
-    },
     "reshape2": {
       "Package": "reshape2",
       "Version": "1.4.3",

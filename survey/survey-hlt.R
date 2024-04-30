@@ -1,14 +1,15 @@
 # -*- coding: utf-8-unix -*-
 library(strafica)
 
-matk = read.csv2(ancfile("input/HLT-aineisto/M_MATKAT.CSV"),
-                 fileEncoding="cp1252",
+matk = read.csv2("input/HLT-aineisto/M_MATKAT.CSV",
+                 encoding="ANSI",
                  stringsAsFactors=FALSE)
-taus = read.csv2(ancfile("input/HLT-aineisto/T_TAUSTA.CSV"),
-                 fileEncoding="cp1252",
+taus = read.csv2("input/HLT-aineisto/T_TAUSTA.CSV",
+                 encoding="UTF-8",
                  stringsAsFactors=FALSE)
-paik = read.csv2(ancfile("input/HLT-aineisto/PA_PAIKAT_sijoittelualueet.csv"),
-                 fileEncoding="cp1252",
+paik = read.csv2("input/HLT-aineisto/PA_PAIKAT_sijoittelualueet.csv",
+                 encoding="UTF-8",
+                 sep=",",
                  stringsAsFactors=FALSE)
 
 
@@ -158,7 +159,7 @@ koht = mcddply(koht, .(M_TAUSTAID), function(df) {
             # Arranging locations from closest to farthest. In tie, location
             # with latest visit is first.
             similar_targets = arrange(similar_targets, dist, -m)
-            
+
             # If trip is beginning and the end location of the last trip is
             # similar enough, let's move that to first.
             ended_here_last = FALSE
@@ -168,14 +169,14 @@ koht = mcddply(koht, .(M_TAUSTAID), function(df) {
                                              similar_targets[-j, , drop=FALSE])
                 ended_here_last = TRUE
             }
-            
+
             # Kindergartens and shops will never be identified as already
             # visited locations. This prevents tours starting and ending to same
             # kindergarten/shop.
             if (!ended_here_last & df$type[i] %in% c(8, 9, 10, 11, 12)) {
                 similar_targets = similar_targets[0, , drop=FALSE]
             }
-            
+
             if (nrow(similar_targets) > 0 && similar_targets$dist[1] < DISTANCE) {
                 # If the first location is close enough, the location is
                 # identical.
@@ -206,7 +207,7 @@ jkoht = rename(ikoht, tid=jtid)
 matk = leftjoin(matk, jkoht)
 
 # Replace trip types by the ones in HEHA
-types = read.delims("types-hlt.txt", fileEncoding="utf-8")
+types = read.delims("survey/types-hlt.txt", fileEncoding="utf-8")
 m = match(matk$M_LTK, types$id)
 matk$itype = types$type[m]
 m = match(matk$M_MTK, types$id)
@@ -232,7 +233,7 @@ paik = arrange(paik, tid)
 ### Modes
 ###
 
-modes = read.delims("modes-hlt.txt", fileEncoding="utf-8")
+modes = read.delims("survey/modes-hlt.txt", fileEncoding="utf-8")
 m = match(matk$M_PAAKULKUTAPA, modes$id)
 matk$mode = modes$mode[m]
 m = is.na(matk$mode)
@@ -277,11 +278,11 @@ matk = rename(matk, M_TRIPROUTESID=eid)
 ###
 
 matk = downclass(matk)
-write.csv2(matk, file="matkat-hlt.csv", row.names=FALSE)
+write.csv2(matk, file="survey/temp/matkat-hlt.csv", row.names=FALSE)
 taus = downclass(taus)
-write.csv2(taus, file="tausta-hlt.csv", row.names=FALSE)
+write.csv2(taus, file="survey/temp/tausta-hlt.csv", row.names=FALSE)
 paik = downclass(paik)
-write.csv2(paik, file="paikat-hlt.csv", row.names=FALSE)
+write.csv2(paik, file="survey/temp/paikat-hlt.csv", row.names=FALSE)
 
 npeople = nrow(taus)
 ntrips = nrow(matk)

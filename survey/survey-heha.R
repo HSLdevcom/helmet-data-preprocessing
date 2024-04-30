@@ -3,7 +3,7 @@ library(strafica)
 library(readxl)
 library(lubridate)
 
-matk = load1("raw-heha.RData")
+matk = load1("survey/temp/raw-heha.RData")
 matk$length = matk$PITUUS
 matk$eid = matk$matkaid
 
@@ -21,7 +21,7 @@ matk = subset(matk, montako_matkaa > 0)
 ### Location types
 ###
 
-types = read.delims("types-heha.txt", fileEncoding="utf-8")
+types = read.delims("survey/types-heha.txt", fileEncoding="utf-8")
 m = match(matk$LP, types$type_name)
 matk$itype = types$type[m]
 m = match(matk$MP, types$type_name)
@@ -273,7 +273,7 @@ koht = mcddply(koht, .(juokseva), function(df) {
             # Arranging locations from closest to farthest. In tie, location
             # with latest visit is first.
             similar_targets = arrange(similar_targets, dist, -m)
-            
+
             # If trip is beginning and the end location of the last trip is
             # similar enough, let's move that to first.
             ended_here_last = FALSE
@@ -283,14 +283,14 @@ koht = mcddply(koht, .(juokseva), function(df) {
                                              similar_targets[-j, , drop=FALSE])
                 ended_here_last = TRUE
             }
-            
+
             # Kindergartens and shops will never be identified as already
             # visited locations. This prevents tours starting and ending to same
             # kindergarten/shop.
             if (!ended_here_last & df$type[i] %in% c(4, 5)) {
                 similar_targets = similar_targets[0, , drop=FALSE]
             }
-            
+
             if (nrow(similar_targets) > 0 && similar_targets$dist[1] < DISTANCE) {
                 # If the first location is close enough, the location is
                 # identical.
@@ -333,7 +333,7 @@ paik = arrange(paik, tid)
 ### Modes
 ###
 
-modes = read.delims("modes-heha.txt", fileEncoding="utf-8")
+modes = read.delims("survey/modes-heha.txt", fileEncoding="utf-8")
 m = match(matk$PKTAPA2, modes$PKTAPA2)
 matk$mode = modes$mode[m]
 m = is.na(matk$mode)
@@ -355,11 +355,11 @@ matk = leftjoin(matk, pick(taus, juokseva, pid), by="juokseva")
 ###
 
 matk = downclass(matk)
-write.csv2(matk, file="matkat-heha.csv", row.names=FALSE)
+write.csv2(matk, file="survey/temp/matkat-heha.csv", row.names=FALSE)
 taus = downclass(taus)
-write.csv2(taus, file="tausta-heha.csv", row.names=FALSE)
+write.csv2(taus, file="survey/temp/tausta-heha.csv", row.names=FALSE)
 paik = downclass(paik)
-write.csv2(paik, file="paikat-heha.csv", row.names=FALSE)
+write.csv2(paik, file="survey/temp/paikat-heha.csv", row.names=FALSE)
 
 npeople = nrow(taus)
 ntrips = nrow(matk)

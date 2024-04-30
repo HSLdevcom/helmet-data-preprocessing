@@ -18,10 +18,10 @@ verbose_source("zones.R")
 verbose_source("matrices.R")
 setwd(ROOT_DIRECTORY)
 
-setwd("survey")
-verbose_source("raw-heha.R")
-verbose_source("survey-heha.R")
-verbose_source("survey-hlt.R")
+setwd(ROOT_DIRECTORY)
+verbose_source("survey/raw-heha.R")
+verbose_source("survey/survey-heha.R")
+verbose_source("survey/survey-hlt.R")
 setwd(ROOT_DIRECTORY)
 
 # TODO: Find out how to set up a pipenv environment and run these commands. Can

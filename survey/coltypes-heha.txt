@@ -1,14 +1,8 @@
 col_index	col_type	col_name
 1	numeric	juokseva
-2	text	Kunnannimi
-3	text	Kantakaupunkitaiesikaupunki
-4	text	IkaryhmaPOSTITUS
-5	text	AidinkieliPOSTITUS
-6	text	supu
-7	text	username
-8	text	haastattelija
-9	numeric	tutkimuspaiva
-10	text	SMS_muistutus
+2	text	username
+3	numeric	tutkimuspaiva
+4	text	SMS_muistutus
 11	text	onko_valmis
 12	text	valmistumispvm
 13	text	vastauskieli

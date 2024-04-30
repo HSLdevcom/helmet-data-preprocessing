@@ -247,7 +247,7 @@ class Tour(object):
             if secondary_destination.get_id() == -1:
                 letters.remove("B")
             else:
-                print "`origin` and `destination` are the same but still `secondary_destination` exists!"
+                print ("`origin` and `destination` are the same but still `secondary_destination` exists!")
         # Finally, find out positions of each location
         indices = list()
         if "A" in letters:
