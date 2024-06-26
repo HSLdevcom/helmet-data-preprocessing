@@ -1,48 +1,48 @@
-# -*- coding: utf-8-unix -*-
 library(strafica)
 library(readxl)
+library(tidyr)
 library(lubridate)
+columns = read.delims("survey/coltypes-lt23.csv")
+matk = read_xlsx("input/HEHA-aineistot/HEHA23_MATKAT_KERTOIMET_sij23.xlsx", col_types=columns$col_type)
+matk$length = matk$MATKANPITUUS
+matk$eid = matk$jarjestys
 
-matk = load1("survey/temp/raw-heha.RData")
-matk$length = matk$PITUUS
-matk$eid = matk$matkaid
-
-taus = pick(matk,
-            juokseva, montako_matkaa, kerroin, ika, sukup_laaj,
-            ap_kela, montako_autoa, onko_ajokortti, miten_usein_auto_kaytettavissa, toimi,
-            kotitalous_0_6v, kotitalous_kaikki, ap_sij23)
-taus = rename(taus, ap_sij23=rzone, kerroin=xfactor)
-taus = dedup(taus, juokseva)
-
-matk = subset(matk, montako_matkaa > 0)
-
+taus_columns = read.delims("survey/coltypes-lt23-tausta.csv")
+taus = read_xlsx("input/HEHA-aineistot/HEHA23_TAUSTAT_KERTOIMET_sij23.xlsx", col_types=taus_columns$col_type)
 
 ###
 ### Location types
 ###
 
-types = read.delims("survey/types-heha.txt", fileEncoding="utf-8")
-m = match(matk$LP, types$type_name)
-matk$itype = types$type[m]
-m = match(matk$MP, types$type_name)
-matk$jtype = types$type[m]
+types = read.delims("survey/types-lt23.txt", fileEncoding="utf-8")
+matk$itype = matk$lahtopaikka
+matk$jtype = matk$maaranpaa
+
+# Filter weekend out
+matk = subset(matk, !(is.na(kerroin_arki)))
+taus = subset(taus, !(is.na(kerroin_arki)))
+
+#taus = unpick(taus,POISTOT,PVtyyppiNUM,haastattelija,tutkimuspaiva)+
+taus = pick(taus,username,ika,lon,lat,kerroin_arki,asuinpaikka_sij23)
+matk = leftjoin(matk, taus)
+
+#filter out those without home address
+matk = subset(matk,!(is.na(lon)))
+
+#Get xfactor
+matk$xfactor = matk$kerroin_arki
+taus$xfactor = taus$kerroin_arki
+
 # Children under 18 go to school (3) and adults at and over 18 go to university.
 m = which(matk$ika >= 18 & matk$itype == 3)
 matk$itype[m] = 12
 m = which(matk$ika >= 18 & matk$jtype == 3)
 matk$jtype[m] = 12
 
-
-###
-### Coordinates
-###
-
-matk$ix = as.numeric(matk$lp_x)
-matk$iy = as.numeric(matk$lp_y)
-matk$jx = as.numeric(matk$mp_x)
-matk$jy = as.numeric(matk$mp_y)
-m = which(matk$jx == 20190925)
-matk$jx[m] = 25.09
+matk$ix = as.numeric(matk$lon_aloitus)
+matk$iy = as.numeric(matk$lat_aloitus)
+matk$jx = as.numeric(matk$lon_maaranpaa)
+matk$jy = as.numeric(matk$lat_maaranpaa)
 
 m = which(matk$ix < 1 | matk$iy < 1)
 matk$ix[m] = NA
@@ -54,13 +54,12 @@ matk$jy[m] = NA
 matk = reproject(matk, from=4326, to=3067, names=c("ix","iy"))
 matk = reproject(matk, from=4326, to=3067, names=c("jx","jy"))
 
-
 ###
 ### Home coordinates
 ###
 
-matk$rx = as.numeric(matk$ap_x)
-matk$ry = as.numeric(matk$ap_y)
+matk$rx = as.numeric(matk$lon)
+matk$ry = as.numeric(matk$lat)
 m = which(matk$rx < 1 | matk$rx < 1)
 matk$rx[m] = NA
 matk$ry[m] = NA
@@ -90,33 +89,33 @@ hms_string_from_datetime = function(x, start_from=4) {
     return(y)
 }
 
-matk$idatetime = ymd_hms(matk$LPdttm, tz="Europe/Helsinki")
+matk = separate(matk, col = aika, into = c("start", "end"),sep = ",")
+matk$idatetime = ymd_hms(matk$start)
 matk$itime = hms_string_from_datetime(matk$idatetime)
-matk$jdatetime = ymd_hms(matk$MPdttm, tz="Europe/Helsinki")
+matk$jdatetime = ymd_hms(matk$end)
 matk$jtime = hms_string_from_datetime(matk$jdatetime)
 
 # If a trip is missing all four attributes, it is most likely an error.
-matk = subset(matk, !(is.na(itime) & is.na(jtime) & is.na(LP) & is.na(MP)))
-
+matk = subset(matk, !(is.na(itime) & is.na(jtime) & is.na(lahtopaikka) & is.na(maaranpaa)))
 
 ###
 ### Trip number
 ###
 
 # Arranging by person identifier and time
-matk = arrange(matk, juokseva, itime)
+matk = arrange(matk, username, itime)
 
-matk = mcddply(matk, .(juokseva), function(df) {
+#????
+matk = mcddply(matk, .(username), function(df) {
     df$number = rows.along(df)
     return(df)
 })
-
 
 ###
 ### Time spent on location
 ###
 
-times = mcddply(matk, .(juokseva), function(df) {
+times = mcddply(matk, .(username), function(df) {
     if (nrow(df) == 1) return(NULL)
     times = data.frame(type=NA, staytime=NA)
     for (i in rows.along(df)) {
@@ -135,7 +134,11 @@ times = mcddply(matk, .(juokseva), function(df) {
 })
 fold(times, .(type), tmed=median(staytime), tmean=mean(staytime), tmin=min(staytime), tmax=max(staytime))
 
-
+#translate 2023 column names into 2018 column names
+matk$lp_sij23 = matk$aloitus_sij23
+matk$mp_sij23 = matk$maaranpaa_sij23
+matk$ap_sij23 = matk$asuinpaikka_sij23
+matk$Paakulkutapa = matk$pktapa2
 ###
 ### Imputation
 ###
@@ -147,7 +150,6 @@ flip_trip = function(trip,
     stopif(nrow(trip) != 1)
     flipped_trip = trip
     flipped_trip[,] = NA
-    flipped_trip$juokseva = trip$juokseva
     flipped_trip$username = trip$username
     flipped_trip$xfactor = trip$xfactor
     flipped_trip$eid = 0
@@ -177,54 +179,55 @@ flip_trip = function(trip,
     return(flipped_trip)
 }
 
+
 matk$imputated = FALSE
-matk = mcddply(matk, .(juokseva), function(df) {
+matk = mcddply(matk, .(username), function(df) {
     n = nrow(df)
 
-    if (n > 1 && all(df$itype %in% 1) && all(df$jtype %nin% 1)) {
-        # There are more than one trip and all trips begin from home but never
-        # arrive there.
-        new_trips = mclapply.stop(rows.along(df), function(i) {
-            return(flip_trip(df[i,,drop=FALSE]))
-        })
-        new_trips = rbind_all(new_trips)
+    # if (n > 1 && all(df$itype %in% 1) && all(df$jtype %nin% 1)) {
+    #     # There are more than one trip and all trips begin from home but never
+    #     # arrive there.
+    #     new_trips = mclapply.stop(rows.along(df), function(i) {
+    #         return(flip_trip(df[i,,drop=FALSE]))
+    #     })
+    #     new_trips = rbind_all(new_trips)
 
-        df = rbind_list(df, new_trips)
-        df = arrange(df, number)
-        df$number = rows.along(df)
+    #     df = rbind_list(df, new_trips)
+    #     df = arrange(df, number)
+    #     df$number = rows.along(df)
 
-        return(df)
-    }
+    #     return(df)
+    # }
 
     new_trips = df[0,,drop=FALSE]
-    for (i in rows.along(df)) {
-        last = (i == n)
-        starts_home = (df$itype[i] %in% 1)
-        next_starts_home = ifelse(last, TRUE, df$itype[i+1] %in% 1)
-        no_overnight = (df$jtype[i] %in% c(2,3,4,5,8,11,12))
-        does_not_end_home = (df$jtype[i] %nin% c(1))
+    # for (i in rows.along(df)) {
+    #     last = (i == n)
+    #     starts_home = (df$itype[i] %in% 1)
+    #     next_starts_home = ifelse(last, TRUE, df$itype[i+1] %in% 1)
+    #     no_overnight = (df$jtype[i] %in% c(2,3,4,5,8,11,12))
+    #     does_not_end_home = (df$jtype[i] %nin% c(1))
 
-        if ((last && starts_home && no_overnight) ||
-                (starts_home && next_starts_home && does_not_end_home)) {
+    #     if ((last && starts_home && no_overnight) ||
+    #             (starts_home && next_starts_home && does_not_end_home)) {
 
-            #
-            # Imputate if
-            #
-            # 1. This trip is the last or the only one, it starts from home, and
-            #    it ends somewhere where people do not traditionally stay
-            #    overnight,
-            #
-            # or
-            #
-            # 2. This trip starts from home as well as the next trip, but this
-            #    trip did not end home.
-            #
+    #         #
+    #         # Imputate if
+    #         #
+    #         # 1. This trip is the last or the only one, it starts from home, and
+    #         #    it ends somewhere where people do not traditionally stay
+    #         #    overnight,
+    #         #
+    #         # or
+    #         #
+    #         # 2. This trip starts from home as well as the next trip, but this
+    #         #    trip did not end home.
+    #         #
 
-            new_trip = flip_trip(df[i,,drop=FALSE])
-            new_trips = rbind_list(new_trips, new_trip)
+    #         new_trip = flip_trip(df[i,,drop=FALSE])
+    #         new_trips = rbind_list(new_trips, new_trip)
 
-        }
-    }
+    #     }
+    # }
 
     df = rbind_list(df, new_trips)
     df = arrange(df, number)
@@ -234,19 +237,18 @@ matk = mcddply(matk, .(juokseva), function(df) {
 m = which(matk$imputated)
 matk$eid[m] = max(matk$eid) + seq(length(m))
 
-
 ###
 ### Unique locations
 ###
 
-ikoht = pick(matk, juokseva, eid, number, itype, ix, iy)
+ikoht = pick(matk, username, eid, number, itype, ix, iy)
 ikoht = rename(ikoht, itype=type, ix=x, iy=y)
 ikoht$from = TRUE
-jkoht = pick(matk, juokseva, eid, number, jtype, jx, jy)
+jkoht = pick(matk, username, eid, number, jtype, jx, jy)
 jkoht = rename(jkoht, jtype=type, jx=x, jy=y)
 jkoht$from = FALSE
 koht = rbind_list(ikoht, jkoht)
-koht = arrange(koht, juokseva, number, -from)
+koht = arrange(koht, username, number, -from)
 
 .eucd = function(x, y, tx, ty) {
     dist = eucd(x, y, tx, ty)
@@ -255,10 +257,11 @@ koht = arrange(koht, juokseva, number, -from)
     return(dist)
 }
 
+
 # Rule of thumb: two locations are same if they have same type and their
 # distance is at most DISTANCE meters.
 DISTANCE = 250
-koht = mcddply(koht, .(juokseva), function(df) {
+koht = mcddply(koht, .(username), function(df) {
     df$tid = 0
     number_of_unique_targets = 0
     for (i in rows.along(df)) {
@@ -310,13 +313,13 @@ koht = mcddply(koht, .(juokseva), function(df) {
     }
     return(df)
 })
-koht$tid = with(koht, classify(juokseva, tid))
+koht$tid = with(koht, classify(username, tid))
 
 # Adding location identifiers to trip table.
-ikoht = pick(subset(koht, from), juokseva, number, tid)
+ikoht = pick(subset(koht, from), username, number, tid)
 ikoht = rename(ikoht, tid=itid)
 matk = leftjoin(matk, ikoht)
-ikoht = pick(subset(koht, !from), juokseva, number, tid)
+ikoht = pick(subset(koht, !from), username, number, tid)
 jkoht = rename(ikoht, tid=jtid)
 matk = leftjoin(matk, jkoht)
 
@@ -334,7 +337,7 @@ paik = arrange(paik, tid)
 ###
 
 modes = read.delims("survey/modes-heha.txt", fileEncoding="utf-8")
-m = match(matk$PKTAPA2, modes$PKTAPA2)
+m = match(matk$pktapa2, modes$id)
 matk$mode = modes$mode[m]
 m = is.na(matk$mode)
 matk$mode[m] = -1
@@ -344,10 +347,11 @@ matk$mode[m] = -1
 ### New person ids
 ###
 
-taus = arrange(taus, juokseva)
-taus$pid_orig = taus$juokseva
+taus = arrange(taus, username)
+taus$pid_orig = taus$username
 taus$pid = rows.along(taus) + 100000L
-matk = leftjoin(matk, pick(taus, juokseva, pid), by="juokseva")
+taus$rzone = taus$asuinpaikka_sij23
+matk = leftjoin(matk, pick(taus, username, pid), by="username")
 
 
 ###
@@ -355,16 +359,19 @@ matk = leftjoin(matk, pick(taus, juokseva, pid), by="juokseva")
 ###
 
 matk = downclass(matk)
-write.csv2(matk, file="survey/temp/matkat-heha.csv", row.names=FALSE)
+write.csv2(matk, file="survey/temp/matkat-heha23.csv", row.names=FALSE)
 taus = downclass(taus)
-write.csv2(taus, file="survey/temp/tausta-heha.csv", row.names=FALSE)
+write.csv2(taus, file="survey/temp/tausta-heha23.csv", row.names=FALSE)
 paik = downclass(paik)
-write.csv2(paik, file="survey/temp/paikat-heha.csv", row.names=FALSE)
+write.csv2(paik, file="survey/temp/paikat-heha23.csv", row.names=FALSE)
 
 npeople = nrow(taus)
 ntrips = nrow(matk)
 xpeople = sum(taus$xfactor)
-xtrips = sum(taus$xfactor[match(matk$pid, taus$pid)])
+xtrips_array = (taus$xfactor[match(matk$pid, taus$pid)])
+xtrips = sum(xtrips_array)
 sprintf("People: %.0f (n=%d)", xpeople, npeople)
 sprintf("Trips: %.0f (n=%d)", xtrips, ntrips)
 sprintf("Trips per people: %.2f", xtrips/xpeople)
+
+

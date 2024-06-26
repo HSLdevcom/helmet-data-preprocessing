@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 
-import constants
-from location import Location
+import tours.constants as constants
+from tours.location import Location
 
 
 class Tour(object):

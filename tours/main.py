@@ -1,14 +1,13 @@
-#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
 import sys
 import pandas
 import json
-import constants
-from person import Person
-from trip import Trip
-from tour import Tour
-from location import Location
+import tours.constants as constants
+from tours.person import Person
+from tours.trip import Trip
+from tours.tour import Tour
+from tours.location import Location
 from operator import methodcaller
 
 

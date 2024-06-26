@@ -1,5 +1,6 @@
 # -*- coding: utf-8-unix -*-
 library(strafica)
+library(parallel)
 
 .rep = function(x, times) {
     times = na.to.zero(times)

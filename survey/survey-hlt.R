@@ -7,7 +7,7 @@ matk = read.csv2("input/HLT-aineisto/M_MATKAT.CSV",
 taus = read.csv2("input/HLT-aineisto/T_TAUSTA.CSV",
                  encoding="UTF-8",
                  stringsAsFactors=FALSE)
-paik = read.csv2("input/HLT-aineisto/PA_PAIKAT_sijoittelualueet.csv",
+paik = read.csv2("input/HLT-aineisto/PA_PAIKAT_sijoittelualueet_sij2023.csv",
                  encoding="UTF-8",
                  sep=",",
                  stringsAsFactors=FALSE)
@@ -24,7 +24,7 @@ paik = pick(paik,
             PA_ETRS_TM35FIN_E,
             PA_ETRS_TM35FIN_N,
             PA_KUNTANUMERO,
-            sij2019)
+            sij2023)
 paik = rename(paik,
               PA_TAUSTAID=M_TAUSTAID,
               PA_TRIPROUTESID=M_TRIPROUTESID,
@@ -36,20 +36,20 @@ paik = rename(paik,
 # Start coordinates
 paik_m1 = subset(paik, PA_PAIKKAKOODI=="M1")
 paik_m1 = rename(unpick(paik_m1, PA_PAIKKAKOODI),
-                 x=ix, y=iy, kunta=ikunta, sij2019=izone)
+                 x=ix, y=iy, kunta=ikunta, sij2023=izone)
 matk = leftjoin(matk, paik_m1)
 
 # End coordinates
 paik_m2 = subset(paik, PA_PAIKKAKOODI=="M2")
 paik_m2 = rename(unpick(paik_m2, PA_PAIKKAKOODI),
-                 x=jx, y=jy, kunta=jkunta, sij2019=jzone)
+                 x=jx, y=jy, kunta=jkunta, sij2023=jzone)
 matk = leftjoin(matk, paik_m2)
 
 # Home coordinates
 paik_k1 = subset(paik, PA_PAIKKAKOODI=="K1")
 paik_k1 = rename(unpick(paik_k1, PA_PAIKKAKOODI, M_TRIPROUTESID),
                  M_TAUSTAID=T_TAUSTAID,
-                 x=rx, y=ry, kunta=rkunta, sij2019=rzone)
+                 x=rx, y=ry, kunta=rkunta, sij2023=rzone)
 taus = leftjoin(taus, paik_k1)
 
 # Missing values are marked as zero
