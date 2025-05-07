@@ -1,14 +1,18 @@
+#library(dplyr)
 library(strafica)
 library(readxl)
 library(tidyr)
 library(lubridate)
-columns = read.delims("survey/coltypes-lt23.csv")
+
+columns = read.delims("survey/coltypes-lt23.csv", sep=";")
 matk = read_xlsx("input/HEHA-aineistot/HEHA23_MATKAT_KERTOIMET_sij23.xlsx", col_types=columns$col_type)
 matk$length = matk$MATKANPITUUS
 matk$eid = matk$jarjestys
 
-taus_columns = read.delims("survey/coltypes-lt23-tausta.csv")
+taus_columns = read.delims("survey/coltypes-lt23-tausta.csv", sep=";")
 taus = read_xlsx("input/HEHA-aineistot/HEHA23_TAUSTAT_KERTOIMET_sij23.xlsx", col_types=taus_columns$col_type)
+
+sprintf("R1 People: %.0f Trips:  %.0f", nrow(taus), nrow(matk))
 
 ###
 ### Location types
@@ -22,12 +26,22 @@ matk$jtype = matk$maaranpaa
 matk = subset(matk, !(is.na(kerroin_arki)))
 taus = subset(taus, !(is.na(kerroin_arki)))
 
+#filter lenkit out
+matk = subset(matk, LENKKI==2)
+sprintf("R2 (weekend and lenkit filtered) People: %.0f Trips:  %.0f", nrow(taus), nrow(matk))
+
 #taus = unpick(taus,POISTOT,PVtyyppiNUM,haastattelija,tutkimuspaiva)+
-taus = pick(taus,username,ika,lon,lat,kerroin_arki,asuinpaikka_sij23)
-matk = leftjoin(matk, taus)
+taus = pick(taus,username,ika,lon,lat,kerroin_arki,sukupuoli2,asuinpaikka_sij23,
+            montako_autoa2,miten_usein_auto_kaytettavissa,toimi,kotitalous_0_6v,
+            onko_ajokortti)
+taus$montako_autoa = taus$montako_autoa2
+taus$sukup_laaj = taus$sukupuoli2
+matk = leftjoin(matk, taus, "username")
 
 #filter out those without home address
-matk = subset(matk,!(is.na(lon)))
+matk = subset(matk,!(is.na(asuinpaikka_sij23)))
+
+sprintf("R3 (homeaddress missing) People: %.0f Trips:  %.0f", nrow(taus), nrow(matk))
 
 #Get xfactor
 matk$xfactor = matk$kerroin_arki
@@ -90,13 +104,15 @@ hms_string_from_datetime = function(x, start_from=4) {
 }
 
 matk = separate(matk, col = aika, into = c("start", "end"),sep = ",")
-matk$idatetime = ymd_hms(matk$start)
+matk$idatetime = ymd_hms(matk$start, tz="Europe/Helsinki")
 matk$itime = hms_string_from_datetime(matk$idatetime)
-matk$jdatetime = ymd_hms(matk$end)
+matk$jdatetime = ymd_hms(matk$end, tz="Europe/Helsinki")
 matk$jtime = hms_string_from_datetime(matk$jdatetime)
 
 # If a trip is missing all four attributes, it is most likely an error.
 matk = subset(matk, !(is.na(itime) & is.na(jtime) & is.na(lahtopaikka) & is.na(maaranpaa)))
+
+sprintf("R4 (weird trips) People: %.0f Trips:  %.0f", nrow(taus), nrow(matk))
 
 ###
 ### Trip number
@@ -336,12 +352,33 @@ paik = arrange(paik, tid)
 ### Modes
 ###
 
-modes = read.delims("survey/modes-heha.txt", fileEncoding="utf-8")
+modes = read.delims("survey/modes-heha23.txt", fileEncoding="utf-8")
 m = match(matk$pktapa2, modes$id)
 matk$mode = modes$mode[m]
+
+### Park and ride
+library(dplyr)
+a = is.na(matk$autokul)
+matk$autokul[a] = 0
+a = is.na(matk$automat)
+matk$automat[a] = 0
+matk <- matk %>%
+  mutate(is_car = ifelse(autokul == 1 | automat == 1, 1, 0))
+
+matk$bussi[is.na(matk$bussi)] <- 0
+matk$juna[is.na(matk$juna)] <- 0
+matk$metro[is.na(matk$metro)] <- 0
+matk$raitio[is.na(matk$raitio)] <- 0
+matk$pikaraitio[is.na(matk$pikaraitio)] <- 0
+matk <- matk %>%
+  mutate(is_transit = ifelse(bussi == 1 | juna == 1 | metro == 1 | raitio == 1 | pikaraitio == 1, 1, 0))
+matk <- matk %>%
+  mutate(is_lp = ifelse(is_car == 1 & is_transit == 1, 1, 0))
+matk <- matk %>%
+  mutate(mode = ifelse(is_lp == 1, 6, mode))
 m = is.na(matk$mode)
 matk$mode[m] = -1
-
+unloadNamespace("dplyr")
 
 ###
 ### New person ids
@@ -353,6 +390,7 @@ taus$pid = rows.along(taus) + 100000L
 taus$rzone = taus$asuinpaikka_sij23
 matk = leftjoin(matk, pick(taus, username, pid), by="username")
 
+sprintf("R5 (final) People: %.0f Trips:  %.0f", nrow(taus), nrow(matk))
 
 ###
 ### Output
@@ -360,7 +398,7 @@ matk = leftjoin(matk, pick(taus, username, pid), by="username")
 
 matk = downclass(matk)
 write.csv2(matk, file="survey/temp/matkat-heha23.csv", row.names=FALSE)
-taus = downclass(taus)
+#taus = downclass(taus)
 write.csv2(taus, file="survey/temp/tausta-heha23.csv", row.names=FALSE)
 paik = downclass(paik)
 write.csv2(paik, file="survey/temp/paikat-heha23.csv", row.names=FALSE)

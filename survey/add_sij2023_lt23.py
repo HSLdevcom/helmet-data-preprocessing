@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import geopandas as gpd
 from shapely.geometry import Point
 
@@ -10,11 +11,18 @@ print(aluejako.head())
 aluejako = aluejako[["SIJ2023", "geometry"]]
 aluejako = aluejako.to_crs(4326)
 
+def coords2point(coords):
+    if type(coords) == float:
+        return coords
+    k = coords.split(",")
+    if k[1]=='' or k[0]=='': return np.nan
+    return Point(float(k[1]), float(k[0]))
 # #Process HEHA
 heha = pd.read_excel("C:\\Users\\HajduPe\\helmet-data-preprocessing\\input\\HEHA-aineistot\\HEHA23_MATKAT_KERTOIMET.xlsx")
 for c in ["aloitus","maaranpaa"]:
-
-    heha["geometry"] = heha.apply(lambda row: Point(row["lon_"+c], row["lat_"+c]), axis=1)
+    
+    heha["geometry"] = heha.apply(lambda row: coords2point(row["G_"+c+"koordinaatit"]), axis=1)
+    #heha["geometry"] = heha.apply(lambda row: Point(row["lon_"+c], row["lat_"+c]), axis=1)
 
     # Convert to a GeoDataFrame
     heha = gpd.GeoDataFrame(heha, geometry="geometry")
@@ -38,8 +46,8 @@ heha.to_excel("C:\\Users\\HajduPe\\helmet-data-preprocessing\\input\\HEHA-aineis
 # #Process HEHA taustat
 heha = pd.read_excel("C:\\Users\\HajduPe\\helmet-data-preprocessing\\input\\HEHA-aineistot\\HEHA23_TAUSTAT_KERTOIMET.xlsx")
 for c in ["asuinpaikka"]:
-
-    heha["geometry"] = heha.apply(lambda row: Point(row["lon"], row["lat"]), axis=1)
+    heha["geometry"] = heha.apply(lambda row: coords2point(row["kotikoordinaatit"]), axis=1)
+    #heha["geometry"] = heha.apply(lambda row: Point(row["lon"], row["lat"]), axis=1)
 
     # Convert to a GeoDataFrame
     heha = gpd.GeoDataFrame(heha, geometry="geometry")

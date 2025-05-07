@@ -1,6 +1,8 @@
 import pandas as pd
+import numpy as np
 
 df1 = pd.read_csv("input/estimation_Sami/zonedata_base.csv")
+df1.index = np.arange(1, len(df1) + 1)
 
 col_dict = {    "Unnamed: 0":"zone",
                 "population":"pop",
@@ -21,7 +23,7 @@ col_dict = {    "Unnamed: 0":"zone",
                 "industry":"industry",
                 "parking_cost_work": "parkCostW",
                 "parking_cost_errand": "parkCostE",
-                "comprehesive_schools": "schoolL1",
+                "comprehensive_schools": "schoolL1",
                 "secondary_schools":"schoolL2",
                 "tertiary_education":"schoolL3",
                 "zone_area":"area",
@@ -41,7 +43,10 @@ col_dict = {    "Unnamed: 0":"zone",
 df1 = df1.rename(columns=col_dict)
 df1 = df1 * 1 #hacky way to turn true false into ints
 df1 = df1.fillna(0)
+print([k for k in df1.columns if k in col_dict.values()])
+print(len([k for k in df1.columns if k in col_dict.values()]))
+df1 = df1[[k for k in df1.columns if k in col_dict.values()]]
 df_cols = pd.DataFrame(data = {"columns": ["index"]+list(col_dict.values())})
 df_cols.to_csv("../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/zonedata_base_cols.csv", index=False)
 
-df1.to_csv("../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/zonedata_base.csv", sep=" ")
+df1.to_csv("../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/zonedata_base.csv", sep=" ", header=False)

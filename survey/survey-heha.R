@@ -355,11 +355,11 @@ matk = leftjoin(matk, pick(taus, juokseva, pid), by="juokseva")
 ###
 
 matk = downclass(matk)
-write.csv2(matk, file="survey/temp/matkat-heha.csv", row.names=FALSE)
+write.csv2(matk, file="survey/temp/matkat-heha18.csv", row.names=FALSE)
 taus = downclass(taus)
-write.csv2(taus, file="survey/temp/tausta-heha.csv", row.names=FALSE)
+write.csv2(taus, file="survey/temp/tausta-heha18.csv", row.names=FALSE)
 paik = downclass(paik)
-write.csv2(paik, file="survey/temp/paikat-heha.csv", row.names=FALSE)
+write.csv2(paik, file="survey/temp/paikat-heha18.csv", row.names=FALSE)
 
 npeople = nrow(taus)
 ntrips = nrow(matk)

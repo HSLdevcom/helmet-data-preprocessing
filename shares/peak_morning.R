@@ -29,17 +29,20 @@ m_car = min(which(morning$mode %in% "car"))
 m_transit = min(which(morning$mode %in% "transit"))
 m_walk = min(which(morning$mode %in% "walk"))
 m_bike = min(which(morning$mode %in% "bike"))
+m_pnr = min(which(morning$mode %in% "pnr"))
 
-peak = dfsas(mode_name=c("car", "transit", "bike", "walk"),
+peak = dfsas(mode_name=c("car", "transit", "bike", "walk","pnr"),
              lower=c(morning$lower[m_car],
                      morning$lower[m_transit],
                      morning$lower[m_bike],
-                     morning$lower[m_walk]),
+                     morning$lower[m_walk],
+                     morning$lower[m_pnr]),
              upper=c(morning$upper[m_car],
                      morning$upper[m_transit],
                      morning$upper[m_bike],
-                     morning$upper[m_walk]),
-             percentage=c(1, 1, 1, 1))
+                     morning$upper[m_walk],
+                     morning$upper[m_pnr]),
+             percentage=c(1, 1, 1, 1, 1))
 
 print(peak)
 save(peak, file="peak_morning.RData")

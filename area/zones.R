@@ -39,15 +39,22 @@ zones$district[m] = "helsinki_other"
 zones$district[zones$surrounding_municipality] = "surrounding"
 zones$district[zones$peripheral_municipality] = "peripheral"
 
+#change first column into id manually
 zone_data = read.csv2(.ancfile("input/estimation_Sami/zonedata_base.csv"),
                     fileEncoding="utf-8",
                     stringsAsFactors=FALSE,
-                    sep=",")
+                    sep=",",)
+zone_data$id = zone_data$X
+zone_data = subset(zone_data,id<34999) #filter park and ride
 zone_data$zone_area = as.numeric(as.character(zone_data$zone_area))
 zone_data$workplaces = as.numeric(as.character(zone_data$workplaces))
+
+# zone_data = subset(zone_data,id %in% c(102,103,244,1063,1531,2703,2741,6272,6291,19071)) #TEST ONLY!!!
+# zones = subset(zones,zone_orig %in% c(102,103,244,1063,1531,2703,2741,6272,6291,19071)) #TEST ONLY!!!
 zones$jobDens = zone_data$workplaces/zone_data$zone_area
 zones$popDens = zone_data$population_density
 zones$singleHP = zone_data$share_detached_houses
+zones$sportsar = zone_data$sportsar
 zones$carDens = zone_data$car_density
 zones$pop = zone_data$population
 zones$jobs = zone_data$workplaces
@@ -58,6 +65,7 @@ zones$universit = zone_data$tertiary_education
 zones$primary = zone_data$comprehensive_schools
 zones$CParkWork = zone_data$parking_cost_work
 zones$CParkOther = zone_data$parking_cost_errand
+zones$zone_area = zone_data$zone_area
 
 
 View(zones)
@@ -112,10 +120,12 @@ zones = downclass(zones)
 check.na(zones)
 write.csv2(zones, file="zones.csv", row.names=FALSE)
 
+write.table(rbind(zones$zone_area), file = "flatfiles/zones_area.csv", row.names =FALSE, col.names = FALSE,sep = " ",quote=FALSE)
 write.table(rbind(zones$cbd), file = "flatfiles/zones_cbd.csv", row.names =FALSE, col.names = FALSE,sep = " ",quote=FALSE)
 write.table(rbind(zones$jobDens), file = "flatfiles/zones_job_density.csv", row.names =FALSE, col.names = FALSE,sep = " ",quote=FALSE)
 write.table(rbind(zones$popDens), file = "flatfiles/zones_pop_density.csv", row.names =FALSE, col.names = FALSE,sep = " ",quote=FALSE)
 write.table(rbind(zones$singleHP), file = "flatfiles/zones_singleHP.csv", row.names =FALSE, col.names = FALSE,sep = " ",quote=FALSE)
+write.table(rbind(zones$sportsar), file = "flatfiles/zones_sportsArea.csv", row.names =FALSE, col.names = FALSE,sep = " ",quote=FALSE)
 write.table(rbind(zones$carDens), file = "flatfiles/zones_car_density.csv", row.names =FALSE, col.names = FALSE,sep = " ",quote=FALSE)
 write.table(rbind(zones$pop), file = "flatfiles/zones_pop.csv", row.names =FALSE, col.names = FALSE,sep = " ",quote=FALSE)
 write.table(rbind(zones$jobs), file = "flatfiles/zones_jobs.csv", row.names =FALSE, col.names = FALSE,sep = " ",quote=FALSE)

@@ -220,7 +220,7 @@ nhb = c(6,7)
 
 data_columns = write_estimation_data(alternatives=subset(alternatives,
                                                          ttype %in% hb_work_school_study),
-                                     batch_size=1000,
+                                     batch_size=10000,
                                      model_name="wss",
                                      row=row,
                                      matrix_list=matrix_list,
@@ -230,7 +230,7 @@ writeLines(data_columns, "alternatives/columns-wss.txt")
 
 data_columns = write_estimation_data(alternatives=subset(alternatives,
                                                          ttype %in% hb_shopping_service),
-                                     batch_size=1000,
+                                     batch_size=10000,
                                      model_name="spb",
                                      row=row,
                                      matrix_list=matrix_list,
@@ -240,7 +240,7 @@ writeLines(data_columns, "alternatives/columns-spb.txt")
 
 data_columns = write_estimation_data(alternatives=subset(alternatives,
                                                          ttype %in% hb_other),
-                                     batch_size=1000,
+                                     batch_size=10000,
                                      model_name="other",
                                      row=row,
                                      matrix_list=matrix_list,
@@ -250,7 +250,7 @@ writeLines(data_columns, "alternatives/columns-other.txt")
 
 data_columns = write_estimation_data(alternatives=subset(alternatives,
                                                          ttype %in% nhb),
-                                     batch_size=100,
+                                     batch_size=10000,
                                      model_name="wbo",
                                      row=row,
                                      matrix_list=matrix_list,

@@ -16,6 +16,7 @@ tours$length_class = apply.breaks(tours$length,
                                   class=length_class_names,
                                   lower=c(0, 1, 3,  5, 10, 20, 30, 40),
                                   upper=c(1, 3, 5, 10, 20, 30, 40, Inf))
+tours = tours[!is.na(tours$length_class),]
 stopifnot(all(!is.na(tours$length_class)))
 
 length_all = fold(tours, .(length_class, model_type),

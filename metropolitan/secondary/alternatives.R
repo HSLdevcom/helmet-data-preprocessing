@@ -187,7 +187,7 @@ write_estimation_data = function(alternatives,
         
         stopifnot(all(sapply(batch, class) %in% c("integer", "numeric")))
         
-        fname = sprintf("alternatives/alternatives-%s-%05d_%05d.txt.txt",
+        fname = sprintf("alternatives/alternatives-%s-%05d_%05d.txt",
                         model_name,
                         start,
                         stop)

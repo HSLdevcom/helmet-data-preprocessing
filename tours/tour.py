@@ -45,11 +45,14 @@ class Tour(object):
             3: 0.0,
             4: 0.0,
             5: 0.0,
+            6: 0.0, #park and ride
         }
         for trip in trips:
             i = trip.get_mode()
             lengths[i] = lengths[i] + trip.get_length()
         mode = max(lengths, key=lengths.get)
+
+        #TODO: Park and ride should prevail over other modes?
         return mode
 
     def get_length(self):

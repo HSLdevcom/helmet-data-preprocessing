@@ -4,3 +4,4 @@ mode	mode_name
 3	transit
 4	car
 5	car
+6	pnr

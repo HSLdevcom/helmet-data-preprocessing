@@ -1,7 +1,7 @@
 {
     "survey": "heha",
-    "people-filepath": "survey/temp/tausta-heha.csv",
-    "trips-filepath": "survey/temp/matkat-heha.csv",
-    "locations-filepath": "survey/temp/paikat-heha.csv",
-    "tour-filepath": "tours/tours-heha.csv"
+    "people-filepath": "survey/temp/tausta-heha18.csv",
+    "trips-filepath": "survey/temp/matkat-heha18.csv",
+    "locations-filepath": "survey/temp/paikat-heha18.csv",
+    "tour-filepath": "tours/tours-heha18.csv"
 }
