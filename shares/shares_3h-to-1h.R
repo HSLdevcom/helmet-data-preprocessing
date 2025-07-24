@@ -67,17 +67,17 @@ shares_transport_class = ddply(trips, .(transport_class), function(df) {
     temp = leftjoin(df_aht, peaks[["morning"]])
     m = which(with(temp, itime >= lower & itime < upper))
     xfactor = sum(temp$xfactor[m] * temp$percentage[m])
-    stat$share[1] = xfactor / sum(df_aht$xfactor)
+    stat$share[1] = 1/(xfactor / sum(df_aht$xfactor))
     
     temp = leftjoin(df_pt, peaks[["other"]])
     m = which(with(temp, itime >= lower & itime < upper))
     xfactor = sum(temp$xfactor[m] * temp$percentage[m])
-    stat$share[2] = xfactor / sum(df_pt$xfactor)
+    stat$share[2] = 1/(xfactor / sum(df_pt$xfactor))
     
     temp = leftjoin(df_iht, peaks[["afternoon"]])
     m = which(with(temp, itime >= lower & itime < upper))
     xfactor = sum(temp$xfactor[m] * temp$percentage[m])
-    stat$share[3] = xfactor / sum(df_iht$xfactor)
+    stat$share[3] = 1/(xfactor / sum(df_iht$xfactor))
     
     return(stat)
 })
