@@ -40,8 +40,10 @@ mat$jzone = zones$zone[match(mat$jzone, zones$zone_orig)]
 mat = mat[, c("izone","jzone",grep("^length_car", colnames(mat), value=TRUE))]
 
 tours$length = NA
+tours = subset(tours, year<2019)
 all = expand.grid(year=unique(tours$year),
                   mtype=unique(tours$mtype))
+
 for (i in rows.along(all)) {
     m = which(tours$year %in% all$year[i] &
                   tours$mtype %in% all$mtype[i])

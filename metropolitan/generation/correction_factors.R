@@ -31,5 +31,5 @@ m1 = which(ttypes$homebased_tours >= 4 & !ttypes$not_modelled)
 m2 = which(ttypes$homebased_tours >= 4 & ttypes$not_modelled)
 sum(ttypes$xfactor[m2]) / sum(ttypes$xfactor[m1])
 m3 = which(ttypes$homebased_tours >= 4 & ttypes$too_long)
-sum((ttypes$homebased_tours[m3] - 4) / 4 * ttypes$xfactor[m3]) / sum(ttypes$xfactor[m1])
+sum((ttypes$homebased_tours[m3] - 4) / 4 * ttypes$xfactor[m3]) / (sum(ttypes$xfactor[m1])+(sum(ttypes$xfactor[m2]))) # 2025: changed the base to all 4+ tour combinations
 

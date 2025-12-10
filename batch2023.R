@@ -27,11 +27,11 @@ verbose_source("survey/survey-hlt.R")
 verbose_source("survey/survey-lt23.R")
 setwd(ROOT_DIRECTORY)
 
+#Select HEHA18 or HEHA23 via heha_year_config.txt
+
 # pipenv run python -m tours.main input-config-heha.json
 # pipenv run python -m tours.main input-config-hlt.json
 # pipenv run python -m tours.main input-config-heha23.json #if this fails due unicode, check the source data for weird unicode characters
-
-#Select HEHA18 or HEHA23 via heha_year_config.txt
 
 setwd("metropolitan/primary/")
 verbose_source("background.R")
@@ -41,11 +41,6 @@ verbose_source("observations.R")
 setwd(ROOT_DIRECTORY)
 
 setwd("metropolitan/secondary/")
-verbose_source("tours.R")
-verbose_source("observations.R")
-setwd(ROOT_DIRECTORY)
-
-setwd("metropolitan/constructed/")
 verbose_source("tours.R")
 verbose_source("observations.R")
 setwd(ROOT_DIRECTORY)
@@ -68,10 +63,6 @@ verbose_source("alternatives.R")
 setwd(ROOT_DIRECTORY)
 
 setwd("metropolitan/secondary/")
-verbose_source("alternatives.R")
-setwd(ROOT_DIRECTORY)
-
-setwd("metropolitan/constructed/")
 verbose_source("alternatives.R")
 setwd(ROOT_DIRECTORY)
 
@@ -105,7 +96,7 @@ verbose_source("demand_from_zones.R")
 verbose_source("output.R")
 setwd(ROOT_DIRECTORY)
 
-setwd("shares")
+setwd("shares") 
 verbose_source("tours.R")
 verbose_source("trips.R")
 verbose_source("peak_morning.R")
@@ -121,28 +112,27 @@ cat metropolitan/primary/alternatives/alternatives-wbo-*.txt | fold -w 180 -s > 
 cat metropolitan/primary/alternatives/alternatives-spb-*.txt | fold -w 180 -s > ../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/havainnot23/SPB.txt
 cat metropolitan/primary/alternatives/alternatives-other-*.txt | fold -w 180 -s > ../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/havainnot23/OTH.txt
 cat metropolitan/secondary/alternatives/alternatives--*.txt | fold -w 180 -s > ../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/havainnot23/SEC.txt
-cat metropolitan/constructed/alternatives/alternatives--*.txt | fold -w 180 -s > ../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/havainnot23/HCO.txt
-cat peripheral/primary/alternatives/alternatives--*.txt | fold -w 180 -s > ../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/havainnot/YMP.txt
-cat peripheral/constructed/alternatives/alternatives--*.txt | fold -w 180 -s > ../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/havainnot/YCO.txt
+# cat peripheral/primary/alternatives/alternatives--*.txt | fold -w 180 -s > ../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/havainnot/YMP.txt
+# cat peripheral/constructed/alternatives/alternatives--*.txt | fold -w 180 -s > ../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/havainnot/YCO.txt
 
 cat metropolitan/generation/alternatives/alternatives*.txt | fold -w 180 -s > ../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/havainnot23/ACCM.txt
 
 #vastukset
 python -m impedances.main
+#Create SEC_vastukset from SEC and zones
+python ./impedances/sec_dest_impedances.py
+cat output/impedances/SEC_vastukset.txt |  fold -w 180 -s > ../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/havainnot23/SEC_vastukset.txt
 #move impedance files from output to estimate folder of Alogit
 for f in *.csv ; do cat $f | fold -w 180 -s > new_$f ; done #works if in right folder (Aineisto/uudet 2023/vastukset)
-#Create SEC_vastukset from SEC and zones
-# python ./impedances/sec_dest_impedances.py
-
-cat output/impedances/SEC_vastukset.txt |  fold -w 180 -s > ../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/havainnot23/SEC_vastukset.txt
+python ./impedances/park_and_ride_observations.py
+cat HBW_park_and_ride_choice.txt | fold -w 180 -s > HBW_park_and_ride.txt #liipy-aineisto
 
 #flatfiles (zonet)
 python -m area.main
-
-cat ../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/zonedata_base.csv | fold -w 180 -s > ../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/zonedata_base_folded.csv
+cat ../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/zonedata_base.csv | fold -w 180 -s > ../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/zonedata_base_folded.csv 
 #vanha: remove header from zonedata_base manually, replace ; with space, fill missing data for peripheral municipalities (age distribution)
 #vanha: cat input/estimation_Sami/zonedata_forecast_muokattu.csv | fold -w 180 -s > ../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/zonedata_base_folded.csv
 
+cat ../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/zonedata_accessibility.csv | fold -w 180 -s > ../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/zonedata_accessibility_folded.csv 
 
-cat HBW_park_and_ride_choice.txt | fold -w 180 -s > HBW_park_and_ride.txt #liipy-aineisto
 

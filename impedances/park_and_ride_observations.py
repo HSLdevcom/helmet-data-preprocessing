@@ -22,8 +22,8 @@ aluejako = gpd.read_file("C:\\Users\\HajduPe\\helmet-data-preprocessing\\input\\
 print(aluejako.head())
 aluejako = aluejako[["SIJ2023", "geometry"]]
 aluejako = aluejako.to_crs(4326)
-#impendances = omx.open_file('C:\\Users\\HajduPe\\helmet-data-preprocessing\\input\\estimation_Sami\\hw.omx') #Must have all 2098 zones
-impendances = omx.open_file('C:\\Users\\HajduPe\\helmet-data-preprocessing\\input\\tuloskansion_vastukset\\dist_aht.omx') #Must have all 2098 zones
+impendances = omx.open_file('C:\\Users\\HajduPe\\helmet-data-preprocessing\\input\\estimation_Sami\\hw.omx') #Must have all 2098 zones
+#impendances = omx.open_file('C:\\Users\\HajduPe\\helmet-data-preprocessing\\input\\tuloskansion_vastukset\\dist_aht.omx') #Must have all 2098 zones
 zonedata = pd.read_csv("C:\\Users\\HajduPe\\helmet-data-preprocessing\\input\\estimation_Sami\\zonedata_forecast.csv") #Must have all 2098 zones
 
 #process observations
@@ -192,6 +192,7 @@ matrix_list = list(impendances.list_matrices())
 print(matrix_list)
 imp_arrays = {}
 scaler = 1.0 #0.5
+
 for matrix_key in matrix_list:
     if matrix_key == "walk_dist":
         imp_arrays["walk_dist"] = np.array(impendances["bike_dist"]) * scaler
@@ -201,23 +202,27 @@ for matrix_key in matrix_list:
         imp_arrays[matrix_key] = np.array(impendances[matrix_key]) * scaler
 print(imp_arrays["car_work"].shape)
 print('mappings:', impendances.list_mappings()) # ['taz']
+
 tazs = impendances.mapping('zone_number')
+
 #Alogit file
 selector_d = {'aloitus_sij23':'izone',
               'maaranpaa_sij23':'jzone',
               'laitos_emme':'kzone',
               'xfactor':'xfactor',
               }
+
 alogit_observations = observations.rename(columns=selector_d)[selector_d.values()]
 id_counter = 1
 
 #zone data
 print(zonedata["service"],zonedata["shops"])
 var_list = []
+
 #impedances
 zonedata_nearbys = {}
 for i in range(0,PARK_FACILITIES):
-                zonedata_nearbys[i] = zonedata[zonedata.apply(lambda x: imp_arrays["car_work"][tazs[int(x["id"])],i]<1,axis=1)] #filter nearby areas
+                zonedata_nearbys[i] = zonedata[zonedata.apply(lambda x: imp_arrays["car_work"][tazs[int(x["zone_id"])],i]<1,axis=1)] #filter nearby areas
 
 # kzone2id = {tazs[taz]:taz for taz in tazs if taz>34999} #inverted dictionary lookup for lp facilities
 # print(kzone2id)

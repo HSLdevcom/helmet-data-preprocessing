@@ -8,6 +8,7 @@ heha.query("kerroin_arki>0.001", inplace=True)
 print(len(heha))
 lenkit = heha.query("LENKKI==1")
 print(len(lenkit))
+print(lenkit["kerroin_arki"].sum())
 #print(lenkit.head())
 print(lenkit["kerroin_arki"].sum()/heha["kerroin_arki"].sum())
 
@@ -23,7 +24,7 @@ print(lenkit.dtypes)
 print(lenkit["username"].dtype,taustat["username"].dtype)
 
 lenkit = lenkit.set_index("username").join(taustat.set_index("username"),on="username",how="left",lsuffix="_lenkit",rsuffix="_taustat")
-print(lenkit.head())
+print(len(lenkit))
 
 modes = {1: "car",2: "pt", 3: "bike", 4: "walk", 5: "other"}
 ages = []
@@ -48,7 +49,7 @@ for ag in age_groups:
     print(ag,share/pop_share)
 plt.plot(ages,shares)
 for mode in modes:
-    print(f'{modes[mode]}: {lenkit.query("pktapa2_luok==@mode")["kerroin_arki_lenkit"].sum()/lenkit["kerroin_arki_lenkit"].sum()}')
+    print(f'{modes[mode]}: {lenkit.query("pktapa2_luok==@mode")["kerroin_arki_lenkit"].sum()/lenkit["kerroin_arki_lenkit"].sum()}, {lenkit["kerroin_arki_lenkit"].sum()}')
 # heha.to_excel("C:\\Users\\HajduPe\\helmet-data-preprocessing\\input\\HEHA-aineistot\\HEHA23_MATKAT_KERTOIMET_sij23.xlsx",
 #              sheet_name='Data',index=False)
 plt.show()

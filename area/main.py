@@ -4,7 +4,7 @@ import numpy as np
 df1 = pd.read_csv("input/estimation_Sami/zonedata_base.csv")
 df1.index = np.arange(1, len(df1) + 1)
 
-col_dict = {    "Unnamed: 0":"zone",
+col_dict = {    "zone_id":"zone",
                 "population":"pop",
                 "share_age_7-17":"age7to17",
                 "share_age_18-29":"age18to29",
@@ -46,6 +46,9 @@ df1 = df1.fillna(0)
 print([k for k in df1.columns if k in col_dict.values()])
 print(len([k for k in df1.columns if k in col_dict.values()]))
 df1 = df1[[k for k in df1.columns if k in col_dict.values()]]
+if "zone" not in [k for k in df1.columns if k in col_dict.values()]:
+    print("ERROR: Missing zone_id")
+    exit()
 df_cols = pd.DataFrame(data = {"columns": ["index"]+list(col_dict.values())})
 df_cols.to_csv("../H4_estimointi/Helmet4/helmet_estimation/Aineisto/uudet2023/zonedata_base_cols.csv", index=False)
 

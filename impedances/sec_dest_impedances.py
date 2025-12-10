@@ -25,8 +25,8 @@ for matrix_key in matrix_list:
     else:
         imp_arrays[matrix_key] = np.array(impendances[matrix_key]) * scaler
 
-print(imp_arrays.keys())
-print(imp_arrays["walk_dist"][0,1])
+# print(imp_arrays.keys())
+# print(imp_arrays["walk_dist"][0,1])
 counter = 1
 
 weird_count = 0
@@ -53,7 +53,7 @@ with open(impedances_per_obs, "w", newline='') as out_file:
                     no_kval = imp_arrays[matrix_name][pto,pfrom]
                     delta_val = kval - no_kval
                     if delta_val>1000: 
-                        if matrix_name == "car_time": print(delta_val)
+                        if matrix_name == "car_time": weird_count+=1
                         delta_val = 1000
                     if delta_val<0:
                         #print(f"Between zone {pfrom} and {pto} delta {delta_val} if going via {i}, casting to zero")
@@ -66,6 +66,7 @@ with open(impedances_per_obs, "w", newline='') as out_file:
             counter += 1
             # if counter > 5: break
 
+impendances.close()
 print(f"Weird values less than zero: {weird_count}\nGood values: {good_count}")
-for matrix_name in imp_arrays:
-    print(matrix_name, np.max(imp_arrays[matrix_name]))
+# for matrix_name in imp_arrays:
+#     print(matrix_name, np.max(imp_arrays[matrix_name]))

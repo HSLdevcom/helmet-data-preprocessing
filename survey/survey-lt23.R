@@ -185,13 +185,18 @@ flip_trip = function(trip,
     flipped_trip$jdatetime = flipped_trip$idatetime + (trip$jdatetime - trip$idatetime)
     flipped_trip$jtime = hms_string_from_datetime(flipped_trip$jdatetime)
     flipped_trip$Paakulkutapa = trip$Paakulkutapa
+    flipped_trip$pktapa2 = trip$pktapa2
     flipped_trip$length = trip$length
     flipped_trip$number = trip$number + 0.5
     flipped_trip$imputated = TRUE
-    flipped_trip = unpick(flipped_trip,
-                          LPdttm, MPdttm,
-                          dt1, tm1, dt2, tm2,
-                          LPdttm_, MPdttm_)
+
+    flipped_trip$ika2 = trip$ika2
+    flipped_trip = unpick(flipped_trip,tutkimuspaiva)
+    # flipped_trip = unpick(flipped_trip,
+    #                       LPdttm, MPdttm,
+    #                       dt1, tm1, dt2, tm2,
+    #                       LPdttm_, MPdttm_)
+    # flipped_trip = pick(username,xfactor,eid,ix,iy,jx,jy,itype,jtype,lp_sij23,mp_sij23,idatetime,jtime,Paakulkutapa,length,number,imputated)
     return(flipped_trip)
 }
 
@@ -200,50 +205,49 @@ matk$imputated = FALSE
 matk = mcddply(matk, .(username), function(df) {
     n = nrow(df)
 
-    # if (n > 1 && all(df$itype %in% 1) && all(df$jtype %nin% 1)) {
-    #     # There are more than one trip and all trips begin from home but never
-    #     # arrive there.
-    #     new_trips = mclapply.stop(rows.along(df), function(i) {
-    #         return(flip_trip(df[i,,drop=FALSE]))
-    #     })
-    #     new_trips = rbind_all(new_trips)
+    if (n > 1 && all(df$itype %in% 1) && all(df$jtype %nin% 1)) {
+        # There are more than one trip and all trips begin from home but never
+        # arrive there.
+        new_trips = mclapply.stop(rows.along(df), function(i) {
+            return(flip_trip(df[i,,drop=FALSE]))
+        })
+        new_trips = rbind_all(new_trips)
+        df = rbind_list(df, new_trips)
+        df = arrange(df, number)
+        df$number = rows.along(df)
 
-    #     df = rbind_list(df, new_trips)
-    #     df = arrange(df, number)
-    #     df$number = rows.along(df)
-
-    #     return(df)
-    # }
+        return(df)
+    }
 
     new_trips = df[0,,drop=FALSE]
-    # for (i in rows.along(df)) {
-    #     last = (i == n)
-    #     starts_home = (df$itype[i] %in% 1)
-    #     next_starts_home = ifelse(last, TRUE, df$itype[i+1] %in% 1)
-    #     no_overnight = (df$jtype[i] %in% c(2,3,4,5,8,11,12))
-    #     does_not_end_home = (df$jtype[i] %nin% c(1))
+    for (i in rows.along(df)) {
+        last = (i == n)
+        starts_home = (df$itype[i] %in% 1)
+        next_starts_home = ifelse(last, TRUE, df$itype[i+1] %in% 1)
+        no_overnight = (df$jtype[i] %in% c(2,3,4,5,8,11,12))
+        does_not_end_home = (df$jtype[i] %nin% c(1))
 
-    #     if ((last && starts_home && no_overnight) ||
-    #             (starts_home && next_starts_home && does_not_end_home)) {
+        if ((last && starts_home && no_overnight) ||
+                (starts_home && next_starts_home && does_not_end_home)) {
 
-    #         #
-    #         # Imputate if
-    #         #
-    #         # 1. This trip is the last or the only one, it starts from home, and
-    #         #    it ends somewhere where people do not traditionally stay
-    #         #    overnight,
-    #         #
-    #         # or
-    #         #
-    #         # 2. This trip starts from home as well as the next trip, but this
-    #         #    trip did not end home.
-    #         #
+            #
+            # Imputate if
+            #
+            # 1. This trip is the last or the only one, it starts from home, and
+            #    it ends somewhere where people do not traditionally stay
+            #    overnight,
+            #
+            # or
+            #
+            # 2. This trip starts from home as well as the next trip, but this
+            #    trip did not end home.
+            #
 
-    #         new_trip = flip_trip(df[i,,drop=FALSE])
-    #         new_trips = rbind_list(new_trips, new_trip)
+            new_trip = flip_trip(df[i,,drop=FALSE])
+            new_trips = rbind_list(new_trips, new_trip)
 
-    #     }
-    # }
+        }
+    }
 
     df = rbind_list(df, new_trips)
     df = arrange(df, number)

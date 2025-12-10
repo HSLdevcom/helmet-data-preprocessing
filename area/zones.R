@@ -44,10 +44,11 @@ zone_data = read.csv2(.ancfile("input/estimation_Sami/zonedata_base.csv"),
                     fileEncoding="utf-8",
                     stringsAsFactors=FALSE,
                     sep=",",)
-zone_data$id = zone_data$X
+zone_data$id = zone_data$zone_id
 zone_data = subset(zone_data,id<34999) #filter park and ride
 zone_data$zone_area = as.numeric(as.character(zone_data$zone_area))
 zone_data$workplaces = as.numeric(as.character(zone_data$workplaces))
+zone_data$population = as.numeric(as.character(zone_data$population))
 
 # zone_data = subset(zone_data,id %in% c(102,103,244,1063,1531,2703,2741,6272,6291,19071)) #TEST ONLY!!!
 # zones = subset(zones,zone_orig %in% c(102,103,244,1063,1531,2703,2741,6272,6291,19071)) #TEST ONLY!!!
@@ -66,7 +67,8 @@ zones$primary = zone_data$comprehensive_schools
 zones$CParkWork = zone_data$parking_cost_work
 zones$CParkOther = zone_data$parking_cost_errand
 zones$zone_area = zone_data$zone_area
-
+zones$density = (zone_data$population+zone_data$workplaces)/zone_data$zone_area
+zones$TPark = 0.05993817*sqrt(zones$density) + 5.24176150
 
 View(zones)
 # built_land_area = read_xlsx(.ancfile("input/Maankäyttö/rakennettu_maapinta_ala_2018.xlsx"), sheet="Kaikki")
@@ -136,3 +138,4 @@ write.table(rbind(zones$universit), file = "flatfiles/zones_university.csv", row
 write.table(rbind(zones$primary), file = "flatfiles/zones_primary.csv", row.names =FALSE, col.names = FALSE,sep = " ",quote=FALSE)
 write.table(rbind(zones$CParkWork), file = "flatfiles/zones_cost_park_work.csv", row.names =FALSE, col.names = FALSE,sep = " ",quote=FALSE)
 write.table(rbind(zones$CParkOther), file = "flatfiles/zones_cost_park_other.csv", row.names =FALSE, col.names = FALSE,sep = " ",quote=FALSE)
+write.table(rbind(zones$TPark), file = "flatfiles/zones_time_park.csv", row.names =FALSE, col.names = FALSE,sep = " ",quote=FALSE)
