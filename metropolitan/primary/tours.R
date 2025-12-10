@@ -7,7 +7,8 @@ library(strafica)
 zones = read.csv2(ancfile("area/zones.csv"), stringsAsFactors=FALSE)
 
 # HEHA 2018
-tours = read.csv2(ancfile("tours/tours-heha.csv"),
+heha_year = scan(file="../../heha_year_config.txt", what="", sep="\t")
+tours = read.csv2(ancfile(sprintf("tours/tours-heha%s.csv",heha_year)),
                   stringsAsFactors=FALSE)
 tours$closed = ifelse(tours$closed == "True", TRUE, FALSE)
 tours$model = 1
@@ -18,7 +19,7 @@ tours = subset(tours, ((zones$capital_region[m] | zones$surrounding_municipality
                            tours$zone_origin %in% zones$zone_orig &
                            tours$zone_destination %in% zones$zone_orig))
 tours = subset(tours, rzone %in% zones$zone_orig)
-tours = subset(tours, mode %in% 1:5)
+tours = subset(tours, mode %in% 1:6)
 tours = downclass(tours)
 check.na(tours)
 save(tours, file="tours.RData")

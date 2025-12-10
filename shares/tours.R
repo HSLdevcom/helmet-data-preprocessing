@@ -21,6 +21,8 @@ tours = leftjoin(tours, model_types)
 tours = leftjoin(tours, modes)
 tours = unpick(tours, ttype, mode)
 tours$weight = ifelse(tours$closed %in% 1, 1, 0.5) * tours$xfactor
+tours$survey[which(tours$pid>300000)] = 2
+tours = subset(tours, xfactor>1)
 
 # HLT tours have never a secondary destination
 m = which(tours$survey %in% 2 & tours$order %in% c("ABC", "ACB", "CAB"))

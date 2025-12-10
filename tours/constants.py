@@ -214,7 +214,8 @@ def read_trips_from_heha(fname):
                                  "jtid": int,
                                  "mode": int,
                                  "length": float,
-                                 })
+                                 },
+                         encoding="latin1")
     return df
 
 

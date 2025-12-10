@@ -11,9 +11,9 @@ zones = read.csv2(ancfile("area/zones.csv"), stringsAsFactors=FALSE)
 background = list()
 
 # HEHA 2018
-
-message("Formatting HEHA 2018 personal data...")
-people = read.csv2(ancfile("survey/tausta-heha.csv"), stringsAsFactors=FALSE)
+heha_year = scan(file="../../heha_year_config.txt", what="", sep="\t")
+message(sprintf("Formatting HEHA %s personal data...\n", heha_year))
+people = read.csv2(ancfile(sprintf("survey/temp/tausta-heha%s.csv", heha_year)), stringsAsFactors=FALSE)
 people = subset(people, rzone %in% zones$zone_orig)
 
 df = data.frame(pid=people$pid)
@@ -33,18 +33,18 @@ df$licence = ifelse(is.na(df$licence), 9, df$licence)
 df$car_user = NA
 df$car_user = ifelse(df$cars_owned %in% c(1,2) &
                          df$licence == 1 &
-                         people$miten_usein_auto_kaytettavissa == "Aina tai melkein aina" &
+                         (people$miten_usein_auto_kaytettavissa == "Aina tai melkein aina" | people$miten_usein_auto_kaytettavissa == 1) &
                          !df$minor, 1, 0)
 df$car_user = ifelse(is.na(df$car_user), 9, df$car_user)
 df$employed = NA
-df$employed = ifelse(people$toimi == "Työssäkäyvä", 1, 0)
+df$employed = ifelse(people$toimi == "Työssäkäyvä" | people$toimi == 1, 1, 0)
 df$employed = ifelse(df$minor & is.na(people$toimi), 0, df$employed)
 df$employed = ifelse(is.na(df$employed), 9, df$employed)
 df = unpick(df, minor)
 df$children = NA
 df$children = ifelse(people$kotitalous_0_6v > 0, 1, 0)
 df$children = ifelse(is.na(people$kotitalous_0_6v), 9, df$children)
-df$female = ifelse(people$sukup_laaj == "Nainen", 1, 0)
+df$female = ifelse(people$sukup_laaj == "Nainen" | people$sukup_laaj == 1, 1, 0)
 df = leftjoin(df, get_age_groups(people$ika, df$pid), by="pid")
 
 m = match(people$rzone, zones$zone_orig)

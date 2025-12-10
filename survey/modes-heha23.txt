@@ -8,5 +8,8 @@ id	PKTAPA2	mode_name	mode
 7	Juna	jl	3
 8	Metro	jl	3
 9	Raitiovaunu	jl	3
-10	Moottoripyörä, mopo, mopoauto, mönkijä	muu	-1
-11	Muu kulku	muu	-1
+10	Pikaraitiovaunu	jl	3
+11	Sähköpotkulauta	py	2
+12	Moottoripyörä, mopo, mopoauto, mönkijä	muu	-1
+13	Muu kulkutapa	muu	-1
+

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-import constants
+import tours.constants as constants
 from math import sqrt
 
 

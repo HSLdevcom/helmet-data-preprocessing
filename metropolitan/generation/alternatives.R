@@ -2,20 +2,13 @@
 library(strafica)
 source(ancfile("util.R"))
 
-zones = read.csv2(ancfile("area/zones.csv"), stringsAsFactors=FALSE, fileEncoding="utf-8")
-zones = pick(zones,
-             zone,
-             population_density,
-             housing,
-             parking_fee_other,
-             cars_per_people,
-             cbd,
-             municipality)
+zones = read.csv2(ancfile("area/zones.csv"), sep=";")
+
 # Rename according to convention
-zones = rename(zones, zone=rzone)
-columns = colnames(zones)[-1]
-columns = sprintf("rzone_%s", columns)
-colnames(zones)[-1] = columns
+zones = rename(zones, zone_orig=rzone)
+# columns = colnames(zones)[-1]
+# columns = sprintf("rzone_%s", columns)
+# colnames(zones)[-1] = columns
 
 generation = load1(ancfile("primary/background.RData"))
 generation = leftjoin(generation, zones, by="rzone")
@@ -59,5 +52,6 @@ generation = generation[, unlist(hits)]
 stopifnot(all(sapply(generation, class) %in% c("integer", "numeric")))
 check.na(generation)
 generation = downclass(generation)
+generation = generation[order(generation$rzone),]
 write_alogit(generation, fname="alternatives/alternatives.txt")
 writeLines(colnames(generation), "alternatives/columns.txt")

@@ -1,7 +1,7 @@
 model_type	assignment_class
 hw	work
-hc	leisure
-hu	leisure
+hc	work
+hu	work
 hs	leisure
 ho	leisure
 hoo	work

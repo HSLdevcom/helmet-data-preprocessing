@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 
-import constants
-from location import Location
+import tours.constants as constants
+from tours.location import Location
 
 
 class Tour(object):
@@ -45,11 +45,14 @@ class Tour(object):
             3: 0.0,
             4: 0.0,
             5: 0.0,
+            6: 0.0, #park and ride
         }
         for trip in trips:
             i = trip.get_mode()
             lengths[i] = lengths[i] + trip.get_length()
         mode = max(lengths, key=lengths.get)
+
+        #TODO: Park and ride should prevail over other modes?
         return mode
 
     def get_length(self):
@@ -247,7 +250,7 @@ class Tour(object):
             if secondary_destination.get_id() == -1:
                 letters.remove("B")
             else:
-                print "`origin` and `destination` are the same but still `secondary_destination` exists!"
+                print ("`origin` and `destination` are the same but still `secondary_destination` exists!")
         # Finally, find out positions of each location
         indices = list()
         if "A" in letters:
